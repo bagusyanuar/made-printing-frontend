@@ -1,1 +1,115 @@
-@import 'tailwindcss';
+@import 'dystopia-linear-lib/index.css';
+
+@source '../../node_modules/dystopia-linear-lib/dist';
+
+@custom-variant dark (&:where(.dark, .dark *, [data-theme=dark], [data-theme=dark] *));
+
+:root {
+	color-scheme: light;
+
+	/* Primary Brand Override: Made Printing Red */
+	--primary: var(--color-red-600);
+	--primary-hover: var(--color-red-700);
+	--primary-foreground: #ffffff;
+	--ring: var(--color-red-500);
+
+	--surface: var(--color-app-surface);
+	--surface-subtle: var(--color-app-surface-subtle);
+	--surface-hover: var(--color-app-surface-subtle);
+	--border: var(--color-line);
+	--border-hover: var(--color-line-hover);
+}
+
+.dark,
+[data-theme='dark'] {
+	color-scheme: dark;
+
+	/* Dark mode primary */
+	--primary: var(--color-red-500);
+	--primary-hover: var(--color-red-400);
+	--primary-foreground: #ffffff;
+	--ring: var(--color-red-400);
+
+	/* Dark mode semantic roles */
+	--color-canvas: var(--color-slate-950);
+	--color-app-surface: var(--color-slate-900);
+	--color-surface-raised: var(--color-slate-800);
+	--color-surface-muted: rgb(255 255 255 / 0.05);
+
+	--color-line: rgb(255 255 255 / 0.1);
+	--color-line-strong: var(--color-slate-700);
+	--color-line-subtle: rgb(255 255 255 / 0.05);
+	--color-line-hover: var(--color-slate-600);
+
+	--color-surface-overlay: --alpha(var(--color-slate-900) / 95%);
+	--color-app-surface-subtle: rgb(255 255 255 / 0.03);
+
+	--color-ink: var(--color-slate-100);
+	--color-ink-muted: var(--color-slate-300);
+	--color-ink-subtle: var(--color-slate-400);
+	--color-ink-faint: color-mix(in oklab, var(--color-slate-400), var(--color-slate-500));
+	--color-ink-inverse: #ffffff;
+
+	--color-sidebar: var(--color-slate-950);
+	--color-sidebar-hover: rgb(255 255 255 / 0.06);
+	--color-sidebar-active: --alpha(var(--color-red-500) / 15%);
+
+	--surface: var(--color-app-surface);
+	--surface-subtle: var(--color-app-surface-subtle);
+	--surface-hover: var(--color-app-surface-subtle);
+	--border: var(--color-line);
+	--border-hover: var(--color-line-hover);
+}
+
+@theme static {
+	--font-sans: 'Inter', sans-serif;
+
+	/* Brand Red Scale */
+	--color-brand-50: var(--color-red-50);
+	--color-brand-100: var(--color-red-100);
+	--color-brand-200: var(--color-red-200);
+	--color-brand-300: var(--color-red-300);
+	--color-brand-400: var(--color-red-400);
+	--color-brand-500: var(--color-red-500);
+	--color-brand-600: var(--color-red-600);
+	--color-brand-700: var(--color-red-700);
+	--color-brand-800: var(--color-red-800);
+	--color-brand-900: var(--color-red-900);
+	--color-brand-950: var(--color-red-950);
+
+	/* Light mode semantic roles */
+	--color-canvas: var(--color-slate-50);
+	--color-app-surface: #ffffff;
+	--color-surface-raised: #ffffff;
+	--color-surface-muted: var(--color-slate-100);
+
+	--color-line: var(--color-slate-200);
+	--color-line-strong: var(--color-slate-300);
+	--color-line-subtle: var(--color-slate-100);
+	--color-line-hover: var(--color-slate-400);
+
+	--color-surface-overlay: --alpha(#ffffff / 95%);
+	--color-app-surface-subtle: --alpha(var(--color-slate-50) / 80%);
+
+	--color-ink: var(--color-slate-900);
+	--color-ink-muted: var(--color-slate-700);
+	--color-ink-subtle: var(--color-slate-600);
+	--color-ink-faint: var(--color-slate-500);
+	--color-ink-inverse: #ffffff;
+
+	--color-sidebar: var(--color-slate-50);
+	--color-sidebar-hover: var(--color-slate-200);
+	--color-sidebar-active: var(--color-red-100);
+
+	/* Chart palette */
+	--color-chart-1: var(--color-red-500);
+	--color-chart-2: var(--color-amber-500);
+	--color-chart-3: var(--color-sky-500);
+	--color-chart-4: var(--color-indigo-500);
+	--color-chart-5: var(--color-emerald-500);
+	--color-chart-6: var(--color-purple-500);
+}
+
+[role='region'][aria-label='Notifications'] {
+	z-index: 9999 !important;
+}
