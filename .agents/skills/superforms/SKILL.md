@@ -72,7 +72,7 @@ A form with no non-field failure mode (nothing beyond what Zod already validates
 ```svelte
 <form method="POST" use:enhance novalidate>
 	<!-- fields -->
-	<div class="gap-cozy flex justify-end">
+	<div class="flex justify-end gap-cozy">
 		<Button type="button" variant="ghost" onclick={() => (open = false)}>Batal</Button>
 		<Button type="submit" disabled={$submitting}>Simpan</Button>
 	</div>
@@ -192,7 +192,7 @@ $effect(() => {
 **`dystopia-linear-lib` (mandatory for new slicing, e.g. `AreaFormModal.svelte`):**
 
 ```svelte
-<div class="gap-tight flex flex-col">
+<div class="flex flex-col gap-tight">
 	<Label for="area-code" required>Kode Area</Label>
 	<TextField
 		id="area-code"

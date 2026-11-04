@@ -15,6 +15,7 @@ Explicitly **not**:
 - **Bento** — no deliberately mismatched tile sizes standing in for hierarchy.
 - **Material** — no stepped elevation ladder, no ripple, no heavy filled colour blocks.
 - **Framed app shell** — no rounded outer frame with a margin around the whole app. The shell stays full-bleed (see [layout-structure.md](./layout-structure.md)).
+- **Dashed borders or wireframe tropes** — strictly no `border-dashed` or `border-dotted` on cards, dropzones, or empty states. All containers use solid hairline borders (`border border-border`) with subtle surface contrast. Dashed outlines are generic AI Slop that makes pages feel unfinished.
 
 ## 2. Surfaces & Elevation
 

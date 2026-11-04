@@ -56,6 +56,7 @@ src/lib/shared/             result, app-error, api-schema, safe-api-call, mock-c
 src/routes/(app)/           Guarded application routes + shell layout (sidebar, header)
 src/routes/(auth)/          Authentication routes (login, forgot-password)
 src/routes/layout.css       Tailwind entry, theme tokens & semantic roles
+docs/knowledge/             Core domain knowledge & business logic specs
 .agents/                    Agent ecosystem (AGENTS.md, rules/, skills/, workflows/)
 ```
 
@@ -65,12 +66,13 @@ Aliases: `$features` &rarr; `src/features`, `$lib` &rarr; `src/lib`. Never use r
 
 ## 5. Read Before Writing Code
 
-1. **`.agents/AGENTS.md`** — Workspace-wide master rules.
-2. **`.agents/rules/architecture.md`** — Clean Architecture + DDD layer boundaries and responsibilities.
-3. **`.agents/rules/digital-printing-erp-domain.md`** — Digital printing domain logic, metrics, and workflows.
-4. **`.agents/rules/svelte-best-practices.md`** — Svelte 5 Runes, Snippets, and event props.
-5. **`.agents/rules/type-safety.md`** & **`tailwind.md`** — Strict typing and styling conventions.
-6. **`.agents/skills/`** — Reusable specialized skills for API integration, form handling, slicing, etc.
+1. **`docs/knowledge/`** — Core domain knowledge, SPK lifecycle, calculation formulas, and machine workflows.
+2. **`.agents/AGENTS.md`** — Workspace-wide master rules.
+3. **`.agents/rules/architecture.md`** — Clean Architecture + DDD layer boundaries and responsibilities.
+4. **`.agents/rules/digital-printing-erp-domain.md`** — Digital printing domain logic, metrics, and workflows.
+5. **`.agents/rules/svelte-best-practices.md`** — Svelte 5 Runes, Snippets, and event props.
+6. **`.agents/rules/type-safety.md`** & **`tailwind.md`** — Strict typing and styling conventions.
+7. **`.agents/skills/`** — Reusable specialized skills for API integration, form handling, slicing, etc.
 
 ---
 
@@ -83,6 +85,7 @@ Aliases: `$features` &rarr; `src/features`, `$lib` &rarr; `src/lib`. Never use r
 - **Svelte 5 Runes Only**: `$props()`, `$state()`, `$derived()`, `$effect()`. Never use deprecated Svelte 4 syntax (`export let`, `$:`, `on:click`, `<slot />`).
 - **SPA Architecture**: This app runs entirely in the browser (`adapter-static`, `ssr = false`). Never create `+page.server.ts` or `hooks.server.ts`.
 - **Currency & Precision**: All money amounts are handled in Rupiah (`IDR`). Display with standard formatting (`Rp 150.000`), never calculate financial totals with raw floating-point math.
+- **Zero Dashed Borders & No AI Slop Dashes**: Never use `border-dashed` or `border-dotted` in UI markup (empty states, upload zones, cards). Avoid excessive em-dashes (`—`) and repetitive hyphenated phrasing in UI text, code comments, and vibe coding.
 
 ---
 

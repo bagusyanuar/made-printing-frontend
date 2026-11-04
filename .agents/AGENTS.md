@@ -56,4 +56,5 @@ These rules apply to all interactions within this workspace (`made-printing-fron
 - **Client-Side SPA Paradigm**: No server-only SvelteKit files (`+page.server.ts`, `hooks.server.ts`). All business logic and UI runs in the browser.
 - **No Manual Component Wrapping in Stories**: When `component` is set in `defineMeta`, `<Story>` automatically wraps its content with that component. Pass props via `args` instead of instantiating the component manually.
 - **Mandatory `asChild` for Composed & Container Stories**: Whenever writing stories with wrapper containers (e.g. `<div class="dark">`) or multiple component instances inside `<Story>`, **ALWAYS** use `<Story name="..." asChild>` to prevent double rendering and invalid DOM element nesting.
+- **Zero Dashed Borders & No AI Slop Dashes**: Never use `border-dashed` or `border-dotted` in UI markup (empty states, upload zones, cards). Avoid excessive em-dashes (`—`) and repetitive hyphenated phrasing in UI text, code comments, and vibe coding.
   </CRITICAL_RULES>

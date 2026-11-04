@@ -55,6 +55,9 @@ danger:    'bg-danger text-danger-foreground'
 
 Same shape in `Button.variants.js`. The lesson: a neutral element's border is always `border-border`. A colored border shows up only on the specific variant that means something (danger, primary-outline) — never as the resting state of an ordinary container.
 
+**Zero Dashed Borders (`border-dashed` appears 0 times in library source):**
+Never reach for `border-dashed` or `border-dotted` on empty states, dropzones, or cards. It is an immediate sign of generic AI Slop. Real Linear-style components use solid hairline borders (`border border-border`) with calm `bg-surface-subtle` fills.
+
 ## Typography: `text-sm` Is The Floor, Weight Carries Hierarchy
 
 Measured: `text-sm` 33 uses, `text-xs` 6, `text-lg` 3. `font-medium` 24 uses against `font-semibold` 3 and `font-normal` 1 — **zero uses of `font-bold`.**

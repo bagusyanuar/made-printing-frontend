@@ -14,6 +14,10 @@ These are the _principles_. The concrete style that implements them — Soft Min
 - **One accent for interface, a separate ramp for data.** A donut or a multi-series chart cannot be drawn in one accent, so charts read from the fixed `--color-chart-1..6` tokens defined in [soft-minimal-saas.md](./soft-minimal-saas.md#4-colour). Never hand-pick colours per chart, and never borrow a chart hue for a button.
 - **Semantic hues are fixed:** `emerald` success, `amber` warning, `rose` danger, `sky` info. Never repurpose them decoratively.
 - **No arbitrary hex — including the brand's own.** `bg-[#00272f]` is a violation now that `bg-brand-950` exists; a literal hex escapes the scale and cannot be themed or audited. `#005466` and `#003e4a` are `brand-700` and `brand-800`.
+- **Strict Prohibition of Dashed Borders (`border-dashed` / `border-dotted`):**
+  Never use dashed borders on cards, empty states, file upload dropzones, dividers, or placeholders. Dashed borders are an overused "AI Slop" cliché that makes production UIs look like unfinished wireframes. Always use crisp solid hairline borders (`border border-border` / `border-line`) paired with subtle background contrast (`bg-surface-subtle`).
+- **Restraint on Dashes & AI Slop Punctuation in Vibe Code & Copy:**
+  Avoid excessive em-dashes (`—`), en-dashes (`–`), or repetitive hyphens in UI copy, placeholders, titles, and code comments. Write naturally, directly, and cleanly without the stereotypical repetitive LLM prose style.
 
 ## 2. Depth & Elevation
 

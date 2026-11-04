@@ -21,8 +21,8 @@ These are requirements, not preferences — apply them to every new page/feature
 <Typography variant="muted" class="mt-1">Kelola daftar area kerja…</Typography>
 
 <!-- no -->
-<h1 class="text-foreground text-xl font-semibold">Master Area</h1>
-<p class="text-foreground-subtle text-sm">Kelola daftar area kerja…</p>
+<h1 class="text-xl font-semibold text-foreground">Master Area</h1>
+<p class="text-sm text-foreground-subtle">Kelola daftar area kerja…</p>
 ```
 
 ### Typography Variant Reference
