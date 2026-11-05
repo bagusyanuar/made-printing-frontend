@@ -51,4 +51,3 @@ describe('sectionContainsActive', () => {
 		expect(sectionContainsActive(testSections, '/dashboard')).toEqual(new Set());
 	});
 });
-

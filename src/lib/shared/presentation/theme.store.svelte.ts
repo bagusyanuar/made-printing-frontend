@@ -75,4 +75,3 @@ export class ThemeStore {
 }
 
 export const themeStore = new ThemeStore();
-

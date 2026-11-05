@@ -53,4 +53,3 @@ export interface SidebarClasses {
 	flyoutLabel?: string;
 	chevron?: string;
 }
-

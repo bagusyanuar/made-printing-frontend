@@ -24,4 +24,3 @@ export function sectionContainsActive(sections: NavSection[], pathname: string):
 	}
 	return open;
 }
-

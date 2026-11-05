@@ -14,4 +14,3 @@ export class PageTitleStore {
 }
 
 export const pageTitleStore = new PageTitleStore();
-
