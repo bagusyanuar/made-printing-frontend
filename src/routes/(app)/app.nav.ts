@@ -1,17 +1,19 @@
 import IconLayoutDashboard from '~icons/lucide/layout-dashboard';
+import IconTicket from '~icons/lucide/ticket';
+import IconCirclePlus from '~icons/lucide/circle-plus';
+import IconFileCheck from '~icons/lucide/file-check';
 import IconReceipt from '~icons/lucide/receipt';
-import IconFileText from '~icons/lucide/file-text';
-import IconPrinter from '~icons/lucide/printer';
-import IconLayers from '~icons/lucide/layers';
-import IconScissors from '~icons/lucide/scissors';
-import IconBoxes from '~icons/lucide/boxes';
-import IconPackage from '~icons/lucide/package';
-import IconDroplets from '~icons/lucide/droplets';
-import IconDatabase from '~icons/lucide/database';
-import IconUsers from '~icons/lucide/users';
-import IconWrench from '~icons/lucide/wrench';
-import IconSparkles from '~icons/lucide/sparkles';
-import IconBarChart3 from '~icons/lucide/bar-chart-3';
+import IconLandmark from '~icons/lucide/landmark';
+import IconHandCoins from '~icons/lucide/hand-coins';
+import IconArrowLeftRight from '~icons/lucide/arrow-left-right';
+import IconTag from '~icons/lucide/tag';
+import IconHandshake from '~icons/lucide/handshake';
+import IconTrendingUp from '~icons/lucide/trending-up';
+import IconTrendingDown from '~icons/lucide/trending-down';
+import IconBanknote from '~icons/lucide/banknote';
+import IconScale from '~icons/lucide/scale';
+import IconSettings from '~icons/lucide/settings';
+import IconShieldCheck from '~icons/lucide/shield-check';
 
 import type { NavSection } from '$lib/components/ui/sidebar/sidebar.types';
 
@@ -25,98 +27,100 @@ export const appNavSections: NavSection[] = [
 				icon: IconLayoutDashboard
 			},
 			{
-				title: 'Kasir & POS',
-				href: '/pos',
-				icon: IconReceipt,
-				badge: 'Kasir'
+				title: 'Produk',
+				href: '/products',
+				icon: IconTag
 			},
 			{
-				title: 'Order & SPK',
-				href: '/orders',
-				icon: IconFileText
+				title: 'Biro/Reseller',
+				href: '/resellers',
+				icon: IconHandshake
 			}
 		]
 	},
 	{
-		label: 'PRODUKSI & WORKFLOW',
+		label: 'TRANSAKSI',
 		entries: [
 			{
-				id: 'production-workflow',
-				title: 'Produksi',
-				icon: IconPrinter,
-				children: [
-					{
-						title: 'Antrean Mesin Cetak',
-						href: '/production/queues',
-						icon: IconPrinter
-					},
-					{
-						title: 'Pra-Cetak & Nesting',
-						href: '/production/prepress',
-						icon: IconLayers
-					},
-					{
-						title: 'Finishing & QC',
-						href: '/production/finishing',
-						icon: IconScissors
-					}
-				]
+				title: 'Tiket Pesanan',
+				href: '/transactions/tickets',
+				icon: IconTicket
 			},
 			{
-				id: 'inventory-management',
-				title: 'Inventaris',
-				icon: IconBoxes,
-				children: [
-					{
-						title: 'Bahan Roll & Lembaran',
-						href: '/inventory/materials',
-						icon: IconPackage
-					},
-					{
-						title: 'Tinta & Consumables',
-						href: '/inventory/consumables',
-						icon: IconDroplets
-					}
-				]
+				title: 'Pesanan Baru',
+				href: '/transactions/new',
+				icon: IconCirclePlus
+			},
+			{
+				title: 'Invoice',
+				href: '/transactions/invoices',
+				icon: IconFileCheck
 			}
 		]
 	},
 	{
-		label: 'PENGATURAN & MASTER DATA',
+		label: 'KEUANGAN',
 		entries: [
 			{
-				id: 'master-data',
-				title: 'Master Data',
-				icon: IconDatabase,
-				children: [
-					{
-						title: 'Katalog Bahan Baku',
-						href: '/master/materials',
-						icon: IconPackage
-					},
-					{
-						title: 'Mesin Percetakan',
-						href: '/master/machines',
-						icon: IconWrench
-					},
-					{
-						title: 'Layanan Finishing',
-						href: '/master/finishings',
-						icon: IconSparkles
-					},
-					{
-						title: 'Pelanggan & Reseller',
-						href: '/master/customers',
-						icon: IconUsers
-					}
-				]
+				title: 'Pengeluaran',
+				href: '/finance/expenses',
+				icon: IconReceipt
 			},
 			{
-				title: 'Laporan Keuangan',
-				href: '/finance',
-				icon: IconBarChart3
+				title: 'Setoran Modal',
+				href: '/finance/capital-deposit',
+				icon: IconLandmark
+			},
+			{
+				title: 'Penarikan Modal (Prive)',
+				href: '/finance/withdrawals',
+				icon: IconHandCoins
+			},
+			{
+				title: 'Pemindahan Dana',
+				href: '/finance/transfers',
+				icon: IconArrowLeftRight
+			}
+		]
+	},
+	{
+		label: 'LAPORAN',
+		entries: [
+			{
+				title: 'Laporan Penjualan',
+				href: '/reports/sales',
+				icon: IconTrendingUp
+			},
+			{
+				title: 'Laporan Pengeluaran',
+				href: '/reports/expenses',
+				icon: IconTrendingDown
+			},
+			{
+				title: 'Laporan Arus Kas',
+				href: '/reports/cash-flow',
+				icon: IconBanknote
+			},
+			{
+				title: 'Laporan Laba Rugi',
+				href: '/reports/profit-loss',
+				icon: IconScale
+			}
+		]
+	},
+	{
+		label: 'PENGATURAN',
+		entries: [
+			{
+				title: 'Pengaturan',
+				href: '/settings',
+				icon: IconSettings
+			},
+			{
+				title: 'Hak Akses',
+				href: '/settings/access',
+				icon: IconShieldCheck
 			}
 		]
 	}
 ];
-
