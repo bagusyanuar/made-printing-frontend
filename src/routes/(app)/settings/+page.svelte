@@ -2,118 +2,125 @@
 	import { resolve } from '$app/paths';
 	import { pageTitleStore } from '$lib/shared/presentation/page-title.store.svelte';
 	import { Typography } from 'dystopia-linear-lib/components/typography';
-	import { Card, CardHeader, CardTitle, CardContent } from 'dystopia-linear-lib/components/card';
-	import { Badge } from 'dystopia-linear-lib/components/badge';
-	import { Button } from 'dystopia-linear-lib/components/button';
-	import IconPackage from '~icons/lucide/package';
-	import IconWrench from '~icons/lucide/wrench';
-	import IconSparkles from '~icons/lucide/sparkles';
-	import IconStore from '~icons/lucide/store';
-	import IconCreditCard from '~icons/lucide/credit-card';
-	import IconArrowRight from '~icons/lucide/arrow-right';
+	import { NavigationCard } from '$lib/components/navigation-card';
+	import IconSettings from '~icons/lucide/settings';
+	import IconFolderTree from '~icons/lucide/folder-tree';
+	import IconSlidersHorizontal from '~icons/lucide/sliders-horizontal';
+	import IconTag from '~icons/lucide/tag';
+	import IconHandshake from '~icons/lucide/handshake';
+	import IconTruck from '~icons/lucide/truck';
+	import IconReceipt from '~icons/lucide/receipt';
+	import IconShieldCheck from '~icons/lucide/shield-check';
 
 	pageTitleStore.set('Pengaturan Sistem');
 
 	const masterDataModules = [
 		{
-			title: 'Katalog Bahan Baku',
+			title: 'Kategori Produk',
 			description:
-				'Daftar bahan roll (Flexy, Korcin, Albatros) dan lembaran plano (Art Carton, Vinyl A3+), harga beli modal, dan stok.',
-			href: resolve('/(app)/master/materials'),
-			badge: '18 Bahan Baku',
-			icon: IconPackage
+				'Kelola kelompok produk cetak (Large Format, Lembaran A3+, DTF, Merchandise) dan model satuan hitung (m², lembar, meter lari, pcs).',
+			href: resolve('/(app)/settings/product-categories'),
+			icon: IconFolderTree
 		},
 		{
-			title: 'Mesin Percetakan',
+			title: 'Atribut & Varian Produk',
 			description:
-				'Daftar armada mesin cetak Large Format Outdoor/Indoor, Digital Laser A3+, DTF, kapasitas cetak (m²/jam), dan click count.',
-			href: resolve('/(app)/master/machines'),
-			badge: '6 Mesin Aktif',
-			icon: IconWrench
+				'Kelola skema varian dan atribut spesifikasi (EAV) seperti sisi cetak (1 sisi / 2 sisi), gramatur bahan (280g, 340g), varian laminasi, dll.',
+			href: resolve('/(app)/settings/attribute-variants'),
+			icon: IconSlidersHorizontal
 		},
 		{
-			title: 'Layanan Finishing',
+			title: 'Katalog Produk Cetak',
 			description:
-				'Katalog jenis pengerjaan pasca cetak: mata ayam (grommet), seaming/lipat lem, potong pas gambar, laminasi, dan pond.',
-			href: resolve('/(app)/master/finishings'),
-			badge: '12 Layanan',
-			icon: IconSparkles
+				'Daftar produk cetak jadi, spesifikasi bahan baku, skema perhitungan harga (retail/reseller), dan status aktif produk.',
+			href: resolve('/(app)/settings/products'),
+			icon: IconTag
 		},
 		{
-			title: 'Profil Percetakan & Toko',
+			title: 'Biro & Reseller',
 			description:
-				'Identitas usaha percetakan, nomor WhatsApp CS, alamat workshop, serta kop dokumen untuk cetak SPK & Nota Kasir.',
-			href: '#',
-			badge: 'Made Printing',
-			icon: IconStore
+				'Manajemen kemitraan percetakan, penetapan tier harga reseller, plafon limit kredit piutang (TOP), dan saldo deposit mitra.',
+			href: resolve('/(app)/settings/resellers'),
+			icon: IconHandshake
 		},
 		{
-			title: 'Metode Pembayaran Kasir',
+			title: 'Supplier & Pemasok',
 			description:
-				'Konfigurasi kas kecil tunai (cash drawer), rekening transfer bank (BCA, Mandiri), dan QRIS dinamis di meja kasir.',
-			href: '#',
-			badge: '3 Rekening',
-			icon: IconCreditCard
+				'Kelola data vendor pemasok bahan baku (kertas roll/sheet, banner), tinta cetak, suku cadang mesin, dan perlengkapan percetakan.',
+			href: resolve('/(app)/settings/suppliers'),
+			icon: IconTruck
+		},
+		{
+			title: 'Kategori Pengeluaran',
+			description:
+				'Klasifikasi pos biaya operasional percetakan (pembelian bahan, utilitas workshop, perawatan mesin, logistik, dll).',
+			href: resolve('/(app)/settings/expense-categories'),
+			icon: IconReceipt
+		}
+	];
+
+	const systemSettingsModules = [
+		{
+			title: 'Hak Akses & Pengguna',
+			description:
+				'Atur hak izin per peran (Admin, Kasir, CS, Operator Mesin, Finishing, Desainer RIP).',
+			href: resolve('/(app)/settings/access'),
+			icon: IconShieldCheck
 		}
 	];
 </script>
 
-<div class="flex flex-col gap-6">
-	<div>
-		<Typography variant="h3" as="h1" class="font-bold text-foreground">
-			Pusat Pengaturan & Master Data
-		</Typography>
-		<Typography variant="muted" as="p" class="text-foreground-subtle">
-			Kelola seluruh master data operasional percetakan, parameter mesin, katalog bahan baku, dan
-			konfigurasi sistem terpusat.
-		</Typography>
+<div class="flex flex-col gap-8">
+	<!-- Page Header -->
+	<div class="flex items-start gap-3.5 sm:gap-4">
+		<div
+			class="flex size-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary shadow-2xs"
+		>
+			<IconSettings class="size-6" />
+		</div>
+		<div class="flex flex-col">
+			<Typography variant="h2" as="h1" class="font-bold tracking-tight text-foreground">
+				Pusat Pengaturan & Master Data
+			</Typography>
+			<Typography variant="muted" as="p" class="mt-0.5 text-xs text-foreground-subtle sm:text-sm">
+				Kelola konfigurasi sistem, hak akses, dan master data operasional percetakan Made Printing.
+			</Typography>
+		</div>
 	</div>
 
-	<!-- Master Data Modules Grid -->
-	<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-		{#each masterDataModules as item (item.title)}
-			{@const ItemIcon = item.icon}
-			<Card
-				class="flex flex-col justify-between bg-app-surface shadow-xs transition-shadow duration-150 hover:shadow-sm"
-			>
-				<CardHeader class="flex flex-row items-start justify-between gap-4">
-					<div
-						class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
-					>
-						<ItemIcon class="size-5" />
-					</div>
-					<Badge variant="secondary" size="sm">{item.badge}</Badge>
-				</CardHeader>
-				<CardContent class="flex flex-1 flex-col justify-between gap-4 pt-0">
-					<div>
-						<CardTitle class="text-sm font-semibold text-foreground">
-							{item.title}
-						</CardTitle>
-						<p class="mt-1.5 text-xs leading-relaxed text-foreground-subtle">
-							{item.description}
-						</p>
-					</div>
+	<!-- Master Data Section -->
+	<div class="flex flex-col gap-4">
+		<div class="border-b border-border pb-2">
+			<Typography variant="h3" as="h2" class="font-semibold text-foreground">
+				Master Data Operasional
+			</Typography>
+			<Typography variant="muted" as="p" class="text-xs text-foreground-subtle">
+				Basis data utama untuk identifikasi produk, kalkulasi biaya cetak, dan alur kerja SPK.
+			</Typography>
+		</div>
 
-					<div class="border-t border-border pt-3">
-						<Button
-							variant="ghost"
-							size="sm"
-							class="w-full justify-between px-0 text-primary hover:text-primary"
-						>
-							{#snippet child({ props })}
-								<a
-									{...props}
-									href={item.href}
-									class="flex w-full items-center justify-between text-xs font-medium text-primary"
-								>
-									<span>Buka Pengaturan</span>
-									<IconArrowRight class="size-3.5" />
-								</a>
-							{/snippet}
-						</Button>
-					</div>
-				</CardContent>
-			</Card>
-		{/each}
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			{#each masterDataModules as item (item.title)}
+				<NavigationCard {...item} />
+			{/each}
+		</div>
+	</div>
+
+	<!-- System Settings Section -->
+	<div class="flex flex-col gap-4">
+		<div class="border-b border-border pb-2">
+			<Typography variant="h3" as="h2" class="font-semibold text-foreground">
+				Konfigurasi Sistem
+			</Typography>
+			<Typography variant="muted" as="p" class="text-xs text-foreground-subtle">
+				Manajemen hak akses pengguna dan aturan keamanan aplikasi.
+			</Typography>
+		</div>
+
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+			{#each systemSettingsModules as item (item.title)}
+				<NavigationCard {...item} />
+			{/each}
+		</div>
 	</div>
 </div>

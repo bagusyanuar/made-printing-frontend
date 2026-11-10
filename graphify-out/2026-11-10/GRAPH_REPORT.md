@@ -1,25 +1,24 @@
 # Graph Report - made-printing-frontend  (2026-11-10)
 
 ## Corpus Check
-- 154 files · ~76,963 words
+- 154 files · ~76,959 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 887 nodes · 1259 edges · 82 communities (62 shown, 11 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
+- 815 nodes · 1012 edges · 77 communities (59 shown, 11 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e0c21c5c`
+- Built from commit: `913cd231`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - package.json
 - devDependencies
-- themeStore
-- AppSidebar.svelte
+- sidebar.types.ts
 - Result
 - What You Must Do When Invoked
 - @sveltejs/kit
@@ -28,11 +27,12 @@
 - dystopia-linear-lib
 - tsconfig.json
 - Build Order
-- Superforms & Zod Workflow (SPA Mode)
+- Design System & Aesthetics (Anti-AI Slop)
 - vitest
 - prettier.config.js
 - +layout.ts
 - app.d.ts
+- Dashboard Layout Structure
 - Linear-Style Slicing
 - Domain Knowledge: Digital Printing ERP (Made Printing)
 - 04. Model Rumus Kalkulasi Harga & Multi-Tier Pricing
@@ -42,7 +42,6 @@
 - API Integration
 - Svelte 5 Runes
 - Tailwind v4
-- AGENTS.md
 - Process Flow
 - Naming Conventions
 - Type Safety
@@ -51,15 +50,17 @@
 - Superforms + Zod
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
+- 1. Kategori Produk Utama
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
 - Interaction States
 - Layout Composition
+- Page Slicing Rules
 - Commit Message Format
 - 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_)
 - 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan
-- Frontend Architecture Rules (Clean Architecture + DDD)
+- TanStack Table in Svelte 5
 - Testing Rules
 - Storybook for Svelte 5 Guidelines
 - UX Heuristics For Slicing
@@ -71,12 +72,8 @@
 - Conventional Commit Workflow
 - graphify reference: query, path, explain
 - 01. Overview & Domain Model: Made Printing ERP
-- 1. Kategori Produk Utama
 - sv
-- Dashboard Layout Structure
 - knowledge/README.md
-- Design System & Aesthetics (Anti-AI Slop)
-- TanStack Table in Svelte 5
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
@@ -99,8 +96,8 @@
 6. `dystopia-linear-lib` - 14 edges
 7. `Linear-Style Slicing` - 14 edges
 8. `safeApiCall()` - 13 edges
-9. `scripts` - 12 edges
-10. `ProductCategoryRepository` - 12 edges
+9. `ProductCategoryRepository` - 12 edges
+10. `Global Agent Rules` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `productCategoryStore` --references--> `productCategoryUseCases`  [EXTRACTED]
@@ -111,13 +108,13 @@
   src/features/product-categories/infrastructure/product-category.repository.impl.ts → src/features/product-categories/domain/product-category.repository.ts
 - `productCategoryRepositoryMock` --implements--> `ProductCategoryRepository`  [EXTRACTED]
   src/features/product-categories/infrastructure/product-category.repository.mock.ts → src/features/product-categories/domain/product-category.repository.ts
-- `sectionContainsActive()` --calls--> `isNavGroup()`  [EXTRACTED]
-  src/lib/components/ui/sidebar/sidebar.nav.ts → src/lib/components/ui/sidebar/sidebar.types.ts
+- `safeApiCall()` --calls--> `AppError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (82 total, 11 thin omitted)
+## Communities (77 total, 11 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.07
@@ -127,13 +124,9 @@ Nodes (28): name, private, type, version, class-variance-authority, clsx, dystop
 Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
-### Community 3 - "themeStore"
-Cohesion: 0.10
-Nodes (6): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore, ./$types
-
-### Community 5 - "AppSidebar.svelte"
-Cohesion: 0.07
-Nodes (14): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+6 more)
+### Community 5 - "sidebar.types.ts"
+Cohesion: 0.06
+Nodes (19): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+11 more)
 
 ### Community 6 - "Result"
 Cohesion: 0.06
@@ -163,13 +156,17 @@ Nodes (9): $app/tsconfig, compilerOptions, paths, strict, types, extends, includ
 Cohesion: 0.12
 Nodes (17): 10. `application/<feature>.container.ts`, 11. `application/<feature>.use-cases.ts`, 12. `application/<feature>.store.svelte.ts` — only when needed, 13. `presentation/hooks/<feature>.query-keys.ts`, 14. Fetch in the page, not in a load function, 15. Wire the route, 1. `domain/<feature>.entity.ts`, 2. `domain/<feature>.repository.ts` (+9 more)
 
-### Community 14 - "Superforms & Zod Workflow (SPA Mode)"
-Cohesion: 0.15
-Nodes (9): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component, 1. Schema Definition (Zod), 2. Client Form (`+page.svelte` or Component), 3. Extracting the Form into a Hook, 4. Navigating After a Successful Submit (+1 more)
+### Community 14 - "Design System & Aesthetics (Anti-AI Slop)"
+Cohesion: 0.25
+Nodes (8): 1. No "AI Slop" Permitted, 2. Depth & Elevation, 3. Typography & Hierarchy, 4. Micro-Interactions & Animation, 5. Spacing & Negative Space, 6. Dark Mode Support, 7. Icons & Imagery, Design System & Aesthetics (Anti-AI Slop)
 
 ### Community 15 - "vitest"
 Cohesion: 0.38
 Nodes (3): vitest, vitest-browser-svelte, greet()
+
+### Community 19 - "Dashboard Layout Structure"
+Cohesion: 0.40
+Nodes (5): 1. Global Layout Anatomy, 2. Content Area Grid (Modular Widget-Based), 3. Card-Based Content, 4. Responsive Behavior, Dashboard Layout Structure
 
 ### Community 21 - "Linear-Style Slicing"
 Cohesion: 0.12
@@ -188,7 +185,7 @@ Cohesion: 0.17
 Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics, Global Agent Rules, Layout Structure, Naming Conventions, Page Slicing, Project Architecture, Styling (Tailwind CSS) (+4 more)
 
 ### Community 25 - "Global Agent Rules"
-Cohesion: 0.17
+Cohesion: 0.15
 Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics, Global Agent Rules, Layout Structure, Naming Conventions, Page Slicing, Project Architecture, Styling (Tailwind CSS) (+4 more)
 
 ### Community 26 - "Visual Style: Soft Minimal SaaS (Made Printing)"
@@ -206,10 +203,6 @@ Nodes (11): Check, Derived, Not Effect, `$effect` Is Init-Time Only, Effects Tha
 ### Community 29 - "Tailwind v4"
 Cohesion: 0.18
 Nodes (10): Check, Colour Comes From Roles, Conditional Classes, Known Drift — Do Not Copy, No `@apply`, Tailwind v4, The Directives In `layout.css`, The Eight Lint Rules (+2 more)
-
-### Community 30 - "AGENTS.md"
-Cohesion: 0.31
-Nodes (3): 1. Component Reuse Priority, 2. Semantic HTML Per Context, Page Slicing Rules
 
 ### Community 31 - "Process Flow"
 Cohesion: 0.20
@@ -243,6 +236,10 @@ Nodes (8): 1. What This Application Is, 2. Design System & Visual Aesthetic, 3. 
 Cohesion: 0.22
 Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe Inventori Bahan Baku Utama, 2. Inventori Tinta & Consumables, 3. Toleransi Limbah & Waste Ratio (_Scrap Tracking_), A. Bahan Continuous / Roll-Based Goods, B. Bahan Diskrit / Sheet-Based Goods, Rumus Persentase Waste:, Sumber-sumber Limbah Cetak:
 
+### Community 40 - "1. Kategori Produk Utama"
+Cohesion: 0.33
+Nodes (6): 1. Kategori Produk Utama, A. Large Format Outdoor (Solvent / UV Roll), B. Large Format Indoor & Display (Eco-Solvent / Waterbased), C. Digital Printing A3+ Lembaran (Laser Sheetfed), D. Sablon Digital & DTF (Direct-to-Film), E. Merchandise & Flatbed
+
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
 Nodes (7): 1. Svelte Components, 2. Directories and Folders, 3. TypeScript Files (Business Logic & Architecture), 4. Variables and Functions, 5. Constants, 6. Interfaces, Types, and Classes, Naming Conventions
@@ -263,6 +260,10 @@ Nodes (7): A Fully-Interactive Appearance Implies Real Behavior, Check, Disabled
 Cohesion: 0.25
 Nodes (7): Check, F-Pattern And Z-Pattern: Match The Flow To The Content Density, Law of Continuity: Alignment Consistency, Overridable By A Stronger Convention, Layout Composition, Rule Of Thirds: A Compositional Guide, Not A Requirement For Functional UI, Symmetry And Asymmetry: Balance Is Not The Same As Mirroring, White Space Must Be Deterministic, Not Incidental
 
+### Community 46 - "Page Slicing Rules"
+Cohesion: 0.67
+Nodes (3): 1. Component Reuse Priority, 2. Semantic HTML Per Context, Page Slicing Rules
+
 ### Community 47 - "Commit Message Format"
 Cohesion: 0.25
 Nodes (7): 1. Types, 2. Domain Name (Scope), 3. Changelog (Detailed Description), Commit Message Format, Execution Steps (Agent Workflow), Git Commit Workflow, Perfect Commit Message Example:
@@ -275,9 +276,9 @@ Nodes (8): 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_), 
 Cohesion: 0.25
 Nodes (7): 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan, 1. Alur Operasional Kasir / POS, 2. Skema & Metode Pembayaran, 3. Manajemen Piutang & Plafon Kredit Reseller (_Credit Limit_), 4. Format Dokumen Finansial & Percetakan, A. Tipe Status Pembayaran, B. Metode Pembayaran yang Didukung
 
-### Community 50 - "Frontend Architecture Rules (Clean Architecture + DDD)"
-Cohesion: 0.22
-Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
+### Community 50 - "TanStack Table in Svelte 5"
+Cohesion: 0.07
+Nodes (26): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+18 more)
 
 ### Community 51 - "Testing Rules"
 Cohesion: 0.29
@@ -323,29 +324,13 @@ Nodes (5): For /graphify explain, For /graphify path, graphify reference: query,
 Cohesion: 0.33
 Nodes (5): 01. Overview & Domain Model: Made Printing ERP, 1. Latar Belakang & Profil Bisnis, 2. Aktor Pengguna & Peran Sistem (_User Personas_), Detail Tanggung Jawab Per Role:, Mengapa Digital Printing Berbeda dari Percetakan Konvensional (Offset)?
 
-### Community 63 - "1. Kategori Produk Utama"
-Cohesion: 0.33
-Nodes (6): 1. Kategori Produk Utama, A. Large Format Outdoor (Solvent / UV Roll), B. Large Format Indoor & Display (Eco-Solvent / Waterbased), C. Digital Printing A3+ Lembaran (Laser Sheetfed), D. Sablon Digital & DTF (Direct-to-Film), E. Merchandise & Flatbed
-
 ### Community 64 - "sv"
 Cohesion: 0.33
 Nodes (5): Adding features, Building, Creating a project, Developing, sv
 
-### Community 65 - "Dashboard Layout Structure"
-Cohesion: 0.40
-Nodes (5): 1. Global Layout Anatomy, 2. Content Area Grid (Modular Widget-Based), 3. Card-Based Content, 4. Responsive Behavior, Dashboard Layout Structure
-
 ### Community 66 - "knowledge/README.md"
 Cohesion: 0.40
 Nodes (3): 📚 Daftar Modul Knowledge, Knowledge Base: Made Printing ERP (Digital Printing System), 🎯 Prinsip Utama Domain Percetakan Digital
-
-### Community 67 - "Design System & Aesthetics (Anti-AI Slop)"
-Cohesion: 0.25
-Nodes (8): 1. No "AI Slop" Permitted, 2. Depth & Elevation, 3. Typography & Hierarchy, 4. Micro-Interactions & Animation, 5. Spacing & Negative Space, 6. Dark Mode Support, 7. Icons & Imagery, Design System & Aesthetics (Anti-AI Slop)
-
-### Community 68 - "TanStack Table in Svelte 5"
-Cohesion: 0.25
-Nodes (8): 1. Do Not Build a Table From Scratch, 2. Feature Set Is Pinned App-Wide, 3. Auto-Reset Is Off, and Must Stay Off, 4. Defining Columns, 5. Creating the Instance (Parent Owns Everything), 6. `DataTable` Props Worth Knowing, 7. Styling, TanStack Table in Svelte 5
 
 ### Community 69 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -368,24 +353,24 @@ Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
 ## Knowledge Gaps
-- **452 isolated node(s):** `gitignorePath`, `name`, `private`, `version`, `type` (+447 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 561 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **452 isolated node(s):** `Theme`, `NavEntry`, `NavGroup`, `NavLink`, `SidebarClasses` (+447 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 546 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `Result` to `package.json`?**
-  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `svelte` connect `AppSidebar.svelte` to `package.json`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **What connects `gitignorePath`, `name`, `private` to the rest of the system?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `zod` connect `Result` to `package.json`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **What connects `Theme`, `NavEntry`, `NavGroup` to the rest of the system?**
   _452 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
-  _Cohesion score 0.14814814814814814 - nodes in this community are weakly interconnected._
+- **Should `page-title.store.svelte.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._

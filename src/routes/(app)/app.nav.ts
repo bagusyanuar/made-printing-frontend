@@ -1,19 +1,15 @@
 import IconLayoutDashboard from '~icons/lucide/layout-dashboard';
 import IconTicket from '~icons/lucide/ticket';
-import IconCirclePlus from '~icons/lucide/circle-plus';
-import IconFileCheck from '~icons/lucide/file-check';
+import IconShoppingBag from '~icons/lucide/shopping-bag';
 import IconReceipt from '~icons/lucide/receipt';
 import IconLandmark from '~icons/lucide/landmark';
 import IconHandCoins from '~icons/lucide/hand-coins';
 import IconArrowLeftRight from '~icons/lucide/arrow-left-right';
-import IconTag from '~icons/lucide/tag';
-import IconHandshake from '~icons/lucide/handshake';
-import IconTrendingUp from '~icons/lucide/trending-up';
-import IconTrendingDown from '~icons/lucide/trending-down';
+import IconChartPie from '~icons/lucide/chart-pie';
+import IconChartLine from '~icons/lucide/chart-line';
 import IconBanknote from '~icons/lucide/banknote';
 import IconScale from '~icons/lucide/scale';
 import IconSettings from '~icons/lucide/settings';
-import IconShieldCheck from '~icons/lucide/shield-check';
 
 import type { NavSection } from '$lib/components/ui/sidebar/sidebar.types';
 
@@ -25,16 +21,6 @@ export const appNavSections: NavSection[] = [
 				title: 'Dashboard',
 				href: '/dashboard',
 				icon: IconLayoutDashboard
-			},
-			{
-				title: 'Produk',
-				href: '/products',
-				icon: IconTag
-			},
-			{
-				title: 'Biro/Reseller',
-				href: '/resellers',
-				icon: IconHandshake
 			}
 		]
 	},
@@ -49,12 +35,12 @@ export const appNavSections: NavSection[] = [
 			{
 				title: 'Pesanan Baru',
 				href: '/transactions/new',
-				icon: IconCirclePlus
+				icon: IconShoppingBag
 			},
 			{
 				title: 'Invoice',
 				href: '/transactions/invoices',
-				icon: IconFileCheck
+				icon: IconReceipt
 			}
 		]
 	},
@@ -89,12 +75,12 @@ export const appNavSections: NavSection[] = [
 			{
 				title: 'Laporan Penjualan',
 				href: '/reports/sales',
-				icon: IconTrendingUp
+				icon: IconChartPie
 			},
 			{
 				title: 'Laporan Pengeluaran',
 				href: '/reports/expenses',
-				icon: IconTrendingDown
+				icon: IconChartLine
 			},
 			{
 				title: 'Laporan Arus Kas',
@@ -115,11 +101,6 @@ export const appNavSections: NavSection[] = [
 				title: 'Pengaturan',
 				href: '/settings',
 				icon: IconSettings
-			},
-			{
-				title: 'Hak Akses',
-				href: '/settings/access',
-				icon: IconShieldCheck
 			}
 		]
 	}

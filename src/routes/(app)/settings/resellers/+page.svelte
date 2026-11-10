@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { pageTitleStore } from '$lib/shared/presentation/page-title.store.svelte';
 	import { Typography } from 'dystopia-linear-lib/components/typography';
 	import { Card, CardHeader, CardTitle, CardContent } from 'dystopia-linear-lib/components/card';
 	import { Badge } from 'dystopia-linear-lib/components/badge';
 	import { Button } from 'dystopia-linear-lib/components/button';
+	import IconArrowLeft from '~icons/lucide/arrow-left';
 	import IconHandshake from '~icons/lucide/handshake';
 	import IconPlus from '~icons/lucide/plus';
 	import IconSearch from '~icons/lucide/search';
@@ -85,15 +87,25 @@
 </script>
 
 <div class="flex flex-col gap-6">
+	<!-- Page Header with Back Action -->
 	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-		<div>
-			<Typography variant="h3" as="h1" class="font-bold text-foreground">
-				Manajemen Biro Iklan & Reseller
-			</Typography>
-			<Typography variant="muted" as="p" class="text-foreground-subtle">
-				Kelola relasi mitra percetakan, penetapan tier harga reseller, plafon kredit tempo (TOP),
-				dan saldo deposit.
-			</Typography>
+		<div class="flex items-center gap-3">
+			<a
+				href={resolve('/(app)/settings')}
+				class="flex size-9 items-center justify-center rounded-lg border border-border bg-app-surface text-foreground-subtle transition-colors hover:bg-surface-subtle hover:text-foreground"
+				title="Kembali ke Pengaturan"
+			>
+				<IconArrowLeft class="size-4" />
+			</a>
+			<div>
+				<Typography variant="h3" as="h1" class="font-bold text-foreground">
+					Manajemen Biro Iklan & Reseller
+				</Typography>
+				<Typography variant="muted" as="p" class="text-xs text-foreground-subtle sm:text-sm">
+					Kelola relasi mitra percetakan, penetapan tier harga reseller, plafon kredit tempo (TOP),
+					dan saldo deposit.
+				</Typography>
+			</div>
 		</div>
 		<Button size="sm">
 			<IconPlus class="mr-1.5 size-4" />
@@ -202,3 +214,4 @@
 		</CardContent>
 	</Card>
 </div>
+
