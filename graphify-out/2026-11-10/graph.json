@@ -1007,18 +1007,6 @@
       "source_location": "L103"
     },
     {
-      "id": "src_features_product_categories_presentation_components_productcategoryformdialog_if",
-      "label": "if()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Result",
-      "file_type": "code",
-      "norm_label": "if()",
-      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte",
-      "source_location": "L37"
-    },
-    {
       "id": "src_lib_shared_domain_errors_app_error_apperror_constructor",
       "label": ".constructor()",
       "_callable": true,
@@ -1149,6 +1137,18 @@
       "norm_label": "safeapicall()",
       "source_file": "src/lib/shared/infrastructure/api/safe-api-call.ts",
       "source_location": "L12"
+    },
+    {
+      "id": "src_features_product_categories_presentation_components_productcategoryformdialog_if",
+      "label": "if()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "file_type": "code",
+      "norm_label": "if()",
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte",
+      "source_location": "L37"
     },
     {
       "id": "src_routes_app_finance_page_load",
@@ -3059,17 +3059,6 @@
       "source_location": "L1"
     },
     {
-      "id": "src_routes_app_settings_product_categories_page",
-      "label": "product-categories/+page.svelte",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "page-title.store.svelte.ts",
-      "file_type": "code",
-      "norm_label": "product-categories/+page.svelte",
-      "source_file": "src/routes/(app)/settings/product-categories/+page.svelte",
-      "source_location": "L1"
-    },
-    {
       "id": "src_routes_app_settings_products_page",
       "label": "products/+page.svelte",
       "_origin": "ast",
@@ -4469,113 +4458,25 @@
       "source_location": "L122"
     },
     {
-      "id": "arrow_left",
-      "label": "~icons/lucide/arrow-left",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/arrow-left",
-      "source_file": "~icons/lucide/arrow-left"
-    },
-    {
-      "id": "button",
-      "label": "dystopia-linear-lib/components/button",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "dystopia-linear-lib/components/button",
-      "source_file": "dystopia-linear-lib/components/button"
-    },
-    {
-      "id": "chevron_down",
-      "label": "~icons/lucide/chevron-down",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/chevron-down",
-      "source_file": "~icons/lucide/chevron-down"
-    },
-    {
-      "id": "construction",
-      "label": "~icons/lucide/construction",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/construction",
-      "source_file": "~icons/lucide/construction"
-    },
-    {
-      "id": "house",
-      "label": "~icons/lucide/house",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/house",
-      "source_file": "~icons/lucide/house"
-    },
-    {
-      "id": "paths",
-      "label": "$app/paths",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "$app/paths",
-      "source_file": "$app/paths"
-    },
-    {
-      "id": "search_x",
-      "label": "~icons/lucide/search-x",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/search-x",
-      "source_file": "~icons/lucide/search-x"
-    },
-    {
-      "id": "server_crash",
-      "label": "~icons/lucide/server-crash",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/server-crash",
-      "source_file": "~icons/lucide/server-crash"
-    },
-    {
-      "id": "shield_x",
-      "label": "~icons/lucide/shield-x",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "StatusPageLayout.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/shield-x",
-      "source_file": "~icons/lucide/shield-x"
-    },
-    {
       "id": "src_lib_components_status_pages_forbiddenpage",
       "label": "ForbiddenPage.svelte",
       "_origin": "ast",
       "community": 3,
-      "community_name": "StatusPageLayout.svelte",
+      "community_name": "status-pages/index.ts",
       "file_type": "code",
       "norm_label": "forbiddenpage.svelte",
       "source_file": "src/lib/components/status-pages/ForbiddenPage.svelte",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_lib_components_status_pages_index",
+      "label": "status-pages/index.ts",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "status-pages/index.ts",
+      "file_type": "code",
+      "norm_label": "status-pages/index.ts",
+      "source_file": "src/lib/components/status-pages/index.ts",
       "source_location": "L1"
     },
     {
@@ -4583,7 +4484,7 @@
       "label": "NotFoundPage.svelte",
       "_origin": "ast",
       "community": 3,
-      "community_name": "StatusPageLayout.svelte",
+      "community_name": "status-pages/index.ts",
       "file_type": "code",
       "norm_label": "notfoundpage.svelte",
       "source_file": "src/lib/components/status-pages/NotFoundPage.svelte",
@@ -4594,7 +4495,7 @@
       "label": "ServerErrorPage.svelte",
       "_origin": "ast",
       "community": 3,
-      "community_name": "StatusPageLayout.svelte",
+      "community_name": "status-pages/index.ts",
       "file_type": "code",
       "norm_label": "servererrorpage.svelte",
       "source_file": "src/lib/components/status-pages/ServerErrorPage.svelte",
@@ -4605,7 +4506,7 @@
       "label": "StatusPageLayout.svelte",
       "_origin": "ast",
       "community": 3,
-      "community_name": "StatusPageLayout.svelte",
+      "community_name": "status-pages/index.ts",
       "file_type": "code",
       "norm_label": "statuspagelayout.svelte",
       "source_file": "src/lib/components/status-pages/StatusPageLayout.svelte",
@@ -4616,10 +4517,54 @@
       "label": "UnderConstructionPage.svelte",
       "_origin": "ast",
       "community": 3,
-      "community_name": "StatusPageLayout.svelte",
+      "community_name": "status-pages/index.ts",
       "file_type": "code",
       "norm_label": "underconstructionpage.svelte",
       "source_file": "src/lib/components/status-pages/UnderConstructionPage.svelte",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_routes_app_settings_attribute_variants_page",
+      "label": "attribute-variants/+page.svelte",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "status-pages/index.ts",
+      "file_type": "code",
+      "norm_label": "attribute-variants/+page.svelte",
+      "source_file": "src/routes/(app)/settings/attribute-variants/+page.svelte",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_routes_app_settings_expense_categories_page",
+      "label": "expense-categories/+page.svelte",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "status-pages/index.ts",
+      "file_type": "code",
+      "norm_label": "expense-categories/+page.svelte",
+      "source_file": "src/routes/(app)/settings/expense-categories/+page.svelte",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_routes_app_settings_suppliers_page",
+      "label": "suppliers/+page.svelte",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "status-pages/index.ts",
+      "file_type": "code",
+      "norm_label": "suppliers/+page.svelte",
+      "source_file": "src/routes/(app)/settings/suppliers/+page.svelte",
+      "source_location": "L1"
+    },
+    {
+      "id": "src_routes_error",
+      "label": "+error.svelte",
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "status-pages/index.ts",
+      "file_type": "code",
+      "norm_label": "+error.svelte",
+      "source_file": "src/routes/+error.svelte",
       "source_location": "L1"
     },
     {
@@ -5642,17 +5587,6 @@
       "source_location": "L1"
     },
     {
-      "id": "arrow_right",
-      "label": "~icons/lucide/arrow-right",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "NavigationCard.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "~icons/lucide/arrow-right",
-      "source_file": "~icons/lucide/arrow-right"
-    },
-    {
       "id": "badge",
       "label": "dystopia-linear-lib/components/badge",
       "_origin": "ast",
@@ -5673,17 +5607,6 @@
       "file_type": "code",
       "norm_label": "svelte",
       "source_file": "svelte"
-    },
-    {
-      "id": "typography",
-      "label": "dystopia-linear-lib/components/typography",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "NavigationCard.svelte",
-      "confidence": "EXTRACTED",
-      "file_type": "code",
-      "norm_label": "dystopia-linear-lib/components/typography",
-      "source_file": "dystopia-linear-lib/components/typography"
     },
     {
       "id": "src_lib_components_navigation_card_index",
@@ -8160,39 +8083,6 @@
       "source_location": "L5"
     },
     {
-      "id": "src_features_product_categories_presentation_components_productcategorydeletedialog",
-      "label": "ProductCategoryDeleteDialog.svelte",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Result",
-      "file_type": "code",
-      "norm_label": "productcategorydeletedialog.svelte",
-      "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_features_product_categories_presentation_components_productcategoryformdialog",
-      "label": "ProductCategoryFormDialog.svelte",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Result",
-      "file_type": "code",
-      "norm_label": "productcategoryformdialog.svelte",
-      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_features_product_categories_presentation_pages_productcategorylistpage",
-      "label": "ProductCategoryListPage.svelte",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "Result",
-      "file_type": "code",
-      "norm_label": "productcategorylistpage.svelte",
-      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte",
-      "source_location": "L1"
-    },
-    {
       "id": "src_lib_shared_domain_errors_app_error",
       "label": "app-error.ts",
       "_origin": "ast",
@@ -8347,69 +8237,256 @@
       "source_location": "L65"
     },
     {
-      "id": "state",
-      "label": "$app/state",
+      "id": "alert_circle",
+      "label": "~icons/lucide/alert-circle",
       "_origin": "ast",
       "community": 60,
-      "community_name": "status-pages/index.ts",
+      "community_name": "ProductCategoryListPage.svelte",
       "confidence": "EXTRACTED",
       "file_type": "code",
-      "norm_label": "$app/state",
-      "source_file": "$app/state"
+      "norm_label": "~icons/lucide/alert-circle",
+      "source_file": "~icons/lucide/alert-circle"
     },
     {
-      "id": "src_lib_components_status_pages_index",
-      "label": "status-pages/index.ts",
+      "id": "alert_triangle",
+      "label": "~icons/lucide/alert-triangle",
       "_origin": "ast",
       "community": 60,
-      "community_name": "status-pages/index.ts",
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
       "file_type": "code",
-      "norm_label": "status-pages/index.ts",
-      "source_file": "src/lib/components/status-pages/index.ts",
+      "norm_label": "~icons/lucide/alert-triangle",
+      "source_file": "~icons/lucide/alert-triangle"
+    },
+    {
+      "id": "button",
+      "label": "dystopia-linear-lib/components/button",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/button",
+      "source_file": "dystopia-linear-lib/components/button"
+    },
+    {
+      "id": "calculator",
+      "label": "~icons/lucide/calculator",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/calculator",
+      "source_file": "~icons/lucide/calculator"
+    },
+    {
+      "id": "card",
+      "label": "dystopia-linear-lib/components/card",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/card",
+      "source_file": "dystopia-linear-lib/components/card"
+    },
+    {
+      "id": "check_circle_2",
+      "label": "~icons/lucide/check-circle-2",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/check-circle-2",
+      "source_file": "~icons/lucide/check-circle-2"
+    },
+    {
+      "id": "edit_2",
+      "label": "~icons/lucide/edit-2",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/edit-2",
+      "source_file": "~icons/lucide/edit-2"
+    },
+    {
+      "id": "empty_state",
+      "label": "dystopia-linear-lib/components/empty-state",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/empty-state",
+      "source_file": "dystopia-linear-lib/components/empty-state"
+    },
+    {
+      "id": "folder_tree",
+      "label": "~icons/lucide/folder-tree",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/folder-tree",
+      "source_file": "~icons/lucide/folder-tree"
+    },
+    {
+      "id": "layers",
+      "label": "~icons/lucide/layers",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/layers",
+      "source_file": "~icons/lucide/layers"
+    },
+    {
+      "id": "plus",
+      "label": "~icons/lucide/plus",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/plus",
+      "source_file": "~icons/lucide/plus"
+    },
+    {
+      "id": "search",
+      "label": "~icons/lucide/search",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/search",
+      "source_file": "~icons/lucide/search"
+    },
+    {
+      "id": "select",
+      "label": "dystopia-linear-lib/components/select",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/select",
+      "source_file": "dystopia-linear-lib/components/select"
+    },
+    {
+      "id": "spinner",
+      "label": "dystopia-linear-lib/components/spinner",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/spinner",
+      "source_file": "dystopia-linear-lib/components/spinner"
+    },
+    {
+      "id": "table",
+      "label": "dystopia-linear-lib/components/table",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/table",
+      "source_file": "dystopia-linear-lib/components/table"
+    },
+    {
+      "id": "text_field",
+      "label": "dystopia-linear-lib/components/text-field",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/text-field",
+      "source_file": "dystopia-linear-lib/components/text-field"
+    },
+    {
+      "id": "trash_2",
+      "label": "~icons/lucide/trash-2",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/trash-2",
+      "source_file": "~icons/lucide/trash-2"
+    },
+    {
+      "id": "typography",
+      "label": "dystopia-linear-lib/components/typography",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "dystopia-linear-lib/components/typography",
+      "source_file": "dystopia-linear-lib/components/typography"
+    },
+    {
+      "id": "x",
+      "label": "~icons/lucide/x",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "confidence": "EXTRACTED",
+      "file_type": "code",
+      "norm_label": "~icons/lucide/x",
+      "source_file": "~icons/lucide/x"
+    },
+    {
+      "id": "src_features_product_categories_presentation_components_productcategorydeletedialog",
+      "label": "ProductCategoryDeleteDialog.svelte",
+      "_origin": "ast",
+      "community": 60,
+      "community_name": "ProductCategoryListPage.svelte",
+      "file_type": "code",
+      "norm_label": "productcategorydeletedialog.svelte",
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte",
       "source_location": "L1"
     },
     {
-      "id": "src_routes_app_settings_attribute_variants_page",
-      "label": "attribute-variants/+page.svelte",
+      "id": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "label": "ProductCategoryFormDialog.svelte",
       "_origin": "ast",
       "community": 60,
-      "community_name": "status-pages/index.ts",
+      "community_name": "ProductCategoryListPage.svelte",
       "file_type": "code",
-      "norm_label": "attribute-variants/+page.svelte",
-      "source_file": "src/routes/(app)/settings/attribute-variants/+page.svelte",
+      "norm_label": "productcategoryformdialog.svelte",
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte",
       "source_location": "L1"
     },
     {
-      "id": "src_routes_app_settings_expense_categories_page",
-      "label": "expense-categories/+page.svelte",
+      "id": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "label": "ProductCategoryListPage.svelte",
       "_origin": "ast",
       "community": 60,
-      "community_name": "status-pages/index.ts",
+      "community_name": "ProductCategoryListPage.svelte",
       "file_type": "code",
-      "norm_label": "expense-categories/+page.svelte",
-      "source_file": "src/routes/(app)/settings/expense-categories/+page.svelte",
+      "norm_label": "productcategorylistpage.svelte",
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte",
       "source_location": "L1"
     },
     {
-      "id": "src_routes_app_settings_suppliers_page",
-      "label": "suppliers/+page.svelte",
+      "id": "src_routes_app_settings_product_categories_page",
+      "label": "product-categories/+page.svelte",
       "_origin": "ast",
       "community": 60,
-      "community_name": "status-pages/index.ts",
+      "community_name": "ProductCategoryListPage.svelte",
       "file_type": "code",
-      "norm_label": "suppliers/+page.svelte",
-      "source_file": "src/routes/(app)/settings/suppliers/+page.svelte",
-      "source_location": "L1"
-    },
-    {
-      "id": "src_routes_error",
-      "label": "+error.svelte",
-      "_origin": "ast",
-      "community": 60,
-      "community_name": "status-pages/index.ts",
-      "file_type": "code",
-      "norm_label": "+error.svelte",
-      "source_file": "src/routes/+error.svelte",
+      "norm_label": "product-categories/+page.svelte",
+      "source_file": "src/routes/(app)/settings/product-categories/+page.svelte",
       "source_location": "L1"
     },
     {
@@ -19419,12 +19496,66 @@
     },
     {
       "source": "src_features_product_categories_presentation_components_productcategorydeletedialog",
+      "target": "alert_triangle",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategorydeletedialog",
+      "target": "button",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategorydeletedialog",
       "target": "src_features_product_categories_domain_product_category_entity",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategorydeletedialog",
+      "target": "typography",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "alert_circle",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "button",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "select",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
     },
     {
       "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
@@ -19443,6 +19574,159 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "text_field",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "typography",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "target": "x",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "alert_circle",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "badge",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "button",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "calculator",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "card",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "check_circle_2",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "edit_2",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "empty_state",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "folder_tree",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "layers",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "plus",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "search",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "select",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "spinner",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
     },
     {
       "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
@@ -19474,6 +19758,51 @@
     {
       "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
       "target": "src_features_product_categories_presentation_components_productcategoryformdialog",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "svelte",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "table",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "text_field",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "trash_2",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte"
+    },
+    {
+      "source": "src_features_product_categories_presentation_pages_productcategorylistpage",
+      "target": "typography",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19527,15 +19856,6 @@
     },
     {
       "source": "src_lib_components_navigation_card_navigationcard",
-      "target": "arrow_right",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/navigation-card/NavigationCard.svelte"
-    },
-    {
-      "source": "src_lib_components_navigation_card_navigationcard",
       "target": "badge",
       "relation": "imports_from",
       "_origin": "ast",
@@ -19563,48 +19883,12 @@
     },
     {
       "source": "src_lib_components_status_pages_forbiddenpage",
-      "target": "paths",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/ForbiddenPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_forbiddenpage",
-      "target": "shield_x",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/ForbiddenPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_forbiddenpage",
       "target": "src_lib_components_status_pages_statuspagelayout",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/status-pages/ForbiddenPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_notfoundpage",
-      "target": "paths",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/NotFoundPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_notfoundpage",
-      "target": "search_x",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/NotFoundPage.svelte"
     },
     {
       "source": "src_lib_components_status_pages_notfoundpage",
@@ -19617,70 +19901,16 @@
     },
     {
       "source": "src_lib_components_status_pages_servererrorpage",
-      "target": "chevron_down",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/ServerErrorPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_servererrorpage",
-      "target": "paths",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/ServerErrorPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_servererrorpage",
-      "target": "server_crash",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/ServerErrorPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_servererrorpage",
       "target": "src_lib_components_status_pages_statuspagelayout",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/status-pages/ServerErrorPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_statuspagelayout",
-      "target": "arrow_left",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/StatusPageLayout.svelte"
     },
     {
       "source": "src_lib_components_status_pages_statuspagelayout",
       "target": "button",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/StatusPageLayout.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_statuspagelayout",
-      "target": "house",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/StatusPageLayout.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_statuspagelayout",
-      "target": "paths",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -19704,24 +19934,6 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/status-pages/StatusPageLayout.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_underconstructionpage",
-      "target": "construction",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/UnderConstructionPage.svelte"
-    },
-    {
-      "source": "src_lib_components_status_pages_underconstructionpage",
-      "target": "paths",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/lib/components/status-pages/UnderConstructionPage.svelte"
     },
     {
       "source": "src_lib_components_status_pages_underconstructionpage",
@@ -20077,15 +20289,6 @@
     {
       "source": "src_routes_error",
       "target": "src_lib_components_status_pages_index",
-      "relation": "imports_from",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/routes/+error.svelte"
-    },
-    {
-      "source": "src_routes_error",
-      "target": "state",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -20976,5 +21179,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "913cd231ad052f45fbfeb023f80aa38de80a7dc3"
+  "built_at_commit": "eddd1e2ca9f65443b72628ea1e758ec360f5685d"
 }

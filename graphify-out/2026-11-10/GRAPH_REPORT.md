@@ -6,12 +6,12 @@
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 815 nodes · 1012 edges · 77 communities (59 shown, 11 thin omitted)
+- 822 nodes · 1026 edges · 77 communities (59 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `913cd231`
+- Built from commit: `eddd1e2c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -353,24 +353,24 @@ Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
 ## Knowledge Gaps
-- **452 isolated node(s):** `Theme`, `NavEntry`, `NavGroup`, `NavLink`, `SidebarClasses` (+447 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 546 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **452 isolated node(s):** `CalculationTypeOption`, `CALCULATION_TYPES`, `productCategorySchema`, `INITIAL_CATEGORIES`, `AppErrorCode` (+447 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 550 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `zod` connect `Result` to `package.json`?**
+  _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `zod` connect `Result` to `package.json`?**
-  _High betweenness centrality (0.025) - this node is a cross-community bridge._
-- **What connects `Theme`, `NavEntry`, `NavGroup` to the rest of the system?**
+- **What connects `CalculationTypeOption`, `CALCULATION_TYPES`, `productCategorySchema` to the rest of the system?**
   _452 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
 - **Should `page-title.store.svelte.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08695652173913043 - nodes in this community are weakly interconnected._
