@@ -16,6 +16,8 @@ These are the _principles_. The concrete style that implements them — Soft Min
 - **No arbitrary hex — including the brand's own.** `bg-[#00272f]` is a violation now that `bg-brand-950` exists; a literal hex escapes the scale and cannot be themed or audited. `#005466` and `#003e4a` are `brand-700` and `brand-800`.
 - **Strict Prohibition of Dashed Borders (`border-dashed` / `border-dotted`):**
   Never use dashed borders on cards, empty states, file upload dropzones, dividers, or placeholders. Dashed borders are an overused "AI Slop" cliché that makes production UIs look like unfinished wireframes. Always use crisp solid hairline borders (`border border-border` / `border-line`) paired with subtle background contrast (`bg-surface-subtle`).
+- **Strict Prohibition of Arbitrary Monospace (`font-mono` on Badges/Pills/Labels):**
+  Never slap `font-mono` with uppercase or wide tracking on status badges, feature chips, pills, or section labels. Monospace text inside pill badges is a stereotypical AI Slop trope that looks like an unfinished developer console or prototype. All UI badges, labels, pills, and copy must strictly use the theme's default sans-serif font (`--font-sans: 'Inter', sans-serif`). Monospace is strictly reserved for code blocks, terminal logs, technical stack traces, and numeric tabular columns where character alignment is essential.
 - **Restraint on Dashes & AI Slop Punctuation in Vibe Code & Copy:**
   Avoid excessive em-dashes (`—`), en-dashes (`–`), or repetitive hyphens in UI copy, placeholders, titles, and code comments. Write naturally, directly, and cleanly without the stereotypical repetitive LLM prose style.
 

@@ -186,3 +186,4 @@ A screen fails this style if any of these are true:
 - A colour pair is written by hand (`bg-white dark:bg-slate-900`) where a role exists.
 - `dark:` variants are missing on a surface that had to reach for a palette step.
 - More than one accent hue competes for attention in the same view, or `accent` yellow is used on a button.
+- A status badge, pill, button, or general UI label uses `font-mono` instead of the theme's default sans-serif font (`Inter`). Monospace is only allowed for raw code, logs, stack traces, and numeric tabular columns.
