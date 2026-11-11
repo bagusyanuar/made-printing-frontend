@@ -11,6 +11,9 @@ const INITIAL_CATEGORIES: ProductCategory[] = [
 		id: 'cat-1',
 		code: 'LF-OUT',
 		name: 'Large Format Outdoor',
+		type: 'production',
+		spkCategory: null,
+		displayOrder: 1,
 		calculationType: 'square_meter',
 		description: 'Spanduk, Baliho, Banner Flexy Standard/Korcin tahan cuaca luar ruangan',
 		isActive: true,
@@ -21,6 +24,9 @@ const INITIAL_CATEGORIES: ProductCategory[] = [
 		id: 'cat-2',
 		code: 'LF-IN',
 		name: 'Large Format Indoor & Display',
+		type: 'production',
+		spkCategory: null,
+		displayOrder: 2,
 		calculationType: 'square_meter',
 		description:
 			'Albatros, Luster, Easy Banner untuk X-Banner, Roll Up, Poster Display resolusi tinggi',
@@ -32,6 +38,9 @@ const INITIAL_CATEGORIES: ProductCategory[] = [
 		id: 'cat-3',
 		code: 'A3-SHEET',
 		name: 'Digital Printing A3+ Lembaran',
+		type: 'production',
+		spkCategory: null,
+		displayOrder: 3,
 		calculationType: 'sheet',
 		description: 'Brosur, Kartu Nama, Flyer, Sertifikat, Stiker A3+ (Chromo & Vinyl)',
 		isActive: true,
@@ -42,6 +51,9 @@ const INITIAL_CATEGORIES: ProductCategory[] = [
 		id: 'cat-4',
 		code: 'DTF-ROLL',
 		name: 'Sablon Digital DTF & Sublimasi',
+		type: 'production',
+		spkCategory: 'Digital Printing A3+',
+		displayOrder: 4,
 		calculationType: 'meter_run',
 		description: 'Cetak film transfer sablon kaos roll 58/60cm full color tinta tekstil',
 		isActive: true,
@@ -52,11 +64,27 @@ const INITIAL_CATEGORIES: ProductCategory[] = [
 		id: 'cat-5',
 		code: 'MERCH-UV',
 		name: 'Merchandise & Flatbed UV',
+		type: 'production',
+		spkCategory: null,
+		displayOrder: 5,
 		calculationType: 'piece',
 		description: 'Gantungan kunci akrilik, Tumbler grafir/UV, ID Card PVC, Plakat',
 		isActive: true,
 		createdAt: '2026-01-14T13:45:00.000Z',
 		updatedAt: '2026-01-14T13:45:00.000Z'
+	},
+	{
+		id: 'cat-6',
+		code: 'DESIGN-SVC',
+		name: 'Jasa Desain & Setting Layout',
+		type: 'non_production',
+		spkCategory: null,
+		displayOrder: 6,
+		calculationType: 'piece',
+		description: 'Jasa setting layout, edit vektor, dan desain grafis',
+		isActive: true,
+		createdAt: '2026-01-15T14:00:00.000Z',
+		updatedAt: '2026-01-15T14:00:00.000Z'
 	}
 ];
 
@@ -89,6 +117,9 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 			id: `cat-${Date.now()}`,
 			code: normalizedCode,
 			name: input.name.trim(),
+			type: input.type,
+			spkCategory: input.spkCategory?.trim() || null,
+			displayOrder: input.displayOrder,
 			calculationType: input.calculationType,
 			description: input.description?.trim() || null,
 			isActive: input.isActive,
@@ -118,6 +149,9 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 			...existing,
 			code: normalizedCode,
 			name: input.name.trim(),
+			type: input.type,
+			spkCategory: input.spkCategory?.trim() || null,
+			displayOrder: input.displayOrder,
 			calculationType: input.calculationType,
 			description: input.description?.trim() || null,
 			isActive: input.isActive,
@@ -136,6 +170,18 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 		}
 
 		this.#categories = this.#categories.filter((c) => c.id !== id);
+		return Res.ok(undefined);
+	}
+
+	async reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void>> {
+		await delay(100);
+		for (const order of orders) {
+			const cat = this.#categories.find((c) => c.id === order.id);
+			if (cat) {
+				cat.displayOrder = order.displayOrder;
+				cat.updatedAt = new Date().toISOString();
+			}
+		}
 		return Res.ok(undefined);
 	}
 }

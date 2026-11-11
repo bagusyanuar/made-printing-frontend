@@ -11,6 +11,11 @@ export const productCategorySchema = z.object({
 		.string()
 		.min(1, 'Nama kategori wajib diisi')
 		.max(100, 'Nama kategori maksimal 100 karakter'),
+	type: z.enum(['production', 'non_production'], {
+		error: 'Tipe kategori wajib dipilih'
+	}),
+	spkCategory: z.string().nullable().optional(),
+	displayOrder: z.coerce.number().int().min(1, 'Index display minimal 1'),
 	calculationType: z.enum(['square_meter', 'sheet', 'meter_run', 'piece'], {
 		error: 'Model kalkulasi wajib dipilih'
 	}),

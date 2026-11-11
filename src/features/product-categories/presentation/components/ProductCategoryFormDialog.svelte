@@ -8,6 +8,7 @@
 	import {
 		CALCULATION_TYPES,
 		type CalculationType,
+		type CategoryType,
 		type ProductCategory,
 		type ProductCategoryInput
 	} from '../../domain/product-category.entity';
@@ -24,6 +25,9 @@
 
 	let code = $state('');
 	let name = $state('');
+	let type = $state<CategoryType>('production');
+	let spkCategory = $state('');
+	let displayOrder = $state(1);
 	let calculationType = $state<CalculationType>('square_meter');
 	let description = $state('');
 	let isActive = $state(true);
@@ -37,12 +41,18 @@
 			if (category) {
 				code = category.code;
 				name = category.name;
+				type = category.type;
+				spkCategory = category.spkCategory ?? '';
+				displayOrder = category.displayOrder;
 				calculationType = category.calculationType;
 				description = category.description ?? '';
 				isActive = category.isActive;
 			} else {
 				code = '';
 				name = '';
+				type = 'production';
+				spkCategory = '';
+				displayOrder = 1;
 				calculationType = 'square_meter';
 				description = '';
 				isActive = true;
@@ -60,6 +70,9 @@
 		const payload: ProductCategoryInput = {
 			code: code.trim().toUpperCase(),
 			name: name.trim(),
+			type,
+			spkCategory: spkCategory.trim() || null,
+			displayOrder: Number(displayOrder) || 1,
 			calculationType,
 			description: description.trim() || null,
 			isActive
@@ -71,6 +84,9 @@
 			fieldErrors = {
 				code: formatted.code?._errors[0] ?? '',
 				name: formatted.name?._errors[0] ?? '',
+				type: formatted.type?._errors[0] ?? '',
+				spkCategory: formatted.spkCategory?._errors[0] ?? '',
+				displayOrder: formatted.displayOrder?._errors[0] ?? '',
 				calculationType: formatted.calculationType?._errors[0] ?? '',
 				description: formatted.description?._errors[0] ?? ''
 			};
@@ -174,6 +190,64 @@
 					{#if fieldErrors.name}
 						<span class="text-xs text-danger">{fieldErrors.name}</span>
 					{/if}
+				</div>
+
+				<!-- Tipe Kategori & Index Display (Row) -->
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<!-- Tipe -->
+					<div class="flex flex-col gap-1.5">
+						<label for="category-type" class="text-xs font-semibold text-foreground">
+							Tipe Kategori <span class="text-danger">*</span>
+						</label>
+						<Select
+							id="category-type"
+							value={type}
+							onValueChange={(val) => (type = val as CategoryType)}
+							disabled={isSubmitting}
+							class="w-full"
+						>
+							<option value="production">Produksi</option>
+							<option value="non_production">Non Produksi</option>
+						</Select>
+					</div>
+
+					<!-- Index Urutan Display -->
+					<div class="flex flex-col gap-1.5">
+						<label for="category-order" class="text-xs font-semibold text-foreground">
+							Index Urutan Display <span class="text-danger">*</span>
+						</label>
+						<TextField
+							id="category-order"
+							type="number"
+							value={String(displayOrder)}
+							onValueChange={(val) => (displayOrder = Number(val) || 1)}
+							placeholder="1"
+							invalid={Boolean(fieldErrors.displayOrder)}
+							disabled={isSubmitting}
+							class="w-full"
+						/>
+						{#if fieldErrors.displayOrder}
+							<span class="text-xs text-danger">{fieldErrors.displayOrder}</span>
+						{/if}
+					</div>
+				</div>
+
+				<!-- Kategori SPK -->
+				<div class="flex flex-col gap-1.5">
+					<label for="category-spk" class="text-xs font-semibold text-foreground">
+						Kategori SPK (Routing)
+					</label>
+					<TextField
+						id="category-spk"
+						bind:value={spkCategory}
+						placeholder="Default (Kosongkan jika mandiri / default)"
+						disabled={isSubmitting}
+						class="w-full"
+					/>
+					<span class="text-[11px] text-foreground-subtle">
+						Kosongkan untuk kategori mandiri (Default), atau isi nama kategori tujuan jika
+						menginduk.
+					</span>
 				</div>
 
 				<!-- Model Satuan Hitung -->

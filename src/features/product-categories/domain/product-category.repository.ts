@@ -7,4 +7,5 @@ export interface ProductCategoryRepository {
 	create(input: ProductCategoryInput): Promise<Result<ProductCategory>>;
 	update(id: string, input: ProductCategoryInput): Promise<Result<ProductCategory>>;
 	delete(id: string): Promise<Result<void>>;
+	reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void>>;
 }

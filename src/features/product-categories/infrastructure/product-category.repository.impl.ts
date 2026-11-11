@@ -51,6 +51,14 @@ export class ProductCategoryRepositoryImpl implements ProductCategoryRepository 
 			await axiosClient.delete(`/product-categories/${id}`);
 		});
 	}
+
+	async reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void>> {
+		return safeApiCall(async () => {
+			await axiosClient.post('/product-categories/reorder', {
+				orders: orders.map((o) => ({ id: o.id, display_order: o.displayOrder }))
+			});
+		});
+	}
 }
 
 export const productCategoryRepository = new ProductCategoryRepositoryImpl();

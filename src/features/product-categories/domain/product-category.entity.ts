@@ -1,4 +1,5 @@
 export type CalculationType = 'square_meter' | 'sheet' | 'meter_run' | 'piece';
+export type CategoryType = 'production' | 'non_production';
 
 export interface CalculationTypeOption {
 	value: CalculationType;
@@ -38,6 +39,9 @@ export interface ProductCategory {
 	id: string;
 	code: string;
 	name: string;
+	type: CategoryType;
+	spkCategory: string | null;
+	displayOrder: number;
 	calculationType: CalculationType;
 	description: string | null;
 	isActive: boolean;
@@ -48,6 +52,9 @@ export interface ProductCategory {
 export interface ProductCategoryInput {
 	code: string;
 	name: string;
+	type: CategoryType;
+	spkCategory?: string | null;
+	displayOrder: number;
 	calculationType: CalculationType;
 	description?: string | null;
 	isActive: boolean;
