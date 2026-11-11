@@ -1,25 +1,27 @@
-# Graph Report - made-printing-frontend  (2026-11-10)
+# Graph Report - made-printing-frontend  (2026-11-11)
 
 ## Corpus Check
-- 154 files · ~76,959 words
+- 159 files · ~79,218 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 823 nodes · 1045 edges · 74 communities (59 shown, 11 thin omitted)
+- 840 nodes · 1058 edges · 73 communities (60 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f5f4a11f`
+- Built from commit: `46a400d7`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - package.json
 - devDependencies
+- themeStore
+- ProductCategoryListPage.svelte
 - sidebar.types.ts
-- Result
+- ProductCategory
 - What You Must Do When Invoked
 - @sveltejs/kit
 - scripts
@@ -32,35 +34,34 @@
 - prettier.config.js
 - +layout.ts
 - app.d.ts
-- Dashboard Layout Structure
+- Visual Style: Soft Minimal SaaS (Made Printing)
 - Linear-Style Slicing
 - Domain Knowledge: Digital Printing ERP (Made Printing)
 - 04. Model Rumus Kalkulasi Harga & Multi-Tier Pricing
 - Global Agent Rules
 - Global Agent Rules
-- Visual Style: Soft Minimal SaaS (Made Printing)
+- AGENTS.md
 - API Integration
 - Svelte 5 Runes
 - Tailwind v4
+- Type Safety
 - Process Flow
 - Naming Conventions
-- Type Safety
+- 1. Kategori Produk Utama
 - Feature Architecture
 - graphify reference: extra exports and benchmark
 - Superforms + Zod
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
-- 1. Kategori Produk Utama
+- Dashboard Layout Structure
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
 - Interaction States
 - Layout Composition
-- Page Slicing Rules
 - Commit Message Format
 - 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_)
 - 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan
-- TanStack Table in Svelte 5
 - Testing Rules
 - Storybook for Svelte 5 Guidelines
 - UX Heuristics For Slicing
@@ -88,15 +89,15 @@
 - workflows/graphify.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `Result` - 26 edges
-2. `ProductCategory` - 24 edges
-3. `ProductCategoryInput` - 19 edges
-4. `AppError` - 17 edges
-5. `Build Order` - 17 edges
-6. `dystopia-linear-lib` - 14 edges
-7. `Linear-Style Slicing` - 14 edges
-8. `safeApiCall()` - 13 edges
-9. `ProductCategoryRepository` - 12 edges
+1. `ProductCategory` - 24 edges
+2. `ProductCategoryInput` - 19 edges
+3. `Build Order` - 17 edges
+4. `safeApiCall()` - 14 edges
+5. `dystopia-linear-lib` - 14 edges
+6. `Linear-Style Slicing` - 14 edges
+7. `ProductCategoryRepository` - 13 edges
+8. `AppError` - 12 edges
+9. `Global Agent Rules` - 12 edges
 10. `Global Agent Rules` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -108,13 +109,13 @@
   src/features/product-categories/infrastructure/product-category.repository.impl.ts → src/features/product-categories/domain/product-category.repository.ts
 - `productCategoryRepositoryMock` --implements--> `ProductCategoryRepository`  [EXTRACTED]
   src/features/product-categories/infrastructure/product-category.repository.mock.ts → src/features/product-categories/domain/product-category.repository.ts
-- `safeApiCall()` --calls--> `AppError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
+- `parseApiResponseWithMeta()` --calls--> `InvalidResponseError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/api-schema.ts → src/lib/shared/domain/errors/app-error.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (74 total, 11 thin omitted)
+## Communities (73 total, 11 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.07
@@ -124,13 +125,21 @@ Nodes (28): name, private, type, version, class-variance-authority, clsx, dystop
 Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
-### Community 5 - "sidebar.types.ts"
-Cohesion: 0.06
-Nodes (19): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+11 more)
+### Community 3 - "themeStore"
+Cohesion: 0.15
+Nodes (5): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore
 
-### Community 6 - "Result"
-Cohesion: 0.06
-Nodes (43): axios, zod, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType (+35 more)
+### Community 4 - "ProductCategoryListPage.svelte"
+Cohesion: 0.07
+Nodes (4): CALCULATION_TYPES, CalculationTypeOption, CategoryType, TablePaginationProps
+
+### Community 5 - "sidebar.types.ts"
+Cohesion: 0.10
+Nodes (14): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+6 more)
+
+### Community 6 - "ProductCategory"
+Cohesion: 0.05
+Nodes (41): axios, zod, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CalculationType, ProductCategory (+33 more)
 
 ### Community 7 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -157,16 +166,16 @@ Cohesion: 0.12
 Nodes (17): 10. `application/<feature>.container.ts`, 11. `application/<feature>.use-cases.ts`, 12. `application/<feature>.store.svelte.ts` — only when needed, 13. `presentation/hooks/<feature>.query-keys.ts`, 14. Fetch in the page, not in a load function, 15. Wire the route, 1. `domain/<feature>.entity.ts`, 2. `domain/<feature>.repository.ts` (+9 more)
 
 ### Community 14 - "Design System & Aesthetics (Anti-AI Slop)"
-Cohesion: 0.25
-Nodes (8): 1. No "AI Slop" Permitted, 2. Depth & Elevation, 3. Typography & Hierarchy, 4. Micro-Interactions & Animation, 5. Spacing & Negative Space, 6. Dark Mode Support, 7. Icons & Imagery, Design System & Aesthetics (Anti-AI Slop)
+Cohesion: 0.05
+Nodes (34): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+26 more)
 
 ### Community 15 - "vitest"
 Cohesion: 0.38
 Nodes (3): vitest, vitest-browser-svelte, greet()
 
-### Community 19 - "Dashboard Layout Structure"
-Cohesion: 0.40
-Nodes (5): 1. Global Layout Anatomy, 2. Content Area Grid (Modular Widget-Based), 3. Card-Based Content, 4. Responsive Behavior, Dashboard Layout Structure
+### Community 19 - "Visual Style: Soft Minimal SaaS (Made Printing)"
+Cohesion: 0.17
+Nodes (12): 10. Quick Rejection List, 1. What The Style Is, 2. Surfaces & Elevation, 3. Radius, 4. Colour, 5. Spacing Rhythm, 6. Grid & Composition, 7. Navigation (+4 more)
 
 ### Community 21 - "Linear-Style Slicing"
 Cohesion: 0.12
@@ -185,12 +194,12 @@ Cohesion: 0.17
 Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics, Global Agent Rules, Layout Structure, Naming Conventions, Page Slicing, Project Architecture, Styling (Tailwind CSS) (+4 more)
 
 ### Community 25 - "Global Agent Rules"
-Cohesion: 0.15
+Cohesion: 0.17
 Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics, Global Agent Rules, Layout Structure, Naming Conventions, Page Slicing, Project Architecture, Styling (Tailwind CSS) (+4 more)
 
-### Community 26 - "Visual Style: Soft Minimal SaaS (Made Printing)"
-Cohesion: 0.17
-Nodes (12): 10. Quick Rejection List, 1. What The Style Is, 2. Surfaces & Elevation, 3. Radius, 4. Colour, 5. Spacing Rhythm, 6. Grid & Composition, 7. Navigation (+4 more)
+### Community 26 - "AGENTS.md"
+Cohesion: 0.31
+Nodes (3): 1. Component Reuse Priority, 2. Semantic HTML Per Context, Page Slicing Rules
 
 ### Community 27 - "API Integration"
 Cohesion: 0.18
@@ -204,6 +213,10 @@ Nodes (11): Check, Derived, Not Effect, `$effect` Is Init-Time Only, Effects Tha
 Cohesion: 0.18
 Nodes (10): Check, Colour Comes From Roles, Conditional Classes, Known Drift — Do Not Copy, No `@apply`, Tailwind v4, The Directives In `layout.css`, The Eight Lint Rules (+2 more)
 
+### Community 30 - "Type Safety"
+Cohesion: 0.20
+Nodes (10): Check, Dates Arrive As Strings, Know what `satisfies` buys, No `any`, `satisfies`, Not Annotation, Two Schema Files, On Purpose, Type Safety, Types Vanish At Runtime (+2 more)
+
 ### Community 31 - "Process Flow"
 Cohesion: 0.20
 Nodes (9): 1. DTO (Data Transfer Object), 2. Validator, 3. Domain Entity, 4. Mapper, 5. Repository Contract & Implementation, 6. Mock Repository, 7. Wiring (DI), Data Mapper Workflow (Anti-Corruption Layer) (+1 more)
@@ -212,9 +225,9 @@ Nodes (9): 1. DTO (Data Transfer Object), 2. Validator, 3. Domain Entity, 4. Map
 Cohesion: 0.20
 Nodes (9): Barrel Files, By Case, Check, Export Names, Known Drift — Do Not Copy, Naming Conventions, `.svelte.ts` Is Load-Bearing, The Dot-Suffix Vocabulary (+1 more)
 
-### Community 33 - "Type Safety"
-Cohesion: 0.20
-Nodes (10): Check, Dates Arrive As Strings, Know what `satisfies` buys, No `any`, `satisfies`, Not Annotation, Two Schema Files, On Purpose, Type Safety, Types Vanish At Runtime (+2 more)
+### Community 33 - "1. Kategori Produk Utama"
+Cohesion: 0.33
+Nodes (6): 1. Kategori Produk Utama, A. Large Format Outdoor (Solvent / UV Roll), B. Large Format Indoor & Display (Eco-Solvent / Waterbased), C. Digital Printing A3+ Lembaran (Laser Sheetfed), D. Sablon Digital & DTF (Direct-to-Film), E. Merchandise & Flatbed
 
 ### Community 34 - "Feature Architecture"
 Cohesion: 0.22
@@ -236,9 +249,9 @@ Nodes (8): 1. What This Application Is, 2. Design System & Visual Aesthetic, 3. 
 Cohesion: 0.22
 Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe Inventori Bahan Baku Utama, 2. Inventori Tinta & Consumables, 3. Toleransi Limbah & Waste Ratio (_Scrap Tracking_), A. Bahan Continuous / Roll-Based Goods, B. Bahan Diskrit / Sheet-Based Goods, Rumus Persentase Waste:, Sumber-sumber Limbah Cetak:
 
-### Community 40 - "1. Kategori Produk Utama"
-Cohesion: 0.33
-Nodes (6): 1. Kategori Produk Utama, A. Large Format Outdoor (Solvent / UV Roll), B. Large Format Indoor & Display (Eco-Solvent / Waterbased), C. Digital Printing A3+ Lembaran (Laser Sheetfed), D. Sablon Digital & DTF (Direct-to-Film), E. Merchandise & Flatbed
+### Community 39 - "Dashboard Layout Structure"
+Cohesion: 0.40
+Nodes (5): 1. Global Layout Anatomy, 2. Content Area Grid (Modular Widget-Based), 3. Card-Based Content, 4. Responsive Behavior, Dashboard Layout Structure
 
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
@@ -260,10 +273,6 @@ Nodes (7): A Fully-Interactive Appearance Implies Real Behavior, Check, Disabled
 Cohesion: 0.25
 Nodes (7): Check, F-Pattern And Z-Pattern: Match The Flow To The Content Density, Law of Continuity: Alignment Consistency, Overridable By A Stronger Convention, Layout Composition, Rule Of Thirds: A Compositional Guide, Not A Requirement For Functional UI, Symmetry And Asymmetry: Balance Is Not The Same As Mirroring, White Space Must Be Deterministic, Not Incidental
 
-### Community 46 - "Page Slicing Rules"
-Cohesion: 0.67
-Nodes (3): 1. Component Reuse Priority, 2. Semantic HTML Per Context, Page Slicing Rules
-
 ### Community 47 - "Commit Message Format"
 Cohesion: 0.25
 Nodes (7): 1. Types, 2. Domain Name (Scope), 3. Changelog (Detailed Description), Commit Message Format, Execution Steps (Agent Workflow), Git Commit Workflow, Perfect Commit Message Example:
@@ -275,10 +284,6 @@ Nodes (8): 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_), 
 ### Community 49 - "07. Point of Sales (POS), Keuangan, & Manajemen Penagihan"
 Cohesion: 0.25
 Nodes (7): 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan, 1. Alur Operasional Kasir / POS, 2. Skema & Metode Pembayaran, 3. Manajemen Piutang & Plafon Kredit Reseller (_Credit Limit_), 4. Format Dokumen Finansial & Percetakan, A. Tipe Status Pembayaran, B. Metode Pembayaran yang Didukung
-
-### Community 50 - "TanStack Table in Svelte 5"
-Cohesion: 0.07
-Nodes (26): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+18 more)
 
 ### Community 51 - "Testing Rules"
 Cohesion: 0.29
@@ -353,24 +358,24 @@ Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
 ## Knowledge Gaps
-- **452 isolated node(s):** `appNavSections`, `NavEntry`, `NavGroup`, `NavLink`, `SidebarClasses` (+447 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 544 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **453 isolated node(s):** `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES`, `productCategorySchema`, `INITIAL_CATEGORIES` (+448 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 537 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `Result` to `package.json`?**
-  _High betweenness centrality (0.036) - this node is a cross-community bridge._
-- **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `zod` connect `ProductCategory` to `package.json`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **What connects `appNavSections`, `NavEntry`, `NavGroup` to the rest of the system?**
-  _452 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
+  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **What connects `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES` to the rest of the system?**
+  _453 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `page-title.store.svelte.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05069124423963134 - nodes in this community are weakly interconnected._
+- **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
+  _Cohesion score 0.09102564102564102 - nodes in this community are weakly interconnected._

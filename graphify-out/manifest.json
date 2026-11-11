@@ -366,69 +366,69 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/application/product-category.store.svelte.ts": {
-    "mtime": 1794317460.4259171,
-    "seen": 1794317482.4193769,
-    "ast_hash": "867f5d98a6b9e0b476e578bf7878f8f6",
+    "mtime": 1794405631.4410634,
+    "seen": 1794406614.5407958,
+    "ast_hash": "0c734bc894f431d2773fd6a32285b49b",
     "semantic_hash": ""
   },
   "src/features/product-categories/application/product-category.use-cases.ts": {
-    "mtime": 1794317460.434744,
-    "seen": 1794317482.4193778,
-    "ast_hash": "53309a221a34eed69bbffce705b42a7a",
+    "mtime": 1794405860.41307,
+    "seen": 1794406614.540797,
+    "ast_hash": "ec2997037a4c5c15850ff255525f157b",
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.entity.ts": {
-    "mtime": 1794317460.4449565,
-    "seen": 1794317482.419379,
-    "ast_hash": "d338b806a91980b946d1a62d09427548",
+    "mtime": 1794404446.9225876,
+    "seen": 1794406614.540798,
+    "ast_hash": "d0329719b7a321a21afb1c7603d68f1d",
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.repository.ts": {
-    "mtime": 1794317460.4490025,
-    "seen": 1794317482.41938,
-    "ast_hash": "39317616128fe4ccc53484edaaec1471",
+    "mtime": 1794405517.9943583,
+    "seen": 1794406614.540798,
+    "ast_hash": "517c3b9be985ab88ca4b73f540a66491",
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.schema.ts": {
-    "mtime": 1794317460.454839,
-    "seen": 1794317482.41938,
-    "ast_hash": "d90da641bc9e2c3a53e67e8a1a5f6fe7",
+    "mtime": 1794404455.846724,
+    "seen": 1794406614.540799,
+    "ast_hash": "2d61d1a0d338192151e9a476151d2e92",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.dto.ts": {
-    "mtime": 1794317460.463946,
-    "seen": 1794317482.419381,
-    "ast_hash": "2df22b15c7b41daf8b868b12b0019031",
+    "mtime": 1794404472.0644445,
+    "seen": 1794406614.5408,
+    "ast_hash": "244ac29ae6a569ddec3fba304586e153",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.mapper.spec.ts": {
-    "mtime": 1794317460.4721084,
-    "seen": 1794317482.419382,
-    "ast_hash": "3492a32d75269b9b460dae5dbd597f6e",
+    "mtime": 1794404497.7336688,
+    "seen": 1794406614.5408,
+    "ast_hash": "3aa261df59c73efe41ef0bb9655c9510",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.mapper.ts": {
-    "mtime": 1794317460.478461,
-    "seen": 1794317482.419383,
-    "ast_hash": "5cc24cfbf19aab91d157d80ebc892a6d",
+    "mtime": 1794404487.180206,
+    "seen": 1794406614.540801,
+    "ast_hash": "2be48cdba47d8d1576e6e59deec05813",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.repository.impl.ts": {
-    "mtime": 1794317460.4887555,
-    "seen": 1794317482.419384,
-    "ast_hash": "bd9acb3d5d6633f0f08147ac5dfa0f53",
+    "mtime": 1794405578.8893785,
+    "seen": 1794406614.540802,
+    "ast_hash": "82505cd1d7867ca43a7a76f1fda5a4ba",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.repository.mock.ts": {
-    "mtime": 1794317460.5026522,
-    "seen": 1794317482.4193852,
-    "ast_hash": "209f68021fad639147af2e94ba729ec7",
+    "mtime": 1794405561.927173,
+    "seen": 1794406614.540802,
+    "ast_hash": "c88735cf06db2767789f11127fb85d1f",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.validator.ts": {
-    "mtime": 1794317460.506556,
-    "seen": 1794317482.4193852,
-    "ast_hash": "78bba7f5c7b116b12547513a25f2cf33",
+    "mtime": 1794404479.5006268,
+    "seen": 1794406614.540803,
+    "ast_hash": "dfde8f058c202b76854a6ad2c47458be",
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte": {
@@ -438,15 +438,15 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte": {
-    "mtime": 1794317460.5996146,
-    "seen": 1794317482.4193869,
-    "ast_hash": "046fa7e0186bf030b82040d454a793c9",
+    "mtime": 1794404797.2578635,
+    "seen": 1794406614.540808,
+    "ast_hash": "db73758ce19b079d5dd80a54fb23e337",
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte": {
-    "mtime": 1794317517.5573468,
-    "seen": 1794317700.625232,
-    "ast_hash": "69d3f3e0c010d45b5bc0e9349d4be799",
+    "mtime": 1794407747.3259516,
+    "seen": 1794407960.9802408,
+    "ast_hash": "499b7d002ec5437f9a8b4cd4d261d874",
     "semantic_hash": ""
   },
   "src/lib/shared/domain/errors/app-error.ts": {
@@ -939,6 +939,42 @@
     "mtime": 1794320301.7899408,
     "seen": 1794320886.2666612,
     "ast_hash": "a0592bce49ca27bdd671ffbe4680aa87",
+    "semantic_hash": ""
+  },
+  "pnpm-workspace.yaml": {
+    "mtime": 1794372052.678152,
+    "seen": 1794372079.480994,
+    "ast_hash": "e8082c0e1e38468641320caa28208bbb",
+    "semantic_hash": ""
+  },
+  "src/features/product-categories/presentation/components/ProductCategoryOrderDialog.svelte": {
+    "mtime": 1794406568.8204832,
+    "seen": 1794406614.540809,
+    "ast_hash": "a9a46d953a1965cdffefbfd71a9b9140",
+    "semantic_hash": ""
+  },
+  "src/features/product-categories/presentation/components/ProductCategorySpkDialog.svelte": {
+    "mtime": 1794406628.9551494,
+    "seen": 1794406883.266002,
+    "ast_hash": "e76491cf7921baa641e82bbf771098a8",
+    "semantic_hash": ""
+  },
+  "src/lib/components/table-pagination/TablePagination.svelte": {
+    "mtime": 1794407747.3905425,
+    "seen": 1794407960.980256,
+    "ast_hash": "480662da6f4958ef643041e6123ca01a",
+    "semantic_hash": ""
+  },
+  "src/lib/components/table-pagination/index.ts": {
+    "mtime": 1794407874.9937282,
+    "seen": 1794407960.980257,
+    "ast_hash": "a3244ff69f50006aaed8e675ceee79ce",
+    "semantic_hash": ""
+  },
+  "src/lib/components/table-pagination/table-pagination.types.ts": {
+    "mtime": 1794407875.0078254,
+    "seen": 1794407960.980257,
+    "ast_hash": "c75fbb1012054b714d19dfe0d9f9356e",
     "semantic_hash": ""
   }
 }
