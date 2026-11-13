@@ -1,25 +1,25 @@
-# Graph Report - made-printing-frontend  (2026-11-11)
+# Graph Report - made-printing-frontend  (2026-11-13)
 
 ## Corpus Check
-- 159 files · ~79,218 words
+- 159 files · ~79,637 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 840 nodes · 1058 edges · 73 communities (60 shown, 11 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
+- 820 nodes · 1024 edges · 77 communities (63 shown, 11 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 10 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `46a400d7`
+- Built from commit: `9126ef75`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - package.json
 - devDependencies
+- product-category.entity.ts
 - themeStore
-- ProductCategoryListPage.svelte
 - sidebar.types.ts
 - ProductCategory
 - What You Must Do When Invoked
@@ -29,7 +29,7 @@
 - dystopia-linear-lib
 - tsconfig.json
 - Build Order
-- Design System & Aesthetics (Anti-AI Slop)
+- Superforms & Zod Workflow (SPA Mode)
 - vitest
 - prettier.config.js
 - +layout.ts
@@ -54,14 +54,17 @@
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
 - Dashboard Layout Structure
+- Frontend Architecture Rules (Clean Architecture + DDD)
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
 - Interaction States
 - Layout Composition
+- Design System & Aesthetics (Anti-AI Slop)
 - Commit Message Format
 - 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_)
 - 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan
+- TanStack Table in Svelte 5
 - Testing Rules
 - Storybook for Svelte 5 Guidelines
 - UX Heuristics For Slicing
@@ -90,14 +93,14 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `ProductCategory` - 24 edges
-2. `ProductCategoryInput` - 19 edges
-3. `Build Order` - 17 edges
-4. `safeApiCall()` - 14 edges
-5. `dystopia-linear-lib` - 14 edges
-6. `Linear-Style Slicing` - 14 edges
-7. `ProductCategoryRepository` - 13 edges
-8. `AppError` - 12 edges
-9. `Global Agent Rules` - 12 edges
+2. `Result` - 24 edges
+3. `ProductCategoryInput` - 19 edges
+4. `AppError` - 18 edges
+5. `Build Order` - 17 edges
+6. `safeApiCall()` - 14 edges
+7. `dystopia-linear-lib` - 14 edges
+8. `Linear-Style Slicing` - 14 edges
+9. `ProductCategoryRepository` - 12 edges
 10. `Global Agent Rules` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -107,15 +110,15 @@
   src/features/product-categories/infrastructure/product-category.repository.mock.ts → src/features/product-categories/domain/product-category.entity.ts
 - `ProductCategoryRepositoryImpl` --implements--> `ProductCategoryRepository`  [EXTRACTED]
   src/features/product-categories/infrastructure/product-category.repository.impl.ts → src/features/product-categories/domain/product-category.repository.ts
-- `productCategoryRepositoryMock` --implements--> `ProductCategoryRepository`  [EXTRACTED]
-  src/features/product-categories/infrastructure/product-category.repository.mock.ts → src/features/product-categories/domain/product-category.repository.ts
-- `parseApiResponseWithMeta()` --calls--> `InvalidResponseError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/api-schema.ts → src/lib/shared/domain/errors/app-error.ts
+- `safeApiCall()` --calls--> `AppError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
+- `safeApiCall()` --calls--> `ConflictError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (73 total, 11 thin omitted)
+## Communities (77 total, 11 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.07
@@ -125,21 +128,21 @@ Nodes (28): name, private, type, version, class-variance-authority, clsx, dystop
 Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
-### Community 3 - "themeStore"
-Cohesion: 0.15
-Nodes (5): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore
+### Community 2 - "product-category.entity.ts"
+Cohesion: 0.09
+Nodes (16): zod, CALCULATION_TYPES, CalculationTypeOption, CategoryType, productCategorySchema, productCategoryDtoSchema, onClose(), TablePaginationProps (+8 more)
 
-### Community 4 - "ProductCategoryListPage.svelte"
-Cohesion: 0.07
-Nodes (4): CALCULATION_TYPES, CalculationTypeOption, CategoryType, TablePaginationProps
+### Community 3 - "themeStore"
+Cohesion: 0.12
+Nodes (6): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore, ./$types
 
 ### Community 5 - "sidebar.types.ts"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (14): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+6 more)
 
 ### Community 6 - "ProductCategory"
-Cohesion: 0.05
-Nodes (41): axios, zod, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CalculationType, ProductCategory (+33 more)
+Cohesion: 0.07
+Nodes (31): axios, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CalculationType, generateCategoryCode(), ProductCategory (+23 more)
 
 ### Community 7 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -165,9 +168,9 @@ Nodes (9): $app/tsconfig, compilerOptions, paths, strict, types, extends, includ
 Cohesion: 0.12
 Nodes (17): 10. `application/<feature>.container.ts`, 11. `application/<feature>.use-cases.ts`, 12. `application/<feature>.store.svelte.ts` — only when needed, 13. `presentation/hooks/<feature>.query-keys.ts`, 14. Fetch in the page, not in a load function, 15. Wire the route, 1. `domain/<feature>.entity.ts`, 2. `domain/<feature>.repository.ts` (+9 more)
 
-### Community 14 - "Design System & Aesthetics (Anti-AI Slop)"
-Cohesion: 0.05
-Nodes (34): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+26 more)
+### Community 14 - "Superforms & Zod Workflow (SPA Mode)"
+Cohesion: 0.15
+Nodes (9): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component, 1. Schema Definition (Zod), 2. Client Form (`+page.svelte` or Component), 3. Extracting the Form into a Hook, 4. Navigating After a Successful Submit (+1 more)
 
 ### Community 15 - "vitest"
 Cohesion: 0.38
@@ -253,6 +256,10 @@ Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe I
 Cohesion: 0.40
 Nodes (5): 1. Global Layout Anatomy, 2. Content Area Grid (Modular Widget-Based), 3. Card-Based Content, 4. Responsive Behavior, Dashboard Layout Structure
 
+### Community 40 - "Frontend Architecture Rules (Clean Architecture + DDD)"
+Cohesion: 0.22
+Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
+
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
 Nodes (7): 1. Svelte Components, 2. Directories and Folders, 3. TypeScript Files (Business Logic & Architecture), 4. Variables and Functions, 5. Constants, 6. Interfaces, Types, and Classes, Naming Conventions
@@ -273,6 +280,10 @@ Nodes (7): A Fully-Interactive Appearance Implies Real Behavior, Check, Disabled
 Cohesion: 0.25
 Nodes (7): Check, F-Pattern And Z-Pattern: Match The Flow To The Content Density, Law of Continuity: Alignment Consistency, Overridable By A Stronger Convention, Layout Composition, Rule Of Thirds: A Compositional Guide, Not A Requirement For Functional UI, Symmetry And Asymmetry: Balance Is Not The Same As Mirroring, White Space Must Be Deterministic, Not Incidental
 
+### Community 46 - "Design System & Aesthetics (Anti-AI Slop)"
+Cohesion: 0.25
+Nodes (8): 1. No "AI Slop" Permitted, 2. Depth & Elevation, 3. Typography & Hierarchy, 4. Micro-Interactions & Animation, 5. Spacing & Negative Space, 6. Dark Mode Support, 7. Icons & Imagery, Design System & Aesthetics (Anti-AI Slop)
+
 ### Community 47 - "Commit Message Format"
 Cohesion: 0.25
 Nodes (7): 1. Types, 2. Domain Name (Scope), 3. Changelog (Detailed Description), Commit Message Format, Execution Steps (Agent Workflow), Git Commit Workflow, Perfect Commit Message Example:
@@ -284,6 +295,10 @@ Nodes (8): 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_), 
 ### Community 49 - "07. Point of Sales (POS), Keuangan, & Manajemen Penagihan"
 Cohesion: 0.25
 Nodes (7): 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan, 1. Alur Operasional Kasir / POS, 2. Skema & Metode Pembayaran, 3. Manajemen Piutang & Plafon Kredit Reseller (_Credit Limit_), 4. Format Dokumen Finansial & Percetakan, A. Tipe Status Pembayaran, B. Metode Pembayaran yang Didukung
+
+### Community 50 - "TanStack Table in Svelte 5"
+Cohesion: 0.25
+Nodes (8): 1. Do Not Build a Table From Scratch, 2. Feature Set Is Pinned App-Wide, 3. Auto-Reset Is Off, and Must Stay Off, 4. Defining Columns, 5. Creating the Instance (Parent Owns Everything), 6. `DataTable` Props Worth Knowing, 7. Styling, TanStack Table in Svelte 5
 
 ### Community 51 - "Testing Rules"
 Cohesion: 0.29
@@ -358,24 +373,24 @@ Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
 ## Knowledge Gaps
-- **453 isolated node(s):** `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES`, `productCategorySchema`, `INITIAL_CATEGORIES` (+448 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 537 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **453 isolated node(s):** `Theme`, `NavEntry`, `NavGroup`, `NavLink`, `SidebarClasses` (+448 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 543 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `ProductCategory` to `package.json`?**
-  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+- **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `zod` connect `product-category.entity.ts` to `package.json`, `ProductCategory`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.027) - this node is a cross-community bridge._
-- **Why does `svelte` connect `sidebar.types.ts` to `package.json`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **What connects `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES` to the rest of the system?**
+- **What connects `Theme`, `NavEntry`, `NavGroup` to the rest of the system?**
   _453 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
-  _Cohesion score 0.09102564102564102 - nodes in this community are weakly interconnected._
+- **Should `product-category.entity.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.0907258064516129 - nodes in this community are weakly interconnected._
