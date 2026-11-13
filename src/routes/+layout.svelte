@@ -29,5 +29,11 @@
 <RouteProgress />
 <QueryClientProvider client={queryClient}>
 	{@render children()}
-	<Toaster class="z-9999!" classes={{ viewport: 'z-[9999]!' }} />
+	<Toaster
+		class="z-9999! p-6! sm:p-8!"
+		classes={{
+			viewport: 'z-[9999]! p-6! sm:p-8! gap-3',
+			item: 'shadow-lg border-border'
+		}}
+	/>
 </QueryClientProvider>
