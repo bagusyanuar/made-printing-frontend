@@ -1,4 +1,5 @@
 import type { ProductCategory, ProductCategoryInput } from '../domain/product-category.entity';
+import { generateCategoryCode } from '../domain/product-category.entity';
 import type { ProductCategoryDto, ProductCategoryRequestDto } from './product-category.dto';
 
 export function mapProductCategoryDtoToEntity(dto: ProductCategoryDto): ProductCategory {
@@ -20,14 +21,15 @@ export function mapProductCategoryDtoToEntity(dto: ProductCategoryDto): ProductC
 export function mapProductCategoryInputToDto(
 	input: ProductCategoryInput
 ): ProductCategoryRequestDto {
+	const code = (input.code?.trim() || generateCategoryCode(input.name)).toUpperCase();
 	return {
-		code: input.code.trim().toUpperCase(),
+		code,
 		name: input.name.trim(),
 		type: input.type,
 		spk_category: input.spkCategory?.trim() || null,
-		display_order: input.displayOrder,
+		display_order: input.displayOrder ?? 1,
 		calculation_type: input.calculationType,
 		description: input.description?.trim() || null,
-		is_active: input.isActive
+		is_active: input.isActive ?? true
 	};
 }

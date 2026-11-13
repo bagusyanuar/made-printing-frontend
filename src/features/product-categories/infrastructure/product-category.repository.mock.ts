@@ -1,10 +1,14 @@
 import type { Result } from '$lib/shared/domain/types/result';
 import { Result as Res } from '$lib/shared/domain/types/result';
 import { NotFoundError, ConflictError } from '$lib/shared/domain/errors/app-error';
-import type { ProductCategory, ProductCategoryInput } from '../domain/product-category.entity';
+import {
+	generateCategoryCode,
+	type ProductCategory,
+	type ProductCategoryInput
+} from '../domain/product-category.entity';
 import type { ProductCategoryRepository } from '../domain/product-category.repository';
 
-const delay = (ms = 200) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms = 450) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const INITIAL_CATEGORIES: ProductCategory[] = [
 	{
@@ -107,10 +111,21 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 
 	async create(input: ProductCategoryInput): Promise<Result<ProductCategory>> {
 		await delay();
-		const normalizedCode = input.code.trim().toUpperCase();
+		const baseCode = (input.code?.trim() || generateCategoryCode(input.name)).toUpperCase();
+		let normalizedCode = baseCode;
 		if (this.#categories.some((c) => c.code === normalizedCode)) {
-			return Res.error(new ConflictError(`Kode kategori "${normalizedCode}" sudah digunakan`));
+			let counter = 2;
+			while (this.#categories.some((c) => c.code === `${normalizedCode.slice(0, 16)}-${counter}`)) {
+				counter++;
+			}
+			normalizedCode = `${normalizedCode.slice(0, 16)}-${counter}`;
 		}
+
+		const nextOrder =
+			input.displayOrder ??
+			(this.#categories.length > 0
+				? Math.max(...this.#categories.map((c) => c.displayOrder)) + 1
+				: 1);
 
 		const now = new Date().toISOString();
 		const newItem: ProductCategory = {
@@ -119,10 +134,10 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 			name: input.name.trim(),
 			type: input.type,
 			spkCategory: input.spkCategory?.trim() || null,
-			displayOrder: input.displayOrder,
+			displayOrder: nextOrder,
 			calculationType: input.calculationType,
 			description: input.description?.trim() || null,
-			isActive: input.isActive,
+			isActive: input.isActive ?? true,
 			createdAt: now,
 			updatedAt: now
 		};
@@ -138,23 +153,25 @@ export class ProductCategoryRepositoryMock implements ProductCategoryRepository 
 			return Res.error(new NotFoundError('Kategori produk tidak ditemukan'));
 		}
 
-		const normalizedCode = input.code.trim().toUpperCase();
+		const existing = this.#categories[index];
+		const normalizedCode = (input.code?.trim() || existing.code).toUpperCase();
 		const duplicate = this.#categories.find((c) => c.code === normalizedCode && c.id !== id);
 		if (duplicate) {
 			return Res.error(new ConflictError(`Kode kategori "${normalizedCode}" sudah digunakan`));
 		}
 
-		const existing = this.#categories[index];
 		const updatedItem: ProductCategory = {
 			...existing,
 			code: normalizedCode,
 			name: input.name.trim(),
 			type: input.type,
-			spkCategory: input.spkCategory?.trim() || null,
-			displayOrder: input.displayOrder,
+			spkCategory:
+				input.spkCategory !== undefined ? input.spkCategory?.trim() || null : existing.spkCategory,
+			displayOrder: input.displayOrder ?? existing.displayOrder,
 			calculationType: input.calculationType,
-			description: input.description?.trim() || null,
-			isActive: input.isActive,
+			description:
+				input.description !== undefined ? input.description?.trim() || null : existing.description,
+			isActive: input.isActive ?? existing.isActive,
 			updatedAt: new Date().toISOString()
 		};
 

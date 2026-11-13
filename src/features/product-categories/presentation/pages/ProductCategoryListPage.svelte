@@ -18,6 +18,7 @@
 	import { EmptyState } from 'dystopia-linear-lib/components/empty-state';
 	import { Spinner } from 'dystopia-linear-lib/components/spinner';
 	import { TablePagination } from '$lib/components/table-pagination';
+	import { toast } from 'dystopia-linear-lib/components/toast';
 	import IconCirclePlus from '~icons/lucide/circle-plus';
 	import IconSearch from '~icons/lucide/search';
 	import IconRefreshCw from '~icons/lucide/refresh-cw';
@@ -83,35 +84,102 @@
 
 	async function handleSpkSave(targetSpk: string | null): Promise<boolean> {
 		if (!selectedCategoryForSpk) return false;
-		return await productCategoryStore.update(selectedCategoryForSpk.id, {
+		const name = selectedCategoryForSpk.name;
+		const success = await productCategoryStore.update(selectedCategoryForSpk.id, {
 			...selectedCategoryForSpk,
 			spkCategory: targetSpk
 		});
+		if (success) {
+			toast.success('Kategori SPK berhasil diatur', {
+				description: targetSpk
+					? `Item "${name}" diarahkan ke SPK "${targetSpk}".`
+					: `Item "${name}" menggunakan SPK Default (Mandiri).`
+			});
+		} else {
+			toast.danger('Gagal mengatur kategori SPK', {
+				description: productCategoryStore.error || 'Terjadi kesalahan sistem.'
+			});
+		}
+		return success;
 	}
 
 	async function handleSave(input: ProductCategoryInput): Promise<boolean> {
 		if (selectedCategoryForEdit) {
-			return await productCategoryStore.update(selectedCategoryForEdit.id, input);
+			const success = await productCategoryStore.update(selectedCategoryForEdit.id, input);
+			if (success) {
+				toast.success('Kategori berhasil diperbarui', {
+					description: `Perubahan pada kategori "${input.name}" telah disimpan.`
+				});
+			} else {
+				toast.danger('Gagal memperbarui kategori', {
+					description:
+						productCategoryStore.error || 'Terjadi kesalahan sistem saat memperbarui data.'
+				});
+			}
+			return success;
 		}
-		return await productCategoryStore.create(input);
+
+		const success = await productCategoryStore.create(input);
+		if (success) {
+			toast.success('Kategori berhasil dibuat', {
+				description: `Kategori "${input.name}" berhasil ditambahkan.`
+			});
+		} else {
+			toast.danger('Gagal membuat kategori', {
+				description: productCategoryStore.error || 'Terjadi kesalahan sistem saat membuat kategori.'
+			});
+		}
+		return success;
 	}
 
 	async function handleDelete(): Promise<boolean> {
 		if (!selectedCategoryForDelete) return false;
-		return await productCategoryStore.delete(selectedCategoryForDelete.id);
+		const name = selectedCategoryForDelete.name;
+		const success = await productCategoryStore.delete(selectedCategoryForDelete.id);
+		if (success) {
+			toast.success('Kategori berhasil dihapus', {
+				description: `Kategori "${name}" telah dihapus.`
+			});
+		} else {
+			toast.danger('Gagal menghapus kategori', {
+				description: productCategoryStore.error || 'Terjadi kesalahan sistem saat menghapus data.'
+			});
+		}
+		return success;
 	}
 
 	async function handleOrderSave(newOrder: number): Promise<boolean> {
 		if (!selectedCategoryForOrder) return false;
-		return await productCategoryStore.changeOrder(selectedCategoryForOrder.id, newOrder);
+		const name = selectedCategoryForOrder.name;
+		const success = await productCategoryStore.changeOrder(selectedCategoryForOrder.id, newOrder);
+		if (success) {
+			toast.success('Urutan kategori diperbarui', {
+				description: `Kategori "${name}" dipindah ke urutan ${newOrder}.`
+			});
+		} else {
+			toast.danger('Gagal mengubah urutan', {
+				description: productCategoryStore.error || 'Terjadi kesalahan sistem.'
+			});
+		}
+		return success;
 	}
 
 	async function handleMoveUp(item: ProductCategory) {
-		await productCategoryStore.moveUp(item.id);
+		const success = await productCategoryStore.moveUp(item.id);
+		if (success) {
+			toast.success('Urutan dinaikkan', {
+				description: `Kategori "${item.name}" digeser ke atas.`
+			});
+		}
 	}
 
 	async function handleMoveDown(item: ProductCategory) {
-		await productCategoryStore.moveDown(item.id);
+		const success = await productCategoryStore.moveDown(item.id);
+		if (success) {
+			toast.success('Urutan diturunkan', {
+				description: `Kategori "${item.name}" digeser ke bawah.`
+			});
+		}
 	}
 
 	function getCategoryInitial(name: string): string {

@@ -1,12 +1,17 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { Typography } from 'dystopia-linear-lib/components/typography';
 	import { Button } from 'dystopia-linear-lib/components/button';
 	import { TextField } from 'dystopia-linear-lib/components/text-field';
-	import { Select } from 'dystopia-linear-lib/components/select';
+	import { Textarea } from 'dystopia-linear-lib/components/textarea';
+	import { Combobox, type ComboboxOption } from 'dystopia-linear-lib/components/combobox';
+	import { Radio } from 'dystopia-linear-lib/components/radio';
+	import { cn } from 'dystopia-linear-lib/utils/cn';
 	import IconX from '~icons/lucide/x';
 	import IconAlertCircle from '~icons/lucide/alert-circle';
 	import {
 		CALCULATION_TYPES,
+		generateCategoryCode,
 		type CalculationType,
 		type CategoryType,
 		type ProductCategory,
@@ -23,39 +28,49 @@
 
 	let { open = $bindable(false), category = null, onSave, onClose }: Props = $props();
 
-	let code = $state('');
 	let name = $state('');
 	let type = $state<CategoryType>('production');
-	let spkCategory = $state('');
-	let displayOrder = $state(1);
 	let calculationType = $state<CalculationType>('square_meter');
 	let description = $state('');
-	let isActive = $state(true);
 
 	let isSubmitting = $state(false);
 	let formError = $state<string | null>(null);
 	let fieldErrors = $state<Record<string, string>>({});
 
+	const calculationOptions: ComboboxOption<CalculationType>[] = CALCULATION_TYPES.map((opt) => ({
+		value: opt.value,
+		label: `${opt.label} — ${opt.unit}`,
+		keywords: [opt.unit, opt.label, opt.description]
+	}));
+
+	function modalSlideIn(node: Element, { duration = 280 } = {}) {
+		return {
+			duration,
+			css: (t: number) => {
+				// Quintic ease-out curve for natural, buttery-smooth deceleration
+				const eased = 1 - Math.pow(1 - t, 4);
+				const y = (1 - eased) * -44;
+				const scale = 0.95 + 0.05 * eased;
+				return `
+					transform: translateY(${y}px) scale(${scale});
+					opacity: ${eased};
+				`;
+			}
+		};
+	}
+
 	$effect(() => {
 		if (open) {
 			if (category) {
-				code = category.code;
 				name = category.name;
 				type = category.type;
-				spkCategory = category.spkCategory ?? '';
-				displayOrder = category.displayOrder;
 				calculationType = category.calculationType;
 				description = category.description ?? '';
-				isActive = category.isActive;
 			} else {
-				code = '';
 				name = '';
 				type = 'production';
-				spkCategory = '';
-				displayOrder = 1;
 				calculationType = 'square_meter';
 				description = '';
-				isActive = true;
 			}
 			formError = null;
 			fieldErrors = {};
@@ -67,26 +82,29 @@
 		formError = null;
 		fieldErrors = {};
 
+		const trimmedName = name.trim();
+		const finalCode = category ? category.code : generateCategoryCode(trimmedName);
+		const finalDisplayOrder = category ? category.displayOrder : undefined;
+		const finalSpkCategory = category ? (category.spkCategory ?? null) : null;
+		const finalIsActive = category ? category.isActive : true;
+
 		const payload: ProductCategoryInput = {
-			code: code.trim().toUpperCase(),
-			name: name.trim(),
+			code: finalCode,
+			name: trimmedName,
 			type,
-			spkCategory: spkCategory.trim() || null,
-			displayOrder: Number(displayOrder) || 1,
+			spkCategory: finalSpkCategory,
+			displayOrder: finalDisplayOrder,
 			calculationType,
 			description: description.trim() || null,
-			isActive
+			isActive: finalIsActive
 		};
 
 		const validation = productCategorySchema.safeParse(payload);
 		if (!validation.success) {
 			const formatted = validation.error.format();
 			fieldErrors = {
-				code: formatted.code?._errors[0] ?? '',
 				name: formatted.name?._errors[0] ?? '',
 				type: formatted.type?._errors[0] ?? '',
-				spkCategory: formatted.spkCategory?._errors[0] ?? '',
-				displayOrder: formatted.displayOrder?._errors[0] ?? '',
 				calculationType: formatted.calculationType?._errors[0] ?? '',
 				description: formatted.description?._errors[0] ?? ''
 			};
@@ -99,9 +117,19 @@
 
 		if (success) {
 			onClose();
+		} else {
+			formError = 'Gagal menyimpan kategori produk. Silakan coba lagi.';
 		}
 	}
 </script>
+
+<svelte:window
+	onkeydown={(e) => {
+		if (e.key === 'Escape' && open && !isSubmitting) {
+			onClose();
+		}
+	}}
+/>
 
 {#if open}
 	<div
@@ -109,17 +137,19 @@
 		role="dialog"
 		aria-modal="true"
 	>
-		<!-- Backdrop -->
+		<!-- Backdrop with Fade Entrance Transition -->
 		<button
 			type="button"
-			class="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+			class="fixed inset-0 bg-black/50 backdrop-blur-sm"
+			transition:fade={{ duration: 220 }}
 			onclick={onClose}
 			aria-label="Tutup modal"
 		></button>
 
-		<!-- Dialog Modal Container -->
+		<!-- Dialog Modal Container with Smooth Slide-In & Depth Transition -->
 		<div
 			class="relative z-10 w-full max-w-lg rounded-xl border border-border bg-app-surface p-6 shadow-xl"
+			transition:modalSlideIn={{ duration: 280 }}
 		>
 			<!-- Header -->
 			<div class="flex items-start justify-between border-b border-border pb-4">
@@ -128,7 +158,9 @@
 						{category ? 'Edit Kategori Produk' : 'Tambah Kategori Produk Baru'}
 					</Typography>
 					<Typography variant="muted" as="p" class="mt-1 text-xs text-foreground-subtle">
-						Tentukan kode unik, nama, dan formula kalkulasi satuan cetak percetakan.
+						{category
+							? 'Perbarui nama kelompok produk dan formula kalkulasi satuan cetak.'
+							: 'Tentukan nama kelompok produk dan formula kalkulasi satuan cetak percetakan.'}
 					</Typography>
 				</div>
 				<button
@@ -153,27 +185,6 @@
 
 			<!-- Form Content -->
 			<form onsubmit={handleSubmit} class="mt-4 flex flex-col gap-4">
-				<!-- Kode Kategori -->
-				<div class="flex flex-col gap-1.5">
-					<label for="category-code" class="text-xs font-semibold text-foreground">
-						Kode Kategori <span class="text-danger">*</span>
-					</label>
-					<TextField
-						id="category-code"
-						bind:value={code}
-						placeholder="Contoh: LF-OUT, A3-DOC, DTF"
-						invalid={Boolean(fieldErrors.code)}
-						disabled={isSubmitting}
-						class="w-full uppercase"
-					/>
-					{#if fieldErrors.code}
-						<span class="text-xs text-danger">{fieldErrors.code}</span>
-					{/if}
-					<span class="text-[11px] text-foreground-subtle">
-						Format singkatan unik untuk identifikasi produk & SPK.
-					</span>
-				</div>
-
 				<!-- Nama Kategori -->
 				<div class="flex flex-col gap-1.5">
 					<label for="category-name" class="text-xs font-semibold text-foreground">
@@ -182,7 +193,7 @@
 					<TextField
 						id="category-name"
 						bind:value={name}
-						placeholder="Contoh: Large Format Outdoor / Spanduk"
+						placeholder="Contoh: Large Format Outdoor, Digital Press A3+, Merchandise"
 						invalid={Boolean(fieldErrors.name)}
 						disabled={isSubmitting}
 						class="w-full"
@@ -192,82 +203,94 @@
 					{/if}
 				</div>
 
-				<!-- Tipe Kategori & Index Display (Row) -->
-				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-					<!-- Tipe -->
-					<div class="flex flex-col gap-1.5">
-						<label for="category-type" class="text-xs font-semibold text-foreground">
-							Tipe Kategori <span class="text-danger">*</span>
-						</label>
-						<Select
-							id="category-type"
-							value={type}
-							onValueChange={(val) => (type = val as CategoryType)}
-							disabled={isSubmitting}
-							class="w-full"
-						>
-							<option value="production">Produksi</option>
-							<option value="non_production">Non Produksi</option>
-						</Select>
-					</div>
-
-					<!-- Index Urutan Display -->
-					<div class="flex flex-col gap-1.5">
-						<label for="category-order" class="text-xs font-semibold text-foreground">
-							Index Urutan Display <span class="text-danger">*</span>
-						</label>
-						<TextField
-							id="category-order"
-							type="number"
-							value={String(displayOrder)}
-							onValueChange={(val) => (displayOrder = Number(val) || 1)}
-							placeholder="1"
-							invalid={Boolean(fieldErrors.displayOrder)}
-							disabled={isSubmitting}
-							class="w-full"
-						/>
-						{#if fieldErrors.displayOrder}
-							<span class="text-xs text-danger">{fieldErrors.displayOrder}</span>
-						{/if}
-					</div>
-				</div>
-
-				<!-- Kategori SPK -->
-				<div class="flex flex-col gap-1.5">
-					<label for="category-spk" class="text-xs font-semibold text-foreground">
-						Kategori SPK (Routing)
-					</label>
-					<TextField
-						id="category-spk"
-						bind:value={spkCategory}
-						placeholder="Default (Kosongkan jika mandiri / default)"
-						disabled={isSubmitting}
-						class="w-full"
-					/>
-					<span class="text-[11px] text-foreground-subtle">
-						Kosongkan untuk kategori mandiri (Default), atau isi nama kategori tujuan jika
-						menginduk.
+				<!-- Tipe Kategori (Radio Button) -->
+				<div role="group" aria-labelledby="category-type-label" class="flex flex-col gap-1.5">
+					<span id="category-type-label" class="text-xs font-semibold text-foreground">
+						Tipe Kategori <span class="text-danger">*</span>
 					</span>
+					<div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+						<div
+							role="presentation"
+							class={cn(
+								'cursor-pointer rounded-lg border p-3 transition-all',
+								type === 'production'
+									? 'border-primary/60 bg-primary/5 ring-1 ring-primary/20'
+									: 'border-border bg-surface-subtle/40 hover:border-border-hover hover:bg-surface-subtle'
+							)}
+							onclick={() => {
+								if (!isSubmitting) type = 'production';
+							}}
+						>
+							<Radio
+								id="type-production"
+								name="category-type"
+								value="production"
+								bind:group={type}
+								disabled={isSubmitting}
+								label="Produksi"
+								description="Item cetak fisik yang diproses mesin percetakan."
+								classes={{
+									field: 'w-full cursor-pointer',
+									label: 'font-medium text-foreground cursor-pointer text-xs',
+									description: 'text-[11px] text-foreground-subtle cursor-pointer'
+								}}
+							/>
+						</div>
+
+						<div
+							role="presentation"
+							class={cn(
+								'cursor-pointer rounded-lg border p-3 transition-all',
+								type === 'non_production'
+									? 'border-primary/60 bg-primary/5 ring-1 ring-primary/20'
+									: 'border-border bg-surface-subtle/40 hover:border-border-hover hover:bg-surface-subtle'
+							)}
+							onclick={() => {
+								if (!isSubmitting) type = 'non_production';
+							}}
+						>
+							<Radio
+								id="type-non-production"
+								name="category-type"
+								value="non_production"
+								bind:group={type}
+								disabled={isSubmitting}
+								label="Non Produksi"
+								description="Jasa desain, instalasi/ongkos pasang, dan produk non-mesin."
+								classes={{
+									field: 'w-full cursor-pointer',
+									label: 'font-medium text-foreground cursor-pointer text-xs',
+									description: 'text-[11px] text-foreground-subtle cursor-pointer'
+								}}
+							/>
+						</div>
+					</div>
+					{#if fieldErrors.type}
+						<span class="text-xs text-danger">{fieldErrors.type}</span>
+					{/if}
 				</div>
 
-				<!-- Model Satuan Hitung -->
+				<!-- Satuan (Combobox) -->
 				<div class="flex flex-col gap-1.5">
 					<label for="category-calc" class="text-xs font-semibold text-foreground">
-						Model Satuan Hitung <span class="text-danger">*</span>
+						Satuan <span class="text-danger">*</span>
 					</label>
-					<Select
+					<Combobox
 						id="category-calc"
-						value={calculationType}
-						onValueChange={(val) => (calculationType = val as CalculationType)}
+						options={calculationOptions}
+						bind:value={calculationType}
+						size="md"
+						clearable={false}
 						disabled={isSubmitting}
+						invalid={Boolean(fieldErrors.calculationType)}
+						labels={{
+							placeholder: 'Pilih Satuan',
+							searchPlaceholder: 'Cari satuan...',
+							empty: 'Satuan tidak ditemukan'
+						}}
+						classes={{ content: 'z-60' }}
 						class="w-full"
-					>
-						{#each CALCULATION_TYPES as opt (opt.value)}
-							<option value={opt.value}>
-								{opt.label} — {opt.unit}
-							</option>
-						{/each}
-					</Select>
+					/>
 					{#if fieldErrors.calculationType}
 						<span class="text-xs text-danger">{fieldErrors.calculationType}</span>
 					{/if}
@@ -276,16 +299,19 @@
 					</span>
 				</div>
 
-				<!-- Keterangan / Deskripsi -->
+				<!-- Keterangan (Textarea) -->
 				<div class="flex flex-col gap-1.5">
 					<label for="category-desc" class="text-xs font-semibold text-foreground">
 						Keterangan (Opsional)
 					</label>
-					<TextField
+					<Textarea
 						id="category-desc"
 						bind:value={description}
 						placeholder="Catatan tambahan mengenai kategori bahan atau armada mesin..."
 						disabled={isSubmitting}
+						invalid={Boolean(fieldErrors.description)}
+						rows={3}
+						maxlength={255}
 						class="w-full"
 					/>
 					{#if fieldErrors.description}
@@ -293,31 +319,8 @@
 					{/if}
 				</div>
 
-				<!-- Toggle Status Aktif -->
-				<div
-					class="flex items-center justify-between rounded-lg border border-border bg-surface-subtle p-3"
-				>
-					<div>
-						<div class="text-xs font-semibold text-foreground">Status Kategori</div>
-						<div class="text-[11px] text-foreground-subtle">
-							Kategori aktif dapat dipilih saat pembuatan produk baru dan transaksi kasir.
-						</div>
-					</div>
-					<label class="relative inline-flex cursor-pointer items-center">
-						<input
-							type="checkbox"
-							bind:checked={isActive}
-							disabled={isSubmitting}
-							class="peer sr-only"
-						/>
-						<div
-							class="peer h-6 w-11 rounded-full bg-border peer-checked:bg-primary peer-focus:outline-hidden after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full"
-						></div>
-					</label>
-				</div>
-
 				<!-- Footer Buttons -->
-				<div class="mt-4 flex items-center justify-end gap-2 border-t border-border pt-4">
+				<div class="mt-2 flex items-center justify-end gap-2 border-t border-border pt-4">
 					<Button type="button" variant="ghost" size="sm" onclick={onClose} disabled={isSubmitting}>
 						Batal
 					</Button>

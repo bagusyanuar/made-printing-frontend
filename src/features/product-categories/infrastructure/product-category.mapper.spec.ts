@@ -59,4 +59,23 @@ describe('ProductCategoryMapper', () => {
 		expect(requestDto.description).toBe('Kertas Art Carton');
 		expect(requestDto.is_active).toBe(true);
 	});
+
+	it('maps ProductCategoryInput with omitted optional fields using defaults and generated code', () => {
+		const input: ProductCategoryInput = {
+			name: '  Outdoor Banner  ',
+			type: 'production',
+			calculationType: 'square_meter'
+		};
+
+		const requestDto = mapProductCategoryInputToDto(input);
+
+		expect(requestDto.code).toBe('OUTDOOR-BANNER');
+		expect(requestDto.name).toBe('Outdoor Banner');
+		expect(requestDto.type).toBe('production');
+		expect(requestDto.spk_category).toBeNull();
+		expect(requestDto.display_order).toBe(1);
+		expect(requestDto.calculation_type).toBe('square_meter');
+		expect(requestDto.description).toBeNull();
+		expect(requestDto.is_active).toBe(true);
+	});
 });

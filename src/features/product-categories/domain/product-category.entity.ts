@@ -50,12 +50,22 @@ export interface ProductCategory {
 }
 
 export interface ProductCategoryInput {
-	code: string;
+	code?: string;
 	name: string;
 	type: CategoryType;
 	spkCategory?: string | null;
-	displayOrder: number;
+	displayOrder?: number;
 	calculationType: CalculationType;
 	description?: string | null;
-	isActive: boolean;
+	isActive?: boolean;
+}
+
+export function generateCategoryCode(name: string): string {
+	const sanitized = name
+		.trim()
+		.toUpperCase()
+		.replace(/[^A-Z0-9]+/g, '-')
+		.replace(/^-+|-+$/g, '')
+		.slice(0, 18);
+	return sanitized || `CAT-${Date.now().toString().slice(-4)}`;
 }
