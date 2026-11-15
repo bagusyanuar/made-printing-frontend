@@ -1,17 +1,17 @@
 # Graph Report - made-printing-frontend  (2026-11-15)
 
 ## Corpus Check
-- 177 files · ~87,319 words
+- 177 files · ~87,215 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 1016 nodes · 1739 edges · 85 communities (66 shown, 12 thin omitted)
+- 1016 nodes · 1738 edges · 85 communities (66 shown, 12 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b9428359`
+- Built from commit: `44090eef`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -136,7 +136,7 @@ Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-
 Cohesion: 0.13
 Nodes (4): AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, onClose()
 
-### Community 3 - "themeStore"
+### Community 4 - "themeStore"
 Cohesion: 0.10
 Nodes (6): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore, ./$types
 
@@ -384,19 +384,19 @@ Nodes (3): imports, #features/*, #lib
 Cohesion: 0.40
 Nodes (5): 1. Schema Definition (Zod), 2. Client Form (`+page.svelte` or Component), 3. Extracting the Form into a Hook, 4. Navigating After a Successful Submit, Superforms & Zod Workflow (SPA Mode)
 
-### Community 84 - "api-schema.ts"
+### Community 83 - "api-schema.ts"
 Cohesion: 0.24
 Nodes (7): InvalidResponseError, PaginatedResult, PaginationMeta, PaginationParams, apiEnvelopeSchema, paginationMetaSchema, parseApiResponseWithMeta()
 
 ## Knowledge Gaps
 - **459 isolated node(s):** `gitignorePath`, `name`, `private`, `version`, `type` (+454 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 577 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 578 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `Result` to `package.json`, `dystopia-linear-lib/components/typography`, `AppError`, `api-schema.ts`?**
+- **Why does `zod` connect `Result` to `package.json`, `dystopia-linear-lib/components/typography`, `api-schema.ts`, `AppError`?**
   _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
@@ -409,4 +409,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
 - **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
-  _Cohesion score 0.13230769230769232 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.12923076923076923 - nodes in this community are weakly interconnected._

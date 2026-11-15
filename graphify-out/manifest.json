@@ -378,9 +378,9 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.entity.ts": {
-    "mtime": 1794534114.009086,
-    "seen": 1794534749.3845341,
-    "ast_hash": "7ecafb934edd6e3b3f198ce02dc45e46",
+    "mtime": 1794754605.456952,
+    "seen": 1794754699.86643,
+    "ast_hash": "2ee9373ea1631b8dcfdfe19f6213dff0",
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.repository.ts": {
@@ -390,27 +390,27 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/domain/product-category.schema.ts": {
-    "mtime": 1794534114.1548119,
-    "seen": 1794534749.384535,
-    "ast_hash": "88e4f4b759369d833c30adad5901848e",
+    "mtime": 1794754605.5225856,
+    "seen": 1794754699.866432,
+    "ast_hash": "b9eb1255dfe4dc72a986926bb25b8765",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.dto.ts": {
-    "mtime": 1794404472.0644445,
-    "seen": 1794406614.5408,
-    "ast_hash": "244ac29ae6a569ddec3fba304586e153",
+    "mtime": 1794754605.5682948,
+    "seen": 1794754699.866432,
+    "ast_hash": "87be43eb42318bb28e6583c25c8790cb",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.mapper.spec.ts": {
-    "mtime": 1794533707.2626288,
-    "seen": 1794533991.22851,
-    "ast_hash": "c05e99eef72dc6c9d8a26a1f3c9db1a3",
+    "mtime": 1794754605.6733904,
+    "seen": 1794754699.866433,
+    "ast_hash": "5d3203636c5f63c4be0dae22d4958dac",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.mapper.ts": {
-    "mtime": 1794534114.2421348,
-    "seen": 1794534749.3845382,
-    "ast_hash": "aa808462a97d36bfe1d9b63e9cca523b",
+    "mtime": 1794754605.7214108,
+    "seen": 1794754699.866434,
+    "ast_hash": "9fe497a1f7a68c8ec6689bcb7faef147",
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.repository.impl.ts": {
@@ -426,9 +426,9 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/infrastructure/product-category.validator.ts": {
-    "mtime": 1794404479.5006268,
-    "seen": 1794406614.540803,
-    "ast_hash": "dfde8f058c202b76854a6ad2c47458be",
+    "mtime": 1794754605.7948477,
+    "seen": 1794754699.866436,
+    "ast_hash": "c7cb3d4bc20e52e177f89fc96b2bd4bd",
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/components/ProductCategoryDeleteDialog.svelte": {
@@ -438,15 +438,15 @@
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/components/ProductCategoryFormDialog.svelte": {
-    "mtime": 1794537294.5195024,
-    "seen": 1794537767.4407418,
-    "ast_hash": "50fdfb0b3d49c6e55ff754b89742ea34",
+    "mtime": 1794754605.8891096,
+    "seen": 1794754699.866438,
+    "ast_hash": "0635f9d214a77fb92ee13d9e588440c6",
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/pages/ProductCategoryListPage.svelte": {
-    "mtime": 1794536467.401335,
-    "seen": 1794536866.662528,
-    "ast_hash": "487b673aea0a2df90d2932a61aef441a",
+    "mtime": 1794754606.0447695,
+    "seen": 1794754699.8664398,
+    "ast_hash": "9528e147dc6435f71c4cc46084be8aec",
     "semantic_hash": ""
   },
   "src/lib/shared/domain/errors/app-error.ts": {

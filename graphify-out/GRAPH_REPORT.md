@@ -1,17 +1,17 @@
 # Graph Report - made-printing-frontend  (2026-11-15)
 
 ## Corpus Check
-- 177 files · ~87,319 words
+- 177 files · ~87,215 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 942 nodes · 1528 edges · 77 communities (64 shown, 11 thin omitted)
+- 942 nodes · 1596 edges · 80 communities (66 shown, 12 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d5fbb352`
+- Built from commit: `eb75215e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -19,8 +19,10 @@
 - package.json
 - devDependencies
 - dystopia-linear-lib/components/typography
+- attributeVariantStore
+- themeStore
 - sidebar.types.ts
-- Result
+- ProductCategory
 - What You Must Do When Invoked
 - @sveltejs/kit
 - scripts
@@ -39,7 +41,7 @@
 - 04. Model Rumus Kalkulasi Harga & Multi-Tier Pricing
 - Global Agent Rules
 - Global Agent Rules
-- AGENTS.md
+- design-system.md
 - API Integration
 - Svelte 5 Runes
 - Tailwind v4
@@ -73,7 +75,7 @@
 - eslint.config.js
 - Type Safety Rules
 - Conventional Commit Workflow
-- attribute-variant.repository.impl.ts
+- Result
 - graphify reference: query, path, explain
 - 01. Overview & Domain Model: Made Printing ERP
 - sv
@@ -91,35 +93,36 @@
 - extraction-spec.md
 - workflows/graphify.md
 - Superforms & Zod Workflow (SPA Mode)
+- api-schema.ts
 
 ## God Nodes (most connected - your core abstractions)
-1. `Result` - 34 edges
-2. `AppError` - 26 edges
-3. `ProductAttribute` - 24 edges
-4. `ProductCategory` - 24 edges
+1. `Result` - 70 edges
+2. `AppError` - 58 edges
+3. `ProductCategory` - 24 edges
+4. `ProductAttribute` - 24 edges
 5. `safeApiCall()` - 24 edges
 6. `ProductCategoryInput` - 19 edges
-7. `ProductAttributeVariant` - 18 edges
-8. `ProductAttributeInput` - 18 edges
+7. `ProductAttributeInput` - 18 edges
+8. `ProductAttributeVariant` - 18 edges
 9. `ProductAttributeVariantInput` - 18 edges
 10. `NotFoundError` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `safeApiCall()` --calls--> `ConflictError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `AppError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `ForbiddenError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `UnauthorizedError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `ValidationError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
+- `attributeVariantStore` --references--> `attributeVariantUseCases`  [EXTRACTED]
+  src/features/attribute-variants/application/attribute-variant.store.svelte.ts → src/features/attribute-variants/application/attribute-variant.use-cases.ts
+- `productCategoryRepositoryMock` --references--> `ProductCategory`  [EXTRACTED]
+  src/features/product-categories/infrastructure/product-category.repository.mock.ts → src/features/product-categories/domain/product-category.entity.ts
+- `mapProductCategoryInputToDto()` --calls--> `generateCategoryCode()`  [EXTRACTED]
+  src/features/product-categories/infrastructure/product-category.mapper.ts → src/features/product-categories/domain/product-category.entity.ts
+- `productCategoryStore` --references--> `productCategoryUseCases`  [EXTRACTED]
+  src/features/product-categories/application/product-category.store.svelte.ts → src/features/product-categories/application/product-category.use-cases.ts
+- `ProductCategoryRepositoryImpl` --implements--> `ProductCategoryRepository`  [EXTRACTED]
+  src/features/product-categories/infrastructure/product-category.repository.impl.ts → src/features/product-categories/domain/product-category.repository.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (77 total, 11 thin omitted)
+## Communities (80 total, 12 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.07
@@ -130,16 +133,20 @@ Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
 ### Community 2 - "dystopia-linear-lib/components/typography"
-Cohesion: 0.07
-Nodes (6): ProductAttributeVariantBatchItem, AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, onClose(), TablePaginationProps
+Cohesion: 0.06
+Nodes (5): AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, onClose(), TablePaginationProps
+
+### Community 4 - "themeStore"
+Cohesion: 0.15
+Nodes (5): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore
 
 ### Community 5 - "sidebar.types.ts"
-Cohesion: 0.06
-Nodes (19): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+11 more)
+Cohesion: 0.09
+Nodes (14): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+6 more)
 
-### Community 6 - "Result"
-Cohesion: 0.05
-Nodes (41): axios, zod, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType (+33 more)
+### Community 6 - "ProductCategory"
+Cohesion: 0.07
+Nodes (27): axios, zod, productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType (+19 more)
 
 ### Community 7 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -197,8 +204,8 @@ Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics,
 Cohesion: 0.17
 Nodes (12): Design System & Aesthetics, Digital Printing ERP Domain & Semantics, Global Agent Rules, Layout Structure, Naming Conventions, Page Slicing, Project Architecture, Styling (Tailwind CSS) (+4 more)
 
-### Community 26 - "AGENTS.md"
-Cohesion: 0.23
+### Community 26 - "design-system.md"
+Cohesion: 0.33
 Nodes (3): 1. Component Reuse Priority, 2. Semantic HTML Per Context, Page Slicing Rules
 
 ### Community 27 - "API Integration"
@@ -258,7 +265,7 @@ Cohesion: 0.22
 Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
 
 ### Community 41 - "Naming Conventions"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (7): 1. Svelte Components, 2. Directories and Folders, 3. TypeScript Files (Business Logic & Architecture), 4. Variables and Functions, 5. Constants, 6. Interfaces, Types, and Classes, Naming Conventions
 
 ### Community 42 - "Svelte 5 Best Practices"
@@ -333,9 +340,9 @@ Nodes (5): 1. No `any` Allowed, 2. Explicit Types & Interfaces, 3. SvelteKit Aut
 Cohesion: 0.33
 Nodes (5): 1. Format, 2. One Domain Per Commit, 3. Always Confirm Before Committing, 4. Standard Git Safety, Conventional Commit Workflow
 
-### Community 60 - "attribute-variant.repository.impl.ts"
-Cohesion: 0.06
-Nodes (29): attributeVariantRepositoryInstance, attributeVariantStore, attributeVariantUseCases, createAttributeVariantUseCases(), generateSlug(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant (+21 more)
+### Community 60 - "Result"
+Cohesion: 0.08
+Nodes (35): attributeVariantRepositoryInstance, attributeVariantUseCases, createAttributeVariantUseCases(), generateSlug(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant, ProductAttributeVariantBatchItem (+27 more)
 
 ### Community 61 - "graphify reference: query, path, explain"
 Cohesion: 0.33
@@ -374,28 +381,32 @@ Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
 ### Community 81 - "Superforms & Zod Workflow (SPA Mode)"
-Cohesion: 0.40
+Cohesion: 0.25
 Nodes (5): 1. Schema Definition (Zod), 2. Client Form (`+page.svelte` or Component), 3. Extracting the Form into a Hook, 4. Navigating After a Successful Submit, Superforms & Zod Workflow (SPA Mode)
 
+### Community 83 - "api-schema.ts"
+Cohesion: 0.22
+Nodes (8): InvalidResponseError, PaginatedResult, PaginationMeta, PaginationParams, apiEnvelopeSchema, dateStringSchema, paginationMetaSchema, parseApiResponseWithMeta()
+
 ## Knowledge Gaps
-- **459 isolated node(s):** `ProductAttributeVariantBatchItem`, `attributeVariantBatchItemSchema`, `AttributeInputSchema`, `VariantInputSchema`, `ProductAttributeVariantBatchDto` (+454 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 536 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **459 isolated node(s):** `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES`, `productCategorySchema`, `AttributeInputSchema` (+454 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 533 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `Result` to `package.json`, `dystopia-linear-lib/components/typography`, `attribute-variant.repository.impl.ts`?**
-  _High betweenness centrality (0.057) - this node is a cross-community bridge._
+- **Why does `zod` connect `ProductCategory` to `package.json`, `dystopia-linear-lib/components/typography`, `api-schema.ts`, `Result`?**
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.029) - this node is a cross-community bridge._
-- **Why does `vitest` connect `vitest` to `package.json`, `attribute-variant.repository.impl.ts`, `sidebar.types.ts`, `Result`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **What connects `ProductAttributeVariantBatchItem`, `attributeVariantBatchItemSchema`, `AttributeInputSchema` to the rest of the system?**
+- **Why does `Result` connect `Result` to `ProductCategory`?**
+  _High betweenness centrality (0.023) - this node is a cross-community bridge._
+- **What connects `CategoryType`, `CalculationTypeOption`, `CALCULATION_TYPES` to the rest of the system?**
   _459 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
 - **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
-  _Cohesion score 0.073109243697479 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06450071667462971 - nodes in this community are weakly interconnected._
