@@ -486,9 +486,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1794317460.7312918,
-    "seen": 1794317482.419415,
-    "ast_hash": "4db9aa0aabe07fd41460e53932939e33",
+    "mtime": 1794750510.2611852,
+    "seen": 1794750805.733865,
+    "ast_hash": "2ed4471414941799a1ba8c6479217742",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -900,9 +900,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/attribute-variants/+page.svelte": {
-    "mtime": 1794319377.209514,
-    "seen": 1794319755.239989,
-    "ast_hash": "5242c11ec82c6ec64cf557e536c745fc",
+    "mtime": 1794750510.361745,
+    "seen": 1794750805.73389,
+    "ast_hash": "f51ebc898b973baba6f124be6541790e",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/expense-categories/+page.svelte": {
@@ -969,6 +969,114 @@
     "mtime": 1794407875.0078254,
     "seen": 1794407960.980257,
     "ast_hash": "c75fbb1012054b714d19dfe0d9f9356e",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/application/attribute-variant.container.ts": {
+    "mtime": 1794749920.5822427,
+    "seen": 1794750488.357096,
+    "ast_hash": "bf7c72c6361afdec3b6560989caabcd9",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/application/attribute-variant.store.svelte.ts": {
+    "mtime": 1794750412.7008796,
+    "seen": 1794750488.357097,
+    "ast_hash": "1f5177f7670b328331e44c86df8fcc6c",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/application/attribute-variant.use-cases.ts": {
+    "mtime": 1794749927.5371687,
+    "seen": 1794750488.357098,
+    "ast_hash": "a9852fb9a38beb58a63d81ede58ed0e8",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/domain/attribute-variant.entity.ts": {
+    "mtime": 1794752242.5722222,
+    "seen": 1794752783.013382,
+    "ast_hash": "93dfae53c773f49c748f53342b221ece",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/domain/attribute-variant.repository.ts": {
+    "mtime": 1794749804.7676175,
+    "seen": 1794750488.3571,
+    "ast_hash": "8615286319144d32f40de7573b04ce75",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/domain/attribute-variant.schema.ts": {
+    "mtime": 1794752242.6765919,
+    "seen": 1794752783.0133839,
+    "ast_hash": "64f55b293b93a75f4c06ab8c6212d276",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.dto.ts": {
+    "mtime": 1794752012.4022563,
+    "seen": 1794752163.008683,
+    "ast_hash": "0875359daff2db3b17e686b3f36d2afa",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.mapper.spec.ts": {
+    "mtime": 1794752242.7484198,
+    "seen": 1794752783.013385,
+    "ast_hash": "16197938497666605af94ec6d517ca7f",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.mapper.ts": {
+    "mtime": 1794752242.812276,
+    "seen": 1794752783.013386,
+    "ast_hash": "4c760f0f58fc9dd2768e1149f9ce743f",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.repository.impl.ts": {
+    "mtime": 1794749903.6270244,
+    "seen": 1794750488.3571048,
+    "ast_hash": "355765ddd9ae9951f72cab69fff67900",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.repository.mock.ts": {
+    "mtime": 1794752242.9377687,
+    "seen": 1794752783.013391,
+    "ast_hash": "944f95e0d34a523e973c7f414e87a88b",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/infrastructure/attribute-variant.validator.ts": {
+    "mtime": 1794749813.2614677,
+    "seen": 1794750488.357106,
+    "ast_hash": "7e0f8c84441e8247587e66e765a92216",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/components/AttributeDeleteDialog.svelte": {
+    "mtime": 1794751626.4868095,
+    "seen": 1794752163.008687,
+    "ast_hash": "c6fa423606b749e3433902d31a425795",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/components/AttributeFormDialog.svelte": {
+    "mtime": 1794753167.2600522,
+    "seen": 1794753521.988297,
+    "ast_hash": "da8cdd58839a0a735680764a5db11bb6",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/components/VariantDeleteDialog.svelte": {
+    "mtime": 1794750111.5226395,
+    "seen": 1794750488.357107,
+    "ast_hash": "5a16ff70f624151ef280e2b23dcfae5f",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/components/VariantFormDialog.svelte": {
+    "mtime": 1794750838.2885892,
+    "seen": 1794751241.819197,
+    "ast_hash": "0a824d80e8a79fc20fe4ced249acd0df",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/pages/AttributeVariantListPage.svelte": {
+    "mtime": 1794753789.105529,
+    "seen": 1794754057.0642529,
+    "ast_hash": "a97b38525f6c09cababef2765ab73ecc",
+    "semantic_hash": ""
+  },
+  "src/features/attribute-variants/presentation/components/AttributeVariantListDialog.svelte": {
+    "mtime": 1794753685.4142592,
+    "seen": 1794753778.066005,
+    "ast_hash": "a8b9cffe6efb803c26b4559c701ff9d2",
     "semantic_hash": ""
   }
 }
