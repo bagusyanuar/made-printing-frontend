@@ -42,7 +42,7 @@ export interface ProductCategory {
 	type: CategoryType;
 	spkCategory: string | null;
 	displayOrder: number;
-	calculationType: CalculationType;
+	calculationType?: CalculationType | null;
 	description: string | null;
 	isActive: boolean;
 	createdAt: string;
@@ -55,7 +55,7 @@ export interface ProductCategoryInput {
 	type: CategoryType;
 	spkCategory?: string | null;
 	displayOrder?: number;
-	calculationType: CalculationType;
+	calculationType?: CalculationType | null;
 	description?: string | null;
 	isActive?: boolean;
 }

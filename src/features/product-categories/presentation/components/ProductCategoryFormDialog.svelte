@@ -4,15 +4,12 @@
 	import { Button } from 'dystopia-linear-lib/components/button';
 	import { TextField } from 'dystopia-linear-lib/components/text-field';
 	import { Textarea } from 'dystopia-linear-lib/components/textarea';
-	import { Combobox, type ComboboxOption } from 'dystopia-linear-lib/components/combobox';
 	import { Radio } from 'dystopia-linear-lib/components/radio';
 	import { cn } from 'dystopia-linear-lib/utils/cn';
 	import IconX from '~icons/lucide/x';
 	import IconAlertCircle from '~icons/lucide/alert-circle';
 	import {
-		CALCULATION_TYPES,
 		generateCategoryCode,
-		type CalculationType,
 		type CategoryType,
 		type ProductCategory,
 		type ProductCategoryInput
@@ -30,18 +27,11 @@
 
 	let name = $state('');
 	let type = $state<CategoryType>('production');
-	let calculationType = $state<CalculationType>('square_meter');
 	let description = $state('');
 
 	let isSubmitting = $state(false);
 	let formError = $state<string | null>(null);
 	let fieldErrors = $state<Record<string, string>>({});
-
-	const calculationOptions: ComboboxOption<CalculationType>[] = CALCULATION_TYPES.map((opt) => ({
-		value: opt.value,
-		label: `${opt.label} — ${opt.unit}`,
-		keywords: [opt.unit, opt.label, opt.description]
-	}));
 
 	function modalSlideIn(node: Element, { duration = 280 } = {}) {
 		return {
@@ -64,12 +54,10 @@
 			if (category) {
 				name = category.name;
 				type = category.type;
-				calculationType = category.calculationType;
 				description = category.description ?? '';
 			} else {
 				name = '';
 				type = 'production';
-				calculationType = 'square_meter';
 				description = '';
 			}
 			formError = null;
@@ -94,7 +82,6 @@
 			type,
 			spkCategory: finalSpkCategory,
 			displayOrder: finalDisplayOrder,
-			calculationType,
 			description: description.trim() || null,
 			isActive: finalIsActive
 		};
@@ -105,7 +92,6 @@
 			fieldErrors = {
 				name: formatted.name?._errors[0] ?? '',
 				type: formatted.type?._errors[0] ?? '',
-				calculationType: formatted.calculationType?._errors[0] ?? '',
 				description: formatted.description?._errors[0] ?? ''
 			};
 			return;
@@ -159,8 +145,8 @@
 					</Typography>
 					<Typography variant="muted" as="p" class="mt-1 text-xs text-foreground-subtle">
 						{category
-							? 'Perbarui nama kelompok produk dan formula kalkulasi satuan cetak.'
-							: 'Tentukan nama kelompok produk dan formula kalkulasi satuan cetak percetakan.'}
+							? 'Perbarui nama kelompok produk dan pengaturan kategori.'
+							: 'Tentukan nama kelompok produk dan pengaturan kategori percetakan.'}
 					</Typography>
 				</div>
 				<button
@@ -268,35 +254,6 @@
 					{#if fieldErrors.type}
 						<span class="text-xs text-danger">{fieldErrors.type}</span>
 					{/if}
-				</div>
-
-				<!-- Satuan (Combobox) -->
-				<div class="flex flex-col gap-1.5">
-					<label for="category-calc" class="text-xs font-semibold text-foreground">
-						Satuan <span class="text-danger">*</span>
-					</label>
-					<Combobox
-						id="category-calc"
-						options={calculationOptions}
-						bind:value={calculationType}
-						size="md"
-						clearable={false}
-						disabled={isSubmitting}
-						invalid={Boolean(fieldErrors.calculationType)}
-						labels={{
-							placeholder: 'Pilih Satuan',
-							searchPlaceholder: 'Cari satuan...',
-							empty: 'Satuan tidak ditemukan'
-						}}
-						classes={{ content: 'z-60' }}
-						class="w-full"
-					/>
-					{#if fieldErrors.calculationType}
-						<span class="text-xs text-danger">{fieldErrors.calculationType}</span>
-					{/if}
-					<span class="text-[11px] text-foreground-subtle">
-						{CALCULATION_TYPES.find((c) => c.value === calculationType)?.description}
-					</span>
 				</div>
 
 				<!-- Keterangan (Textarea) -->

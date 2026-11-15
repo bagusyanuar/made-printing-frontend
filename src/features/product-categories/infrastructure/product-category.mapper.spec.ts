@@ -63,8 +63,7 @@ describe('ProductCategoryMapper', () => {
 	it('maps ProductCategoryInput with omitted optional fields using defaults and generated code', () => {
 		const input: ProductCategoryInput = {
 			name: '  Outdoor Banner  ',
-			type: 'production',
-			calculationType: 'square_meter'
+			type: 'production'
 		};
 
 		const requestDto = mapProductCategoryInputToDto(input);
@@ -74,7 +73,7 @@ describe('ProductCategoryMapper', () => {
 		expect(requestDto.type).toBe('production');
 		expect(requestDto.spk_category).toBeNull();
 		expect(requestDto.display_order).toBe(1);
-		expect(requestDto.calculation_type).toBe('square_meter');
+		expect(requestDto.calculation_type).toBeNull();
 		expect(requestDto.description).toBeNull();
 		expect(requestDto.is_active).toBe(true);
 	});

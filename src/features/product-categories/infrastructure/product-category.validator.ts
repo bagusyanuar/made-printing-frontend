@@ -9,7 +9,10 @@ export const productCategoryDtoSchema = z.object({
 	type: z.enum(['production', 'non_production']).optional().default('production'),
 	spk_category: z.string().nullable().optional(),
 	display_order: z.number().optional().default(1),
-	calculation_type: z.enum(['square_meter', 'sheet', 'meter_run', 'piece']),
+	calculation_type: z
+		.enum(['square_meter', 'sheet', 'meter_run', 'piece'])
+		.nullable()
+		.optional(),
 	description: z.string().nullable(),
 	is_active: z.boolean(),
 	created_at: dateStringSchema,

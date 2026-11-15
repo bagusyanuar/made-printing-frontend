@@ -5,7 +5,7 @@ export interface ProductCategoryRequestDto {
 	type: 'production' | 'non_production';
 	spk_category: string | null;
 	display_order: number;
-	calculation_type: 'square_meter' | 'sheet' | 'meter_run' | 'piece';
+	calculation_type?: 'square_meter' | 'sheet' | 'meter_run' | 'piece' | null;
 	description: string | null;
 	is_active: boolean;
 }
@@ -18,7 +18,7 @@ export interface ProductCategoryDto {
 	type?: 'production' | 'non_production';
 	spk_category?: string | null;
 	display_order?: number;
-	calculation_type: 'square_meter' | 'sheet' | 'meter_run' | 'piece';
+	calculation_type?: 'square_meter' | 'sheet' | 'meter_run' | 'piece' | null;
 	description: string | null;
 	is_active: boolean;
 	created_at: string;

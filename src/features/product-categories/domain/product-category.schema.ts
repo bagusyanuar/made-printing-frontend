@@ -16,9 +16,10 @@ export const productCategorySchema = z.object({
 	}),
 	spkCategory: z.string().nullable().optional(),
 	displayOrder: z.coerce.number().int().min(1, 'Index display minimal 1').optional(),
-	calculationType: z.enum(['square_meter', 'sheet', 'meter_run', 'piece'], {
-		error: 'Model kalkulasi wajib dipilih'
-	}),
+	calculationType: z
+		.enum(['square_meter', 'sheet', 'meter_run', 'piece'])
+		.nullable()
+		.optional(),
 	description: z.string().max(255, 'Keterangan maksimal 255 karakter').nullable().optional(),
 	isActive: z.boolean().optional()
 }) satisfies z.ZodType<ProductCategoryInput>;

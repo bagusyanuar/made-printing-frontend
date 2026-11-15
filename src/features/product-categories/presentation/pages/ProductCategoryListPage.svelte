@@ -210,8 +210,7 @@
 				Master Data Kategori Produk
 			</Typography>
 			<Typography variant="muted" as="p" class="mt-0.5 text-xs text-foreground-subtle sm:text-sm">
-				Kelola kelompok produk, model satuan hitung (m², lembar A3+, meter lari, pcs), dan status
-				operasional.
+				Kelola kelompok produk, routing kategori SPK, dan status operasional.
 			</Typography>
 		</div>
 	</div>

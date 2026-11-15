@@ -10,7 +10,7 @@ export function mapProductCategoryDtoToEntity(dto: ProductCategoryDto): ProductC
 		type: dto.type ?? 'production',
 		spkCategory: dto.spk_category ?? null,
 		displayOrder: dto.display_order ?? 1,
-		calculationType: dto.calculation_type,
+		calculationType: dto.calculation_type ?? null,
 		description: dto.description,
 		isActive: dto.is_active,
 		createdAt: dto.created_at,
@@ -28,7 +28,7 @@ export function mapProductCategoryInputToDto(
 		type: input.type,
 		spk_category: input.spkCategory?.trim() || null,
 		display_order: input.displayOrder ?? 1,
-		calculation_type: input.calculationType,
+		calculation_type: input.calculationType ?? null,
 		description: input.description?.trim() || null,
 		is_active: input.isActive ?? true
 	};
