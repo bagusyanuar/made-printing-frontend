@@ -486,9 +486,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1794807211.626982,
-    "seen": 1794807690.04849,
-    "ast_hash": "1423c42fb44e365abd76ba9a9b82eab1",
+    "mtime": 1794899510.49655,
+    "seen": 1794899727.675349,
+    "ast_hash": "0ad99197d8a9a307f162d220b2278694",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -936,9 +936,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/resellers/+page.svelte": {
-    "mtime": 1794320301.7899408,
-    "seen": 1794320886.2666612,
-    "ast_hash": "a0592bce49ca27bdd671ffbe4680aa87",
+    "mtime": 1794899510.5670702,
+    "seen": 1794899727.675371,
+    "ast_hash": "303d696a2e112de35316ea8824cf8a52",
     "semantic_hash": ""
   },
   "src/features/product-categories/presentation/components/ProductCategoryOrderDialog.svelte": {
@@ -1140,8 +1140,8 @@
     "semantic_hash": ""
   },
   "src/features/products/infrastructure/product.repository.mock.ts": {
-    "mtime": 1794888755.1304042,
-    "seen": 1794888909.510942,
+    "mtime": 1794888959.2618446,
+    "seen": 1794890061.539486,
     "ast_hash": "efaad104e798292b2484b1f91288da67",
     "semantic_hash": ""
   },
@@ -1164,15 +1164,123 @@
     "semantic_hash": ""
   },
   "src/features/products/presentation/pages/ProductListPage.svelte": {
-    "mtime": 1794888840.7128053,
-    "seen": 1794888909.510946,
-    "ast_hash": "c76766e59277b1f9d0c81d86c6d9596e",
+    "mtime": 1794889248.9119759,
+    "seen": 1794890061.53949,
+    "ast_hash": "b218f506c88e38270b40554f00a71f85",
     "semantic_hash": ""
   },
   "src/features/products/presentation/components/ProductOrderDialog.svelte": {
     "mtime": 1794887434.7858584,
     "seen": 1794887622.082804,
     "ast_hash": "413904334793a74a8cd5fb95dfb3c1db",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/application/reseller.container.ts": {
+    "mtime": 1794899008.7338312,
+    "seen": 1794899350.7152221,
+    "ast_hash": "95f698ded73eb9770f9593e60c20fa5a",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/application/reseller.store.svelte.ts": {
+    "mtime": 1794900047.2885978,
+    "seen": 1794900064.137843,
+    "ast_hash": "f4f4fee6f56333a09bdb9518bcdd11b7",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/application/reseller.use-cases.ts": {
+    "mtime": 1794899016.6491737,
+    "seen": 1794899350.715223,
+    "ast_hash": "3c6d5f4d74b0dc92243d4b4b3bfc4bda",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/domain/reseller.entity.ts": {
+    "mtime": 1794902044.3950562,
+    "seen": 1794902172.428,
+    "ast_hash": "1ba3de507042b6fef1161d9f6742785b",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/domain/reseller.repository.ts": {
+    "mtime": 1794898877.6643987,
+    "seen": 1794899350.715224,
+    "ast_hash": "ecc222e16642fb2153b040aa37976399",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/domain/reseller.schema.ts": {
+    "mtime": 1794902044.5027301,
+    "seen": 1794902172.428001,
+    "ast_hash": "f5946405f128158940d650c84d0c33d6",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.dto.ts": {
+    "mtime": 1794898885.6026733,
+    "seen": 1794899350.715225,
+    "ast_hash": "5984760c2b128366a15fd5884f8ce017",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.mapper.spec.ts": {
+    "mtime": 1794898933.7291431,
+    "seen": 1794899350.715225,
+    "ast_hash": "063aeb5399fe84930c48e01f504858cf",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.mapper.ts": {
+    "mtime": 1794902044.554551,
+    "seen": 1794902172.428003,
+    "ast_hash": "388d52fe9716bc8a7d3757dae87ecd09",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.repository.impl.ts": {
+    "mtime": 1794899000.8989887,
+    "seen": 1794899350.7152262,
+    "ast_hash": "2d12a65c7ecdd27d78ee6d089cc0acf8",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.repository.mock.spec.ts": {
+    "mtime": 1794899332.1871846,
+    "seen": 1794899350.7152262,
+    "ast_hash": "2f33bdfbdf0c928bc6d77012d01ef9f9",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.repository.mock.ts": {
+    "mtime": 1794902044.6454744,
+    "seen": 1794902172.4280078,
+    "ast_hash": "e25c223470d0fe19d8e764fd55a0644e",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/infrastructure/reseller.validator.ts": {
+    "mtime": 1794898894.6509755,
+    "seen": 1794899350.715227,
+    "ast_hash": "9c219e8e48bb8b87d34d20f300526d21",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/presentation/components/ResellerDeleteDialog.svelte": {
+    "mtime": 1794902127.6255324,
+    "seen": 1794902172.42801,
+    "ast_hash": "fecc256659aa4c74428c79762c11e154",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/presentation/components/ResellerDepositDialog.svelte": {
+    "mtime": 1794899087.6902587,
+    "seen": 1794899350.7152278,
+    "ast_hash": "1fd51cb4fcce1268685e674f97e74a69",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/presentation/components/ResellerFormDialog.svelte": {
+    "mtime": 1794902156.366116,
+    "seen": 1794902172.428011,
+    "ast_hash": "42ed76b855644ff2bf9b62cf102e9f47",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/presentation/pages/ResellerListPage.svelte": {
+    "mtime": 1794902120.3441534,
+    "seen": 1794902172.4280121,
+    "ast_hash": "5590783e78e4ade2c3974ddd90b54879",
+    "semantic_hash": ""
+  },
+  "src/features/resellers/presentation/components/ResellerCreditLimitDialog.svelte": {
+    "mtime": 1794902145.422895,
+    "seen": 1794902172.42801,
+    "ast_hash": "2f09a843af5f629bc6eeed5a933ab923",
     "semantic_hash": ""
   }
 }
