@@ -50,6 +50,7 @@ export const productDtoSchema = z.object({
 	lead_time_hours: z.number().nullable().optional(),
 	description: z.string().nullable().optional(),
 	is_active: z.boolean(),
+	display_order: z.number().nullable().optional(),
 	created_at: z.string(),
 	updated_at: z.string()
 }) satisfies z.ZodType<ProductDto>;

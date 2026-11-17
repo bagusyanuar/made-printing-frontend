@@ -32,6 +32,7 @@ describe('product.mapper', () => {
 			lead_time_hours: 2,
 			description: 'Outdoor standard banner',
 			is_active: true,
+			display_order: 5,
 			created_at: '2026-01-01T00:00:00.000Z',
 			updated_at: '2026-01-01T00:00:00.000Z'
 		};
@@ -53,6 +54,7 @@ describe('product.mapper', () => {
 		expect(entity.minOrderQty).toBe(1);
 		expect(entity.leadTimeHours).toBe(2);
 		expect(entity.isActive).toBe(true);
+		expect(entity.displayOrder).toBe(5);
 	});
 
 	it('handles null and optional fields during DTO to entity mapping', () => {
@@ -80,6 +82,7 @@ describe('product.mapper', () => {
 		expect(entity.leadTimeHours).toBeNull();
 		expect(entity.description).toBeNull();
 		expect(entity.isActive).toBe(false);
+		expect(entity.displayOrder).toBe(0);
 	});
 
 	it('maps ProductInput to ProductInputDto correctly', () => {
@@ -108,7 +111,8 @@ describe('product.mapper', () => {
 			minOrderQty: 5,
 			leadTimeHours: 1,
 			description: 'Kiss cut sheet',
-			isActive: true
+			isActive: true,
+			displayOrder: 3
 		};
 
 		const dto = mapProductInputToDto(input);
@@ -125,5 +129,6 @@ describe('product.mapper', () => {
 		expect(dto.min_order_qty).toBe(5);
 		expect(dto.lead_time_hours).toBe(1);
 		expect(dto.is_active).toBe(true);
+		expect(dto.display_order).toBe(3);
 	});
 });

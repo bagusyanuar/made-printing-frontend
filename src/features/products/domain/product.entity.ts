@@ -77,6 +77,7 @@ export interface Product {
 	leadTimeHours: number | null;
 	description: string | null;
 	isActive: boolean;
+	displayOrder: number;
 	createdAt: string;
 	updatedAt: string;
 }
@@ -95,6 +96,7 @@ export interface ProductInput {
 	leadTimeHours?: number | null;
 	description?: string | null;
 	isActive?: boolean;
+	displayOrder?: number;
 }
 
 export function formatCurrency(amount: number): string {

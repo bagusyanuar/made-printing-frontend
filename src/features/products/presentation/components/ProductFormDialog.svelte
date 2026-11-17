@@ -467,7 +467,8 @@
 			minOrderQty: minOrderQty || 1,
 			leadTimeHours: leadTimeHours !== null ? leadTimeHours : null,
 			description: description.trim() || null,
-			isActive
+			isActive,
+			displayOrder: product ? product.displayOrder : undefined
 		};
 
 		const finalValidation = productSchema.safeParse(rawInput);

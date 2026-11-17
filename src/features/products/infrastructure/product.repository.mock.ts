@@ -11,8 +11,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-001',
 		code: 'PRD-LGF-001',
 		name: 'Banner Flexy Outdoor Standar',
-		categoryId: 'cat-001',
-		categoryName: 'Large Format',
+		categoryId: 'cat-1',
+		categoryName: 'Large Format Outdoor',
 		baseMaterial: 'Flexy 280 gsm',
 		calculationType: 'square_meter',
 		basePrice: 18000,
@@ -34,6 +34,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 2,
 		description: 'Banner outdoor standar tahan cuaca untuk spanduk, baliho, dan event.',
 		isActive: true,
+		displayOrder: 1,
 		createdAt: '2026-01-10T08:00:00.000Z',
 		updatedAt: '2026-01-10T08:00:00.000Z'
 	},
@@ -41,8 +42,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-002',
 		code: 'PRD-LGF-002',
 		name: 'Spanduk Flexy Korea Tebal',
-		categoryId: 'cat-001',
-		categoryName: 'Large Format',
+		categoryId: 'cat-1',
+		categoryName: 'Large Format Outdoor',
 		baseMaterial: 'Korcin 440 gsm',
 		calculationType: 'square_meter',
 		basePrice: 35000,
@@ -57,6 +58,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 3,
 		description: 'Bahan spanduk tebal serat halus, tahan angin kencang dan tidak mudah sobek.',
 		isActive: true,
+		displayOrder: 2,
 		createdAt: '2026-01-11T09:00:00.000Z',
 		updatedAt: '2026-01-11T09:00:00.000Z'
 	},
@@ -64,8 +66,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-003',
 		code: 'PRD-LGF-003',
 		name: 'Banner Albatros Indoor Resolusi Tinggi',
-		categoryId: 'cat-001',
-		categoryName: 'Large Format',
+		categoryId: 'cat-2',
+		categoryName: 'Large Format Indoor & Display',
 		baseMaterial: 'Albatros 180 gsm',
 		calculationType: 'square_meter',
 		basePrice: 45000,
@@ -80,6 +82,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 4,
 		description: 'Media indoor tanpa pori, hasil cetak tajam untuk Roll Up Banner & X-Banner.',
 		isActive: true,
+		displayOrder: 3,
 		createdAt: '2026-01-12T10:00:00.000Z',
 		updatedAt: '2026-01-12T10:00:00.000Z'
 	},
@@ -87,8 +90,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-004',
 		code: 'PRD-A3-010',
 		name: 'Sticker Vinyl Glossy A3+ Kiss Cut',
-		categoryId: 'cat-002',
-		categoryName: 'Digital A3+',
+		categoryId: 'cat-3',
+		categoryName: 'Digital Printing A3+ Lembaran',
 		baseMaterial: 'Vinyl Putih A3+',
 		calculationType: 'sheet',
 		basePrice: 12500,
@@ -110,6 +113,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 2,
 		description: 'Stiker anti-air laminasi glossy dengan pemotongan setengah putus (kiss cut).',
 		isActive: true,
+		displayOrder: 4,
 		createdAt: '2026-01-13T11:00:00.000Z',
 		updatedAt: '2026-01-13T11:00:00.000Z'
 	},
@@ -117,8 +121,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-005',
 		code: 'PRD-A3-011',
 		name: 'Kartu Nama Art Carton 260g (2 Sisi)',
-		categoryId: 'cat-002',
-		categoryName: 'Digital A3+',
+		categoryId: 'cat-3',
+		categoryName: 'Digital Printing A3+ Lembaran',
 		baseMaterial: 'Art Carton 260 gsm',
 		calculationType: 'sheet',
 		basePrice: 35000,
@@ -133,6 +137,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 3,
 		description: 'Paket box kartu nama 100 pcs cetak bolak-balik full color termasuk box mika.',
 		isActive: true,
+		displayOrder: 5,
 		createdAt: '2026-01-14T13:00:00.000Z',
 		updatedAt: '2026-01-14T13:00:00.000Z'
 	},
@@ -140,8 +145,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-006',
 		code: 'PRD-A3-012',
 		name: 'Brosur Art Paper 150g A4 Lipat 3',
-		categoryId: 'cat-002',
-		categoryName: 'Digital A3+',
+		categoryId: 'cat-3',
+		categoryName: 'Digital Printing A3+ Lembaran',
 		baseMaterial: 'Art Paper 150 gsm',
 		calculationType: 'sheet',
 		basePrice: 4500,
@@ -156,6 +161,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 4,
 		description: 'Brosur promosi glossy cetak 2 sisi full color dengan rel lipat 3 presisi.',
 		isActive: true,
+		displayOrder: 6,
 		createdAt: '2026-01-15T14:00:00.000Z',
 		updatedAt: '2026-01-15T14:00:00.000Z'
 	},
@@ -163,8 +169,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-007',
 		code: 'PRD-DTF-001',
 		name: 'Sablon DTF Meteran Premium',
-		categoryId: 'cat-003',
-		categoryName: 'DTF Printing',
+		categoryId: 'cat-4',
+		categoryName: 'Sablon Digital DTF & Sublimasi',
 		baseMaterial: 'PET Film 60cm + Powder TPU',
 		calculationType: 'meter_run',
 		basePrice: 45000,
@@ -179,6 +185,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 2,
 		description: 'Print sablon film lebar cetak 58cm, tepung TPU elastis anti retak.',
 		isActive: true,
+		displayOrder: 7,
 		createdAt: '2026-01-16T15:00:00.000Z',
 		updatedAt: '2026-01-16T15:00:00.000Z'
 	},
@@ -186,8 +193,8 @@ const INITIAL_PRODUCTS: Product[] = [
 		id: 'prod-008',
 		code: 'PRD-UV-001',
 		name: 'Gantungan Kunci Akrilik UV Print Custom',
-		categoryId: 'cat-004',
-		categoryName: 'Merchandise',
+		categoryId: 'cat-5',
+		categoryName: 'Merchandise & Flatbed UV',
 		baseMaterial: 'Akrilik Bening 3mm',
 		calculationType: 'piece',
 		basePrice: 7500,
@@ -202,6 +209,7 @@ const INITIAL_PRODUCTS: Product[] = [
 		leadTimeHours: 6,
 		description: 'Gantungan kunci potong laser sesuai pola desain dengan cetak tinta UV timbul.',
 		isActive: true,
+		displayOrder: 8,
 		createdAt: '2026-01-17T16:00:00.000Z',
 		updatedAt: '2026-01-17T16:00:00.000Z'
 	}
@@ -248,6 +256,7 @@ export class ProductRepositoryMock implements ProductRepository {
 			leadTimeHours: input.leadTimeHours ?? null,
 			description: input.description?.trim() || null,
 			isActive: input.isActive ?? true,
+			displayOrder: input.displayOrder ?? this.items.length + 1,
 			createdAt: now,
 			updatedAt: now
 		};
@@ -292,6 +301,7 @@ export class ProductRepositoryMock implements ProductRepository {
 				input.leadTimeHours !== undefined ? input.leadTimeHours : current.leadTimeHours,
 			description: input.description?.trim() || null,
 			isActive: input.isActive !== undefined ? input.isActive : current.isActive,
+			displayOrder: input.displayOrder !== undefined ? input.displayOrder : current.displayOrder,
 			updatedAt: new Date().toISOString()
 		};
 
@@ -306,6 +316,18 @@ export class ProductRepositoryMock implements ProductRepository {
 			return ResultClass.error(new NotFoundError(`Produk dengan ID "${id}" tidak ditemukan.`));
 		}
 		this.items.splice(index, 1);
+		return ResultClass.ok(undefined);
+	}
+
+	async reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void, AppError>> {
+		await new Promise((r) => setTimeout(r, 100));
+		for (const order of orders) {
+			const item = this.items.find((p) => p.id === order.id);
+			if (item) {
+				item.displayOrder = order.displayOrder;
+				item.updatedAt = new Date().toISOString();
+			}
+		}
 		return ResultClass.ok(undefined);
 	}
 }

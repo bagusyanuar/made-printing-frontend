@@ -8,4 +8,5 @@ export interface ProductRepository {
 	create(input: ProductInput): Promise<Result<Product, AppError>>;
 	update(id: string, input: ProductInput): Promise<Result<Product, AppError>>;
 	delete(id: string): Promise<Result<void, AppError>>;
+	reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void, AppError>>;
 }

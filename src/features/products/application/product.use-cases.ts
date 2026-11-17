@@ -10,6 +10,7 @@ export interface ProductUseCases {
 	create(input: ProductInput): Promise<Result<Product, AppError>>;
 	update(id: string, input: ProductInput): Promise<Result<Product, AppError>>;
 	delete(id: string): Promise<Result<void, AppError>>;
+	reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void, AppError>>;
 }
 
 export function createProductUseCases(repository: ProductRepository): ProductUseCases {
@@ -18,7 +19,8 @@ export function createProductUseCases(repository: ProductRepository): ProductUse
 		getById: (id: string) => repository.getById(id),
 		create: (input: ProductInput) => repository.create(input),
 		update: (id: string, input: ProductInput) => repository.update(id, input),
-		delete: (id: string) => repository.delete(id)
+		delete: (id: string) => repository.delete(id),
+		reorder: (orders: { id: string; displayOrder: number }[]) => repository.reorder(orders)
 	};
 }
 

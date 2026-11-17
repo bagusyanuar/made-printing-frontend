@@ -67,7 +67,8 @@ export const productSchema = z.object({
 		.nullable()
 		.optional(),
 	description: z.string().nullable().optional(),
-	isActive: z.boolean().optional()
+	isActive: z.boolean().optional(),
+	displayOrder: z.number().optional()
 });
 
 export type ProductFormSchema = z.infer<typeof productSchema>;

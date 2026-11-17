@@ -49,4 +49,12 @@ export class ProductRepositoryImpl implements ProductRepository {
 			await axiosClient.delete(`/products/${id}`);
 		});
 	}
+
+	async reorder(orders: { id: string; displayOrder: number }[]): Promise<Result<void, AppError>> {
+		return safeApiCall(async () => {
+			await axiosClient.post('/products/reorder', {
+				orders: orders.map((o) => ({ id: o.id, display_order: o.displayOrder }))
+			});
+		});
+	}
 }

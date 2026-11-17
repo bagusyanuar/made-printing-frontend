@@ -52,6 +52,7 @@ export function mapProductDtoToEntity(dto: ProductDto): Product {
 		leadTimeHours: dto.lead_time_hours != null ? Number(dto.lead_time_hours) : null,
 		description: dto.description ?? null,
 		isActive: Boolean(dto.is_active),
+		displayOrder: Number(dto.display_order) || 0,
 		createdAt: dto.created_at,
 		updatedAt: dto.updated_at
 	};
@@ -101,6 +102,7 @@ export function mapProductInputToDto(input: ProductInput): ProductInputDto {
 		min_order_qty: input.minOrderQty ?? 1,
 		lead_time_hours: input.leadTimeHours ?? null,
 		description: input.description ?? null,
-		is_active: input.isActive ?? true
+		is_active: input.isActive ?? true,
+		display_order: input.displayOrder ?? 0
 	};
 }

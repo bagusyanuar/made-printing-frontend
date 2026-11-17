@@ -24,6 +24,9 @@
 	import IconRefreshCw from '~icons/lucide/refresh-cw';
 	import IconEdit2 from '~icons/lucide/edit-2';
 	import IconTrash2 from '~icons/lucide/trash-2';
+	import IconArrowUp from '~icons/lucide/arrow-up';
+	import IconArrowDown from '~icons/lucide/arrow-down';
+	import IconArrowUpDown from '~icons/lucide/arrow-up-down';
 	import IconTag from '~icons/lucide/tag';
 	import IconLayers from '~icons/lucide/layers';
 	import IconAlertCircle from '~icons/lucide/alert-circle';
@@ -31,14 +34,14 @@
 	import {
 		type Product,
 		type ProductInput,
-		formatCurrency,
-		getCalculationLabel,
+		getCalculationUnit,
 		getProductInitial
 	} from '../../domain/product.entity';
 	import { productStore } from '../../application/product.store.svelte';
 	import { productCategoryStore } from '$features/product-categories/application/product-category.store.svelte';
 	import ProductFormDialog from '../components/ProductFormDialog.svelte';
 	import ProductDeleteDialog from '../components/ProductDeleteDialog.svelte';
+	import ProductOrderDialog from '../components/ProductOrderDialog.svelte';
 
 	onMount(() => {
 		productStore.load();
@@ -50,6 +53,9 @@
 
 	let isDeleteOpen = $state(false);
 	let selectedProductForDelete = $state<Product | null>(null);
+
+	let isOrderOpen = $state(false);
+	let selectedProductForOrder = $state<Product | null>(null);
 
 	let currentPage = $state(1);
 	let pageSize = $state(10);
@@ -67,6 +73,45 @@
 	function openDeleteModal(prod: Product) {
 		selectedProductForDelete = prod;
 		isDeleteOpen = true;
+	}
+
+	function openOrderModal(prod: Product) {
+		selectedProductForOrder = prod;
+		isOrderOpen = true;
+	}
+
+	async function handleOrderSave(newOrder: number): Promise<boolean> {
+		if (!selectedProductForOrder) return false;
+		const name = selectedProductForOrder.name;
+		const success = await productStore.changeOrder(selectedProductForOrder.id, newOrder);
+		if (success) {
+			toast.success('Urutan produk diperbarui', {
+				description: `Produk "${name}" dipindah ke urutan ${newOrder}.`
+			});
+		} else {
+			toast.danger('Gagal mengubah urutan', {
+				description: productStore.error || 'Terjadi kesalahan sistem.'
+			});
+		}
+		return success;
+	}
+
+	async function handleMoveUp(item: Product) {
+		const success = await productStore.moveUp(item.id);
+		if (success) {
+			toast.success('Urutan dinaikkan', {
+				description: `Produk "${item.name}" digeser ke atas.`
+			});
+		}
+	}
+
+	async function handleMoveDown(item: Product) {
+		const success = await productStore.moveDown(item.id);
+		if (success) {
+			toast.success('Urutan diturunkan', {
+				description: `Produk "${item.name}" digeser ke bawah.`
+			});
+		}
 	}
 
 	async function handleSave(input: ProductInput): Promise<boolean> {
@@ -120,7 +165,9 @@
 
 	const availableCategories = $derived.by(() => {
 		if (productCategoryStore.items.length > 0) {
-			return productCategoryStore.items.map((c) => ({ id: c.id, name: c.name }));
+			return [...productCategoryStore.items]
+				.sort((a, b) => a.displayOrder - b.displayOrder)
+				.map((c) => ({ id: c.id, name: c.name }));
 		}
 		return productStore.categories;
 	});
@@ -153,7 +200,7 @@
 			<div class="relative w-full max-w-sm">
 				<TextField
 					size="sm"
-					placeholder="Cari kode, nama produk, atau bahan..."
+					placeholder="Cari nama atau deskripsi produk..."
 					value={productStore.searchQuery}
 					onValueChange={(val) => {
 						productStore.searchQuery = val;
@@ -193,7 +240,63 @@
 			</div>
 		</div>
 
-		<!-- Table Container -->
+		<!-- Category Filter Chips (Wrap on overflow) -->
+		{#if availableCategories.length > 0}
+			<div class="flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter kategori">
+				<button
+					type="button"
+					onclick={() => {
+						productStore.selectedCategory = 'all';
+						currentPage = 1;
+					}}
+					class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-all {productStore.selectedCategory ===
+					'all'
+						? 'border-primary/40 bg-primary/10 font-semibold text-primary shadow-2xs'
+						: 'hover:border-border-strong border-border bg-surface text-foreground-subtle hover:bg-surface-subtle hover:text-foreground'}"
+				>
+					<span>Semua</span>
+					<span
+						class="inline-flex min-w-4 items-center justify-center rounded-full px-1 text-[10px] {productStore.selectedCategory ===
+						'all'
+							? 'bg-primary/20 font-bold text-primary'
+							: 'bg-surface-subtle text-foreground-subtle'}"
+					>
+						{productStore.items.length}
+					</span>
+				</button>
+
+				{#each availableCategories as cat (cat.id)}
+					{@const count = productStore.items.filter(
+						(p) =>
+							p.categoryId === cat.id || p.categoryName.toLowerCase() === cat.name.toLowerCase()
+					).length}
+					{@const isSelected = productStore.selectedCategory === cat.id}
+					<button
+						type="button"
+						onclick={() => {
+							productStore.selectedCategory = isSelected ? 'all' : cat.id;
+							currentPage = 1;
+						}}
+						class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-medium transition-all {isSelected
+							? 'border-primary/40 bg-primary/10 font-semibold text-primary shadow-2xs'
+							: 'hover:border-border-strong border-border bg-surface text-foreground-subtle hover:bg-surface-subtle hover:text-foreground'}"
+					>
+						<span>{cat.name}</span>
+						{#if count > 0}
+							<span
+								class="inline-flex min-w-4 items-center justify-center rounded-full px-1 text-[10px] {isSelected
+									? 'bg-primary/20 font-bold text-primary'
+									: 'bg-surface-subtle text-foreground-subtle'}"
+							>
+								{count}
+							</span>
+						{/if}
+					</button>
+				{/each}
+			</div>
+		{/if}
+
+		<!-- Table or State Container -->
 		<Card class="overflow-hidden shadow-none">
 			{#if productStore.isLoading && productStore.items.length === 0}
 				<div class="flex flex-col items-center justify-center py-16 text-center">
@@ -221,20 +324,35 @@
 						{/snippet}
 						{#snippet title()}
 							<Typography variant="h4" as="span" class="font-semibold text-foreground">
-								{productStore.searchQuery ? 'Tidak ada produk yang cocok' : 'Belum ada data produk'}
+								{productStore.searchQuery || productStore.selectedCategory !== 'all'
+									? 'Produk Tidak Ditemukan'
+									: 'Belum Ada Data Produk'}
 							</Typography>
 						{/snippet}
 						{#snippet description()}
 							<Typography variant="muted" as="span" class="text-xs text-foreground-subtle">
-								{productStore.searchQuery
-									? `Tidak ditemukan produk dengan kata kunci "${productStore.searchQuery}".`
+								{productStore.searchQuery || productStore.selectedCategory !== 'all'
+									? 'Tidak ada produk yang cocok dengan pencarian atau filter kategori yang dipilih.'
 									: 'Mulai dengan menambahkan produk cetak baru ke dalam katalog.'}
 							</Typography>
 						{/snippet}
-						{#if !productStore.searchQuery}
+						{#if !productStore.searchQuery && productStore.selectedCategory === 'all'}
 							<Button variant="default" size="sm" onclick={openCreateModal} class="mt-2 gap-1.5">
 								<IconCirclePlus class="size-4" />
-								<span>Tambah Produk</span>
+								<span>Tambah Produk Sekarang</span>
+							</Button>
+						{:else}
+							<Button
+								variant="outline"
+								size="sm"
+								onclick={() => {
+									productStore.searchQuery = '';
+									productStore.selectedCategory = 'all';
+									currentPage = 1;
+								}}
+								class="mt-2"
+							>
+								Reset Filter
 							</Button>
 						{/if}
 					</EmptyState>
@@ -243,13 +361,11 @@
 				<Table class="rounded-none border-0 bg-transparent">
 					<TableHeader>
 						<TableRow class="border-b-0 hover:bg-transparent">
-							<TableHead class="min-w-64">Produk Cetak</TableHead>
-							<TableHead>Kategori</TableHead>
-							<TableHead>Bahan Dasar</TableHead>
-							<TableHead>Model Perhitungan</TableHead>
-							<TableHead>Harga Dasar</TableHead>
-							<TableHead>Status</TableHead>
-							<TableHead class="w-16 text-right"><span class="sr-only">Aksi</span></TableHead>
+							<TableHead class="min-w-60">Nama</TableHead>
+							<TableHead class="w-40">Kategori</TableHead>
+							<TableHead class="w-28">Satuan</TableHead>
+							<TableHead class="w-20 text-center">Index</TableHead>
+							<TableHead class="w-14 text-right"><span class="sr-only">Aksi</span></TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>
@@ -257,7 +373,7 @@
 							<TableRow
 								class="border-b border-border/60 transition-colors last:border-b-0 hover:bg-surface-subtle/40"
 							>
-								<!-- 1. Produk -->
+								<!-- 1. Nama -->
 								<TableCell>
 									<div class="flex items-center gap-3">
 										<Avatar
@@ -269,16 +385,11 @@
 										</Avatar>
 										<div class="flex min-w-0 flex-col">
 											<div class="leading-snug font-medium text-foreground">{item.name}</div>
-											<div class="mt-0.5 flex items-center gap-1.5 text-xs text-foreground-subtle">
-												<span>{item.code}</span>
-												{#if item.assignedAttributes && item.assignedAttributes.length > 0}
-													<span class="text-foreground-faint">·</span>
-													<span class="text-[10px] text-primary">
-														{item.assignedAttributes[0].attributeName} ({item.assignedAttributes[0]
-															.selectedVariantIds.length} varian)
-													</span>
-												{/if}
-											</div>
+											{#if item.description}
+												<div class="mt-0.5 line-clamp-1 text-xs text-foreground-subtle">
+													{item.description}
+												</div>
+											{/if}
 										</div>
 									</div>
 								</TableCell>
@@ -290,53 +401,33 @@
 									</Badge>
 								</TableCell>
 
-								<!-- 3. Bahan Dasar -->
+								<!-- 3. Satuan -->
 								<TableCell>
-									<span class="text-xs text-foreground-subtle">{item.baseMaterial || '-'}</span>
-								</TableCell>
-
-								<!-- 4. Model Perhitungan -->
-								<TableCell>
-									<span class="text-xs text-foreground-subtle">
-										{getCalculationLabel(item.calculationType)}
+									<span
+										class="inline-flex items-center rounded-md border border-border/70 bg-surface-subtle px-2 py-0.5 text-xs font-medium text-foreground"
+									>
+										{getCalculationUnit(item.calculationType)}
 									</span>
 								</TableCell>
 
-								<!-- 5. Harga Dasar -->
-								<TableCell>
-									<div class="flex flex-col">
-										<span class="text-xs font-semibold text-foreground">
-											{formatCurrency(item.basePrice)}
-										</span>
-										{#if item.tierPricing?.resellerPrice}
-											<span class="text-[10px] text-foreground-subtle">
-												Biro: {formatCurrency(item.tierPricing.resellerPrice)}
-											</span>
-										{/if}
-									</div>
+								<!-- 4. Index (Urutan Display) -->
+								<TableCell class="text-center">
+									<span
+										class="inline-flex size-6 items-center justify-center rounded border border-border/70 bg-surface-subtle text-xs font-medium text-foreground"
+									>
+										{item.displayOrder}
+									</span>
 								</TableCell>
 
-								<!-- 6. Status -->
-								<TableCell>
-									{#if item.isActive}
-										<Badge variant="success" size="sm" class="gap-1 rounded-md text-xs font-normal">
-											<span class="size-1.5 rounded-full bg-emerald-500"></span>
-											<span>Aktif</span>
-										</Badge>
-									{:else}
-										<Badge
-											variant="outline"
-											size="sm"
-											class="gap-1 rounded-md text-xs font-normal text-foreground-subtle"
-										>
-											<span class="size-1.5 rounded-full bg-foreground-subtle/60"></span>
-											<span>Nonaktif</span>
-										</Badge>
-									{/if}
-								</TableCell>
-
-								<!-- 7. Aksi -->
+								<!-- 5. Aksi (Vertical Ellipsis Dropdown Popover) -->
 								<TableCell class="text-right">
+									{@const sorted = [...productStore.items].sort(
+										(a, b) => a.displayOrder - b.displayOrder
+									)}
+									{@const fullIdx = sorted.findIndex((i) => i.id === item.id)}
+									{@const isFirst = fullIdx === 0}
+									{@const isLast = fullIdx === sorted.length - 1}
+
 									<Dropdown
 										placement="bottom-end"
 										offset={4}
@@ -344,18 +435,44 @@
 										class="size-8 justify-center! rounded-lg border border-transparent p-0! text-foreground-subtle hover:border-border hover:bg-surface-subtle hover:text-foreground focus-visible:ring-1 focus-visible:ring-primary"
 										classes={{
 											trigger: 'size-8 justify-center! p-0!',
-											content: 'min-w-36 border-border bg-surface p-1 shadow-none'
+											content: 'min-w-40 border-border bg-surface p-1 shadow-none'
 										}}
 									>
 										{#snippet trigger()}
 											<IconEllipsisVertical class="size-4" />
 										{/snippet}
 										<DropdownItem
+											disabled={isFirst}
+											class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-subtle disabled:cursor-not-allowed disabled:opacity-40"
+											onSelect={() => handleMoveUp(item)}
+										>
+											<IconArrowUp class="size-3.5 text-foreground-subtle" />
+											<span>Pindah ke Atas</span>
+										</DropdownItem>
+										<DropdownItem
+											disabled={isLast}
+											class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-subtle disabled:cursor-not-allowed disabled:opacity-40"
+											onSelect={() => handleMoveDown(item)}
+										>
+											<IconArrowDown class="size-3.5 text-foreground-subtle" />
+											<span>Pindah ke Bawah</span>
+										</DropdownItem>
+										<DropdownItem
+											class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-subtle"
+											onSelect={() => openOrderModal(item)}
+										>
+											<IconArrowUpDown class="size-3.5 text-foreground-subtle" />
+											<span>Ubah Urutan...</span>
+										</DropdownItem>
+
+										<div class="my-1 border-t border-border/60"></div>
+
+										<DropdownItem
 											class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-subtle"
 											onSelect={() => openEditModal(item)}
 										>
 											<IconEdit2 class="size-3.5 text-foreground-subtle" />
-											<span>Edit Produk</span>
+											<span>Edit</span>
 										</DropdownItem>
 										<DropdownItem
 											class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-danger transition-colors hover:bg-danger/10"
@@ -370,19 +487,19 @@
 						{/each}
 					</TableBody>
 				</Table>
-
-				<!-- Pagination Container -->
-				{#if productStore.filteredItems.length > 0}
-					<div class="border-t border-border/60 px-4 py-3">
-						<TablePagination
-							bind:currentPage
-							bind:pageSize
-							totalItems={productStore.filteredItems.length}
-						/>
-					</div>
-				{/if}
 			{/if}
 		</Card>
+
+		{#if !productStore.isLoading && !productStore.error && productStore.filteredItems.length > 0}
+			<!-- Pagination & Table Controls -->
+			<TablePagination
+				bind:currentPage
+				bind:pageSize
+				totalItems={productStore.filteredItems.length}
+				pageSizeOptions={[5, 10, 20]}
+				itemLabel="produk"
+			/>
+		{/if}
 	</div>
 </div>
 
@@ -406,5 +523,17 @@
 	onClose={() => {
 		isDeleteOpen = false;
 		selectedProductForDelete = null;
+	}}
+/>
+
+<!-- Modal Change Display Order -->
+<ProductOrderDialog
+	bind:open={isOrderOpen}
+	product={selectedProductForOrder}
+	maxOrder={productStore.items.length}
+	onSave={handleOrderSave}
+	onClose={() => {
+		isOrderOpen = false;
+		selectedProductForOrder = null;
 	}}
 />

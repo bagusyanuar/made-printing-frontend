@@ -41,6 +41,7 @@ export interface ProductDto {
 	lead_time_hours?: number | null;
 	description?: string | null;
 	is_active: boolean;
+	display_order?: number | null;
 	created_at: string;
 	updated_at: string;
 }
@@ -59,4 +60,5 @@ export interface ProductInputDto {
 	lead_time_hours?: number | null;
 	description?: string | null;
 	is_active?: boolean;
+	display_order?: number;
 }
