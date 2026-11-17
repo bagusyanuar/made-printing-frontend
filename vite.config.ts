@@ -7,6 +7,9 @@ import Icons from 'unplugin-icons/vite';
 import path from 'node:path';
 
 export default defineConfig({
+	server: {
+		port: 5175
+	},
 	resolve: {
 		alias: {
 			$lib: path.resolve('./src/lib'),
