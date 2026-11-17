@@ -1,28 +1,28 @@
-# Graph Report - made-printing-frontend  (2026-11-16)
+# Graph Report - made-printing-frontend  (2026-11-17)
 
 ## Corpus Check
-- 192 files · ~94,535 words
+- 193 files · ~95,761 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 1040 nodes · 1886 edges · 81 communities (69 shown, 11 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.85)
+- 1050 nodes · 1906 edges · 78 communities (66 shown, 11 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 24 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `425e675b`
+- Built from commit: `c391b8b6`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - package.json
 - devDependencies
-- product.repository.impl.ts
+- dystopia-linear-lib/components/typography
 - product.entity.ts
-- ProductCategoryInput
+- safeApiCall
 - sidebar.types.ts
-- product-category.repository.impl.ts
+- Frontend Architecture Rules (Clean Architecture + DDD)
 - What You Must Do When Invoked
 - @sveltejs/kit
 - scripts
@@ -54,8 +54,7 @@
 - Superforms + Zod
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
-- product-category.mapper.ts
-- Frontend Architecture Rules (Clean Architecture + DDD)
+- CVA & Tailwind UI Components
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
@@ -78,11 +77,8 @@
 - Result
 - graphify reference: query, path, explain
 - 01. Overview & Domain Model: Made Printing ERP
-- product-category.entity.ts
 - sv
-- CVA & Tailwind UI Components
 - knowledge/README.md
-- dystopia-linear-lib/components/typography
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
@@ -95,12 +91,13 @@
 - rules/graphify.md
 - extraction-spec.md
 - workflows/graphify.md
+- themeStore
 - ProductCategory
 
 ## God Nodes (most connected - your core abstractions)
 1. `Result` - 74 edges
 2. `AppError` - 62 edges
-3. `safeApiCall()` - 30 edges
+3. `safeApiCall()` - 31 edges
 4. `Product` - 24 edges
 5. `ProductAttribute` - 24 edges
 6. `ProductCategory` - 24 edges
@@ -110,21 +107,21 @@
 10. `ProductInput` - 18 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `safeApiCall()` --calls--> `ConflictError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `ForbiddenError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `UnauthorizedError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
-- `safeApiCall()` --calls--> `ValidationError`  [EXTRACTED]
-  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
+- `ProductRepositoryImpl` --implements--> `ProductRepository`  [EXTRACTED]
+  src/features/products/infrastructure/product.repository.impl.ts → src/features/products/domain/product.repository.ts
+- `AttributeVariantRepositoryImpl` --implements--> `AttributeVariantRepository`  [EXTRACTED]
+  src/features/attribute-variants/infrastructure/attribute-variant.repository.impl.ts → src/features/attribute-variants/domain/attribute-variant.repository.ts
 - `ProductCategoryRepositoryImpl` --implements--> `ProductCategoryRepository`  [EXTRACTED]
   src/features/product-categories/infrastructure/product-category.repository.impl.ts → src/features/product-categories/domain/product-category.repository.ts
+- `safeApiCall()` --calls--> `AppError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
+- `safeApiCall()` --calls--> `NotFoundError`  [EXTRACTED]
+  src/lib/shared/infrastructure/api/safe-api-call.ts → src/lib/shared/domain/errors/app-error.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (81 total, 11 thin omitted)
+## Communities (78 total, 11 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.07
@@ -134,25 +131,25 @@ Nodes (28): name, private, type, version, class-variance-authority, clsx, dystop
 Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
-### Community 2 - "product.repository.impl.ts"
-Cohesion: 0.17
-Nodes (8): axios, INITIAL_PRODUCTS, AppErrorCode, ConflictError, ForbiddenError, UnauthorizedError, ValidationError, axiosClient
+### Community 2 - "dystopia-linear-lib/components/typography"
+Cohesion: 0.06
+Nodes (6): ProductAttributeVariantBatchItem, AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, onClose(), TablePaginationProps
 
 ### Community 3 - "product.entity.ts"
-Cohesion: 0.06
-Nodes (33): productRepositoryImpl, productRepositoryInstance, productRepositoryMock, productStore, createProductUseCases(), productUseCases, CALCULATION_TYPES, CalculationType (+25 more)
+Cohesion: 0.07
+Nodes (19): productRepositoryImpl, productRepositoryInstance, productRepositoryMock, productStore, createProductUseCases(), productUseCases, CALCULATION_TYPES, CalculationType (+11 more)
 
-### Community 4 - "ProductCategoryInput"
-Cohesion: 0.18
-Nodes (4): productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, ProductCategoryInput
+### Community 4 - "safeApiCall"
+Cohesion: 0.07
+Nodes (34): axios, zod, generateSlug(), ProductAttributeDto, ProductAttributeRequestDto, ProductAttributeVariantBatchDto, ProductAttributeVariantDto, ProductAttributeVariantRequestDto (+26 more)
 
 ### Community 5 - "sidebar.types.ts"
-Cohesion: 0.06
-Nodes (19): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+11 more)
+Cohesion: 0.10
+Nodes (14): svelte, groupTrigger(), linkContent(), isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry (+6 more)
 
-### Community 6 - "product-category.repository.impl.ts"
-Cohesion: 0.20
-Nodes (10): zod, productCategoryDtoSchema, InvalidResponseError, PaginatedResult, PaginationMeta, PaginationParams, apiEnvelopeSchema, dateStringSchema (+2 more)
+### Community 6 - "Frontend Architecture Rules (Clean Architecture + DDD)"
+Cohesion: 0.22
+Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
 
 ### Community 7 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -262,13 +259,9 @@ Nodes (8): 1. What This Application Is, 2. Design System & Visual Aesthetic, 3. 
 Cohesion: 0.22
 Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe Inventori Bahan Baku Utama, 2. Inventori Tinta & Consumables, 3. Toleransi Limbah & Waste Ratio (_Scrap Tracking_), A. Bahan Continuous / Roll-Based Goods, B. Bahan Diskrit / Sheet-Based Goods, Rumus Persentase Waste:, Sumber-sumber Limbah Cetak:
 
-### Community 39 - "product-category.mapper.ts"
-Cohesion: 0.31
-Nodes (6): generateCategoryCode(), ProductCategoryDto, ProductCategoryRequestDto, mapProductCategoryDtoToEntity(), mapProductCategoryInputToDto(), ProductCategoryRepositoryImpl
-
-### Community 40 - "Frontend Architecture Rules (Clean Architecture + DDD)"
-Cohesion: 0.22
-Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
+### Community 39 - "CVA & Tailwind UI Components"
+Cohesion: 0.40
+Nodes (4): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component
 
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
@@ -347,8 +340,8 @@ Cohesion: 0.33
 Nodes (5): 1. Format, 2. One Domain Per Commit, 3. Always Confirm Before Committing, 4. Standard Git Safety, Conventional Commit Workflow
 
 ### Community 60 - "Result"
-Cohesion: 0.08
-Nodes (31): attributeVariantRepositoryInstance, attributeVariantStore, attributeVariantUseCases, createAttributeVariantUseCases(), generateSlug(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant (+23 more)
+Cohesion: 0.10
+Nodes (16): attributeVariantRepositoryInstance, attributeVariantStore, attributeVariantUseCases, createAttributeVariantUseCases(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant, ProductAttributeVariantInput (+8 more)
 
 ### Community 61 - "graphify reference: query, path, explain"
 Cohesion: 0.33
@@ -358,25 +351,13 @@ Nodes (5): For /graphify explain, For /graphify path, graphify reference: query,
 Cohesion: 0.33
 Nodes (5): 01. Overview & Domain Model: Made Printing ERP, 1. Latar Belakang & Profil Bisnis, 2. Aktor Pengguna & Peran Sistem (_User Personas_), Detail Tanggung Jawab Per Role:, Mengapa Digital Printing Berbeda dari Percetakan Konvensional (Offset)?
 
-### Community 63 - "product-category.entity.ts"
-Cohesion: 0.29
-Nodes (5): CALCULATION_TYPES, CalculationType, CalculationTypeOption, CategoryType, productCategorySchema
-
 ### Community 64 - "sv"
 Cohesion: 0.33
 Nodes (5): Adding features, Building, Creating a project, Developing, sv
 
-### Community 65 - "CVA & Tailwind UI Components"
-Cohesion: 0.40
-Nodes (4): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component
-
 ### Community 66 - "knowledge/README.md"
 Cohesion: 0.40
 Nodes (3): 📚 Daftar Modul Knowledge, Knowledge Base: Made Printing ERP (Digital Printing System), 🎯 Prinsip Utama Domain Percetakan Digital
-
-### Community 67 - "dystopia-linear-lib/components/typography"
-Cohesion: 0.06
-Nodes (5): AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, onClose(), TablePaginationProps
 
 ### Community 69 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -398,29 +379,33 @@ Nodes (3): @sveltejs/adapter-static, @tailwindcss/vite, @vitest/browser-playwrig
 Cohesion: 0.67
 Nodes (3): imports, #features/*, #lib
 
+### Community 82 - "themeStore"
+Cohesion: 0.15
+Nodes (5): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, themeStore
+
 ### Community 83 - "ProductCategory"
-Cohesion: 0.19
-Nodes (7): productCategoryRepositoryInstance, ProductCategory, ProductCategoryRepository, productCategoryRepository, delay(), INITIAL_CATEGORIES, productCategoryRepositoryMock
+Cohesion: 0.06
+Nodes (34): productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType, CalculationTypeOption, CategoryType (+26 more)
 
 ## Knowledge Gaps
-- **480 isolated node(s):** `productRepositoryImpl`, `productRepositoryMock`, `CalculationTypeOption`, `CALCULATION_TYPES`, `PriceTierItem` (+475 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 566 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **480 isolated node(s):** `CalculationTypeOption`, `CALCULATION_TYPES`, `PriceTierItem`, `VariantTierPricing`, `ProductTierPricing` (+475 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 571 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `product-category.repository.impl.ts` to `package.json`, `product.repository.impl.ts`, `dystopia-linear-lib/components/typography`, `product.entity.ts`, `product.schema.ts`, `Result`, `product-category.entity.ts`?**
-  _High betweenness centrality (0.092) - this node is a cross-community bridge._
-- **Why does `devDependencies` connect `devDependencies` to `package.json`?**
-  _High betweenness centrality (0.048) - this node is a cross-community bridge._
-- **Why does `Result` connect `Result` to `product.repository.impl.ts`, `product.entity.ts`, `ProductCategoryInput`, `product-category.repository.impl.ts`, `product-category.mapper.ts`, `ProductCategory`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
-- **What connects `productRepositoryImpl`, `productRepositoryMock`, `CalculationTypeOption` to the rest of the system?**
+- **Why does `zod` connect `safeApiCall` to `package.json`, `dystopia-linear-lib/components/typography`, `ProductCategory`, `product.schema.ts`?**
+  _High betweenness centrality (0.070) - this node is a cross-community bridge._
+- **Why does `vitest` connect `vitest` to `package.json`, `ProductCategory`, `safeApiCall`, `sidebar.types.ts`?**
+  _High betweenness centrality (0.032) - this node is a cross-community bridge._
+- **Why does `Result` connect `Result` to `product.entity.ts`, `ProductCategory`, `safeApiCall`?**
+  _High betweenness centrality (0.022) - this node is a cross-community bridge._
+- **What connects `CalculationTypeOption`, `CALCULATION_TYPES`, `PriceTierItem` to the rest of the system?**
   _480 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `product.entity.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.05593561368209256 - nodes in this community are weakly interconnected._
+- **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
+  _Cohesion score 0.055426176059618075 - nodes in this community are weakly interconnected._
