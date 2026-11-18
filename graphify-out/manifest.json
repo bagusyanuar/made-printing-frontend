@@ -306,16 +306,16 @@
     "semantic_hash": "4c609a3e1e55ef9fcb3c38f1d4f979e9"
   },
   "src/routes/(app)/transactions/new/+page.svelte": {
-    "mtime": 1793836718.8691137,
-    "seen": 1794315921.017301,
-    "ast_hash": "bd573563801cb16d6973c9ba67b92e2b",
-    "semantic_hash": "bd573563801cb16d6973c9ba67b92e2b"
+    "mtime": 1794990190.0454996,
+    "seen": 1794991531.286531,
+    "ast_hash": "f8506c6b11ca0c39e84922bc1a8f0d5f",
+    "semantic_hash": ""
   },
   "src/routes/(app)/transactions/tickets/+page.svelte": {
-    "mtime": 1793836719.0860136,
-    "seen": 1794315921.017301,
-    "ast_hash": "bd3e24bac48474dab82b939a95b54748",
-    "semantic_hash": "bd3e24bac48474dab82b939a95b54748"
+    "mtime": 1794990190.119738,
+    "seen": 1794991531.2865322,
+    "ast_hash": "a08a24dca761d5011fe338198f20da72",
+    "semantic_hash": ""
   },
   "src/routes/+layout.svelte": {
     "mtime": 1794537294.640011,
@@ -486,9 +486,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1794927668.5308692,
-    "seen": 1794972486.822073,
-    "ast_hash": "4bcdd215a1cc70f9bf89b78c1a6ec94c",
+    "mtime": 1794990189.946641,
+    "seen": 1794991531.2865,
+    "ast_hash": "137791064ebfbe63513597bf1b715aa7",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -1491,6 +1491,108 @@
     "mtime": 1794972555.8567977,
     "seen": 1794973217.33724,
     "ast_hash": "1b82cafd5f59ea37185a50c68ad57eea",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/application/ticket-order.container.ts": {
+    "mtime": 1794989553.6915329,
+    "seen": 1794989983.747471,
+    "ast_hash": "9b1c4bf889d35d1b676b5480be8984fa",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/application/ticket-order.store.svelte.ts": {
+    "mtime": 1794992010.0800624,
+    "seen": 1794992664.808505,
+    "ast_hash": "44f080307ddde4214bb4872333e5674a",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/application/ticket-order.use-cases.ts": {
+    "mtime": 1794989567.2927418,
+    "seen": 1794989983.7474718,
+    "ast_hash": "e6a63844a0de42e1d89832ce173f7a92",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/domain/ticket-order.entity.ts": {
+    "mtime": 1794989094.3065984,
+    "seen": 1794989983.747473,
+    "ast_hash": "3b892e6cffd4ed15f5bc50cbe7251d13",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/domain/ticket-order.repository.ts": {
+    "mtime": 1794989148.6770353,
+    "seen": 1794989983.747474,
+    "ast_hash": "b3c639ce5b83431cf548286e66a75e48",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/domain/ticket-order.schema.ts": {
+    "mtime": 1794989107.5368416,
+    "seen": 1794989983.747474,
+    "ast_hash": "1ed7eb43fac1630b28bfb42ead5d39ee",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.dto.ts": {
+    "mtime": 1794989167.0826573,
+    "seen": 1794989983.747475,
+    "ast_hash": "4879fe08e1225295854e7775e0343841",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.mapper.spec.ts": {
+    "mtime": 1794989221.7108083,
+    "seen": 1794989983.747475,
+    "ast_hash": "dfd89242457ecb82dcdcf2a229af3fb8",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.mapper.ts": {
+    "mtime": 1794989197.3621068,
+    "seen": 1794989983.7474759,
+    "ast_hash": "e260925664727b1e345e6c6d4fdd8dfa",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.repository.impl.ts": {
+    "mtime": 1794989296.7482347,
+    "seen": 1794989983.7474759,
+    "ast_hash": "d0db5aabe41426ba8e1c9043cdab23ff",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.repository.mock.spec.ts": {
+    "mtime": 1794989503.7943149,
+    "seen": 1794989983.747477,
+    "ast_hash": "504e9e9fb641fdb71a88001b8a9d9bd7",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.repository.mock.ts": {
+    "mtime": 1794989460.6184552,
+    "seen": 1794989983.747478,
+    "ast_hash": "55a28cf05bf0187c34c464b6028aa664",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/infrastructure/ticket-order.validator.ts": {
+    "mtime": 1794989187.1649058,
+    "seen": 1794989983.747478,
+    "ast_hash": "f8a9dd024b685af0a13d74bca9af41e3",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/presentation/components/TicketOrderCancelDialog.svelte": {
+    "mtime": 1794989854.1859114,
+    "seen": 1794989983.747479,
+    "ast_hash": "c8d99bef8acb4a21afd11e5ac45d9b6d",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/presentation/components/TicketOrderDetailDialog.svelte": {
+    "mtime": 1794992848.9460464,
+    "seen": 1794993656.73176,
+    "ast_hash": "f429821e6ad7c50a93520a3679206976",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/presentation/pages/CreateTicketOrderPage.svelte": {
+    "mtime": 1794992849.1129446,
+    "seen": 1794993656.731761,
+    "ast_hash": "eb199e971e8f5f0067b5f98f6f6a3954",
+    "semantic_hash": ""
+  },
+  "src/features/ticket-orders/presentation/pages/TicketOrderListPage.svelte": {
+    "mtime": 1794992849.7418754,
+    "seen": 1794993656.731762,
+    "ast_hash": "4502499ded5bdd931ce4dce9879e9af3",
     "semantic_hash": ""
   }
 }
