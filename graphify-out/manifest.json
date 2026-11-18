@@ -486,9 +486,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1794906879.4575787,
-    "seen": 1794924040.506492,
-    "ast_hash": "409a32692d72980a0385e1197e134cff",
+    "mtime": 1794927668.5308692,
+    "seen": 1794972486.822073,
+    "ast_hash": "4bcdd215a1cc70f9bf89b78c1a6ec94c",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -906,9 +906,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/expense-categories/+page.svelte": {
-    "mtime": 1794319958.9904065,
-    "seen": 1794320285.85877,
-    "ast_hash": "e92bad5db33ca94fa0da122525ca325d",
+    "mtime": 1794927668.624895,
+    "seen": 1794972486.822103,
+    "ast_hash": "145a292d24df6903a51136089796dce1",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/suppliers/+page.svelte": {
@@ -1389,6 +1389,108 @@
     "mtime": 1794906594.9310868,
     "seen": 1794906653.931128,
     "ast_hash": "ad4dd20dedb1a3c13cd70ade993ddf83",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/application/expense-category.container.ts": {
+    "mtime": 1794927208.9333177,
+    "seen": 1794927300.6858308,
+    "ast_hash": "31bdca9c47e3fa5bc71fe73a26507a9b",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/application/expense-category.store.svelte.ts": {
+    "mtime": 1794927208.9762642,
+    "seen": 1794927300.685832,
+    "ast_hash": "63facbba4e99fcff7268ba35681722b2",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/application/expense-category.use-cases.ts": {
+    "mtime": 1794926471.6335597,
+    "seen": 1794927300.685832,
+    "ast_hash": "7de8daba4ad9ae0f0f8d37cbed7b112a",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/domain/expense-category.entity.ts": {
+    "mtime": 1794927208.9995892,
+    "seen": 1794927300.685833,
+    "ast_hash": "a34cda965f360c82d6b9aea9f710da13",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/domain/expense-category.repository.ts": {
+    "mtime": 1794926320.5866535,
+    "seen": 1794927300.685834,
+    "ast_hash": "4818e2d6a228a5978a2f3e0260087ab9",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/domain/expense-category.schema.ts": {
+    "mtime": 1794926781.0955608,
+    "seen": 1794927300.685834,
+    "ast_hash": "559b46ea7a6d9564e78ed6ddd355f54b",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.dto.ts": {
+    "mtime": 1794926328.3044386,
+    "seen": 1794927300.6858351,
+    "ast_hash": "e1567d740b0cc2296703bbb6fbdfb954",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.mapper.spec.ts": {
+    "mtime": 1794927209.028424,
+    "seen": 1794927300.685836,
+    "ast_hash": "df251d94dca2ef15b223c7275b27780c",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.mapper.ts": {
+    "mtime": 1794927209.0354264,
+    "seen": 1794927300.685836,
+    "ast_hash": "e710ad82d9509f66976949ee634fb5bb",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.repository.impl.ts": {
+    "mtime": 1794927209.0453918,
+    "seen": 1794927300.685837,
+    "ast_hash": "1c87d0ba166b77b4a4208ca7cfe4f8e1",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.repository.mock.spec.ts": {
+    "mtime": 1794926904.3662136,
+    "seen": 1794927300.685837,
+    "ast_hash": "4460c84a7ee7780fe7ae8ed2cfd0742c",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.repository.mock.ts": {
+    "mtime": 1794927209.086178,
+    "seen": 1794927300.685838,
+    "ast_hash": "c5616ec52db1acd0f2bbabfdc95d5225",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/infrastructure/expense-category.validator.ts": {
+    "mtime": 1794926348.4089391,
+    "seen": 1794927300.6858392,
+    "ast_hash": "ce5fcc2d1034844e4bce5809077ffaef",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/presentation/components/ExpenseCategoryDeleteDialog.svelte": {
+    "mtime": 1794926922.8224194,
+    "seen": 1794927300.685842,
+    "ast_hash": "42d13ba8dec749a7e210ac5f71632b4b",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/presentation/components/ExpenseCategoryFormDialog.svelte": {
+    "mtime": 1794927209.229009,
+    "seen": 1794927300.685843,
+    "ast_hash": "362990a94a3fdefafd58fa5c4521f6e4",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/presentation/components/ExpenseCategoryOrderDialog.svelte": {
+    "mtime": 1794927209.2553918,
+    "seen": 1794927300.685843,
+    "ast_hash": "9220caf1eb7e0a706432389a9ed11aae",
+    "semantic_hash": ""
+  },
+  "src/features/expense-categories/presentation/pages/ExpenseCategoryListPage.svelte": {
+    "mtime": 1794972555.8567977,
+    "seen": 1794973217.33724,
+    "ast_hash": "1b82cafd5f59ea37185a50c68ad57eea",
     "semantic_hash": ""
   }
 }
