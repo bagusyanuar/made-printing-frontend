@@ -4,11 +4,11 @@
 	import { goto } from '$app/navigation';
 	import { Typography } from 'dystopia-linear-lib/components/typography';
 	import { Button } from 'dystopia-linear-lib/components/button';
-	import { Badge } from 'dystopia-linear-lib/components/badge';
 	import { Card } from 'dystopia-linear-lib/components/card';
 	import { toast } from 'dystopia-linear-lib/components/toast';
 	import { Combobox, type ComboboxOption } from 'dystopia-linear-lib/components/combobox';
 	import { NumberField } from '$lib/components/number-field';
+	import { DateTimePicker } from '$lib/components/date-time-picker';
 
 	import IconArrowLeft from '~icons/lucide/arrow-left';
 	import IconPlus from '~icons/lucide/plus';
@@ -19,17 +19,23 @@
 	import IconFileText from '~icons/lucide/file-text';
 	import IconLayers from '~icons/lucide/layers';
 	import IconUser from '~icons/lucide/user';
+	import IconHandshake from '~icons/lucide/handshake';
 	import IconCheck from '~icons/lucide/check';
-	import IconRotateCcw from '~icons/lucide/rotate-ccw';
+	import IconClock from '~icons/lucide/clock';
+	import IconExternalLink from '~icons/lucide/external-link';
 
 	import { productCategoryStore } from '$features/product-categories/application/product-category.store.svelte';
 	import { productStore } from '$features/products/application/product.store.svelte';
 	import { resellerStore } from '$features/resellers/application/reseller.store.svelte';
 	import { attributeVariantStore } from '$features/attribute-variants/application/attribute-variant.store.svelte';
 
-	import type { TicketOrderItemInput } from '../../domain/ticket-order.entity';
+	import type {
+		TicketOrderConfirmData,
+		TicketOrderItemInput
+	} from '../../domain/ticket-order.entity';
 	import { formatDimensionText } from '../../domain/ticket-order.entity';
 	import { ticketOrderStore } from '../../application/ticket-order.store.svelte';
+	import TicketOrderConfirmSubmitDialog from '../components/TicketOrderConfirmSubmitDialog.svelte';
 
 	onMount(() => {
 		productCategoryStore.load();
@@ -84,74 +90,74 @@
 		}));
 	});
 
-	// Derived variants filtered by selected product's assigned attributes
-	const variantOptions = $derived.by<ComboboxOption<string>[]>(() => {
-		if (!selectedProductId || !selectedProductObj) return [];
-
-		// 1. If product has assignedAttributes configured, look them up from master data
-		if (selectedProductObj.assignedAttributes && selectedProductObj.assignedAttributes.length > 0) {
-			const matchedVariants: { id: string; name: string }[] = [];
-			for (const assigned of selectedProductObj.assignedAttributes) {
-				const masterAttr = attributeVariantStore.items.find((a) => a.id === assigned.attributeId);
-				if (masterAttr) {
-					const activeVars = masterAttr.variants.filter((v) => v.isActive);
-					if (assigned.selectedVariantIds && assigned.selectedVariantIds.length > 0) {
-						for (const varId of assigned.selectedVariantIds) {
-							const v = activeVars.find((item) => item.id === varId);
-							if (v) matchedVariants.push(v);
-						}
-					} else {
-						matchedVariants.push(...activeVars);
-					}
-				}
-			}
-
-			if (matchedVariants.length > 0) {
-				const uniqueOptions: Record<string, ComboboxOption<string>> = {};
-				for (const v of matchedVariants) {
-					if (!uniqueOptions[v.name]) {
-						uniqueOptions[v.name] = { value: v.name, label: v.name };
-					}
-				}
-				// If currently selected variant is not in options (e.g. custom or loaded from draft), preserve it
-				if (selectedVariantName && !uniqueOptions[selectedVariantName]) {
-					return [
-						{ value: selectedVariantName, label: selectedVariantName },
-						...Object.values(uniqueOptions)
-					];
-				}
-				return Object.values(uniqueOptions);
-			}
+	const hasProductVariants = $derived.by(() => {
+		if (!selectedProductObj) return false;
+		if (
+			!selectedProductObj.assignedAttributes ||
+			selectedProductObj.assignedAttributes.length === 0
+		) {
+			return false;
 		}
-
-		// 2. Fallback if product has no specific assignedAttributes:
-		// Collect active variants from attributeVariantStore
-		const options: ComboboxOption<string>[] = [];
-		const seenNames: Record<string, boolean> = {};
-
-		if (selectedVariantName) {
-			seenNames[selectedVariantName] = true;
-			options.push({ value: selectedVariantName, label: selectedVariantName });
-		}
-
-		for (const attr of attributeVariantStore.items.filter((a) => a.isActive)) {
-			for (const v of attr.variants) {
-				if (v.isActive && !seenNames[v.name]) {
-					seenNames[v.name] = true;
-					options.push({ value: v.name, label: v.name });
-				}
-			}
-		}
-
-		return options;
+		return selectedProductObj.assignedAttributes.some(
+			(attr) => attr.selectedVariantIds && attr.selectedVariantIds.length > 0
+		);
 	});
 
-	// Auto-update UOM when product changes
+	// Derived variants filtered by selected product's assigned attributes
+	const variantOptions = $derived.by<ComboboxOption<string>[]>(() => {
+		if (!selectedProductId || !selectedProductObj || !hasProductVariants) return [];
+
+		const matchedVariants: { id: string; name: string }[] = [];
+		for (const assigned of selectedProductObj.assignedAttributes || []) {
+			const masterAttr = attributeVariantStore.items.find((a) => a.id === assigned.attributeId);
+			if (masterAttr) {
+				const activeVars = masterAttr.variants.filter((v) => v.isActive);
+				if (assigned.selectedVariantIds && assigned.selectedVariantIds.length > 0) {
+					for (const varId of assigned.selectedVariantIds) {
+						const v = activeVars.find((item) => item.id === varId);
+						if (v) matchedVariants.push(v);
+					}
+				} else {
+					matchedVariants.push(...activeVars);
+				}
+			}
+		}
+
+		if (matchedVariants.length > 0) {
+			const uniqueOptions: Record<string, ComboboxOption<string>> = {};
+			for (const v of matchedVariants) {
+				if (!uniqueOptions[v.name]) {
+					uniqueOptions[v.name] = { value: v.name, label: v.name };
+				}
+			}
+			// If currently selected variant is not in options (e.g. custom or loaded from draft), preserve it
+			if (
+				selectedVariantName &&
+				selectedVariantName !== 'default' &&
+				!uniqueOptions[selectedVariantName]
+			) {
+				return [
+					{ value: selectedVariantName, label: selectedVariantName },
+					...Object.values(uniqueOptions)
+				];
+			}
+			return Object.values(uniqueOptions);
+		}
+
+		return [];
+	});
+
+	// Auto-update UOM & variant defaults when product changes
 	$effect(() => {
 		const currentId = selectedProductId;
 		if (currentId && currentId !== lastAppliedProductId) {
 			lastAppliedProductId = currentId;
 			if (selectedProductObj) {
+				if (!hasProductVariants) {
+					selectedVariantName = 'default';
+				} else if (editingItemIndex === null) {
+					selectedVariantName = '';
+				}
 				const type = selectedProductObj.calculationType;
 				if (type === 'square_meter') {
 					uom = 'm2';
@@ -204,7 +210,7 @@
 			return;
 		}
 
-		if (variantOptions.length > 0 && !selectedVariantName.trim()) {
+		if (hasProductVariants && variantOptions.length > 0 && !selectedVariantName.trim()) {
 			toast.danger('Pilih variasi produk', {
 				description: 'Variasi produk wajib dipilih untuk spesifikasi cetak ini.'
 			});
@@ -233,10 +239,14 @@
 			return;
 		}
 
+		const resolvedVariant = hasProductVariants
+			? selectedVariantName.trim() || undefined
+			: 'default';
+
 		const itemPayload: TicketOrderItemInput = {
 			productVariantId: selectedProductObj.id,
 			productName: selectedProductObj.name,
-			variantName: selectedVariantName.trim() || undefined,
+			variantName: resolvedVariant,
 			categoryId: selectedProductObj.categoryId,
 			categoryName: selectedProductObj.categoryName,
 			uom,
@@ -312,7 +322,26 @@
 		}
 	}
 
-	async function handleSubmitToCashier() {
+	let isConfirmSubmitOpen = $state(false);
+	let isSubmittingToCashier = $state(false);
+
+	const selectedResellerName = $derived.by(() => {
+		if (!ticketOrderStore.activeResellerId) return '';
+		const found = resellerStore.items.find((r) => r.id === ticketOrderStore.activeResellerId);
+		return found?.name || '';
+	});
+
+	const confirmSubmitData = $derived<TicketOrderConfirmData>({
+		customerType: ticketOrderStore.activeCustomerType,
+		customerName: ticketOrderStore.activeCustomerName,
+		customerPhone: ticketOrderStore.activeCustomerPhone,
+		resellerName: selectedResellerName,
+		deadline: ticketOrderStore.activeDeadline,
+		notes: ticketOrderStore.activeNotes,
+		items: ticketOrderStore.activeCartItems
+	});
+
+	function handleOpenConfirmSubmit() {
 		if (ticketOrderStore.activeCartItems.length === 0) {
 			toast.danger('Keranjang masih kosong', {
 				description: 'Tambahkan minimal 1 item cetak sebelum mengirim ke kasir.'
@@ -320,8 +349,33 @@
 			return;
 		}
 
+		if (ticketOrderStore.activeCustomerType === 'reseller' && !ticketOrderStore.activeResellerId) {
+			toast.danger('Pilih pelanggan reseller', {
+				description: 'Silakan pilih pelanggan mitra reseller terlebih dahulu.'
+			});
+			return;
+		}
+
+		if (
+			ticketOrderStore.activeCustomerType === 'end_user' &&
+			!ticketOrderStore.activeCustomerName.trim()
+		) {
+			toast.danger('Nama pelanggan kosong', {
+				description: 'Silakan isi nama pelanggan ritel / walk-in.'
+			});
+			return;
+		}
+
+		isConfirmSubmitOpen = true;
+	}
+
+	async function handleConfirmSubmitToCashier() {
+		isSubmittingToCashier = true;
 		const saved = await ticketOrderStore.submitCurrentToCashier();
+		isSubmittingToCashier = false;
+
 		if (saved) {
+			isConfirmSubmitOpen = false;
 			toast.success('Tiket terkirim ke kasir', {
 				description: `Tiket "${saved.jobNumber}" berhasil dikirim. Menunggu kasir menerbitkan nota & SPK.`
 			});
@@ -335,59 +389,22 @@
 </script>
 
 <div class="flex flex-col gap-6">
-	<!-- Page Header & Action Bar -->
-	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-		<div class="flex items-center gap-3">
-			<Button variant="outline" size="sm" class="size-8 justify-center! p-0!">
-				{#snippet child({ props })}
-					<a {...props} href={resolve('/(app)/tickets')} aria-label="Kembali ke antrean">
-						<IconArrowLeft class="size-4" />
-					</a>
-				{/snippet}
-			</Button>
-			<div>
-				<Typography variant="h2" as="h1" class="font-bold tracking-tight text-foreground">
-					{ticketOrderStore.activeEditTicketId ? 'Ubah Tiket Pesanan' : 'Buat Tiket Pesanan Baru'}
-				</Typography>
-				<Typography variant="muted" as="p" class="text-xs text-foreground-subtle">
-					Input rincian teknis bersama pelanggan di meja desain, tanpa kalkulasi harga finansial.
-				</Typography>
-			</div>
-		</div>
-
-		<div class="flex items-center gap-2">
-			<Button
-				variant="outline"
-				size="sm"
-				onclick={() => ticketOrderStore.clearCart()}
-				class="gap-1.5"
-				title="Kosongkan keranjang aktif"
-			>
-				<IconRotateCcw class="size-3.5" />
-				<span>Reset</span>
-			</Button>
-
-			<Button
-				variant="outline"
-				size="sm"
-				onclick={handleSaveDraft}
-				disabled={ticketOrderStore.isLoading || ticketOrderStore.activeCartItems.length === 0}
-				class="gap-1.5"
-			>
-				<IconSave class="size-3.5" />
-				<span>Simpan Draft</span>
-			</Button>
-
-			<Button
-				variant="default"
-				size="sm"
-				onclick={handleSubmitToCashier}
-				disabled={ticketOrderStore.isLoading || ticketOrderStore.activeCartItems.length === 0}
-				class="gap-1.5"
-			>
-				<IconSend class="size-3.5" />
-				<span>Kirim ke Kasir</span>
-			</Button>
+	<!-- Page Header -->
+	<div class="flex items-center gap-3">
+		<Button variant="outline" size="sm" class="size-8 justify-center! p-0!">
+			{#snippet child({ props })}
+				<a {...props} href={resolve('/(app)/tickets')} aria-label="Kembali ke antrean">
+					<IconArrowLeft class="size-4" />
+				</a>
+			{/snippet}
+		</Button>
+		<div>
+			<Typography variant="h2" as="h1" class="font-bold tracking-tight text-foreground">
+				{ticketOrderStore.activeEditTicketId ? 'Ubah Tiket Pesanan' : 'Buat Tiket Pesanan Baru'}
+			</Typography>
+			<Typography variant="muted" as="p" class="text-xs text-foreground-subtle">
+				Input rincian teknis bersama pelanggan di meja desain, tanpa kalkulasi harga finansial.
+			</Typography>
 		</div>
 	</div>
 
@@ -483,38 +500,73 @@
 						/>
 					</div>
 
-					<!-- Variant Selection via Combobox -->
-					<div>
-						<label for="variant-combobox" class="mb-1 block font-medium text-foreground">
-							Variasi Produk <span class="text-[11px] font-normal text-foreground-subtle"
-								>(Wajib Dipilih)</span
+					<!-- Variant Selection (Combobox if has variants, Banner if standard/no variants) -->
+					{#if !selectedProductObj}
+						<div>
+							<label for="variant-combobox" class="mb-1 block font-medium text-foreground">
+								Variasi Produk <span class="text-[11px] font-normal text-foreground-subtle"
+									>(Wajib Dipilih)</span
+								>
+							</label>
+							<Combobox
+								id="variant-combobox"
+								options={[]}
+								disabled={true}
+								size="sm"
+								labels={{
+									placeholder: 'Pilih produk terlebih dahulu',
+									searchPlaceholder: 'Cari varian...',
+									empty: 'Pilih produk terlebih dahulu'
+								}}
+								classes={{ content: 'z-60' }}
+								class="w-full"
+							/>
+						</div>
+					{:else if hasProductVariants}
+						<div>
+							<label for="variant-combobox" class="mb-1 block font-medium text-foreground">
+								Variasi Produk <span class="text-[11px] font-normal text-foreground-subtle"
+									>(Wajib Dipilih)</span
+								>
+							</label>
+							<Combobox
+								id="variant-combobox"
+								options={variantOptions}
+								value={selectedVariantName || undefined}
+								onValueChange={(val) => {
+									selectedVariantName =
+										(typeof val === 'string' ? val : (val?.[0] as string | undefined)) ?? '';
+								}}
+								size="sm"
+								clearable={false}
+								creatable={true}
+								labels={{
+									placeholder: '-- Pilih Varian --',
+									searchPlaceholder: 'Cari varian...',
+									empty: 'Tidak ada varian ditemukan'
+								}}
+								classes={{ content: 'z-60' }}
+								class="w-full"
+							/>
+						</div>
+					{:else}
+						<!-- Banner for Standard / No Variant Product (Matching Legacy App) -->
+						<div
+							class="flex items-center justify-between rounded-lg border border-border/70 bg-surface-subtle p-3"
+						>
+							<div class="flex items-center gap-2">
+								<IconCheck class="size-4 shrink-0 text-emerald-500" />
+								<span class="text-xs text-foreground">
+									Variasi: <span class="font-bold text-foreground">Standar (Tanpa Variasi)</span>
+								</span>
+							</div>
+							<span
+								class="rounded bg-surface-muted px-2 py-0.5 text-[10px] font-medium text-foreground-subtle"
 							>
-						</label>
-						<Combobox
-							id="variant-combobox"
-							options={variantOptions}
-							value={selectedVariantName || undefined}
-							disabled={!selectedProductId}
-							onValueChange={(val) => {
-								selectedVariantName =
-									(typeof val === 'string' ? val : (val?.[0] as string | undefined)) ?? '';
-							}}
-							size="sm"
-							clearable={false}
-							creatable={true}
-							labels={{
-								placeholder: !selectedProductId
-									? 'Pilih produk terlebih dahulu'
-									: '-- Pilih Varian --',
-								searchPlaceholder: 'Cari varian...',
-								empty: !selectedProductId
-									? 'Pilih produk terlebih dahulu'
-									: 'Tidak ada varian ditemukan'
-							}}
-							classes={{ content: 'z-60' }}
-							class="w-full"
-						/>
-					</div>
+								Otomatis Default
+							</span>
+						</div>
+					{/if}
 
 					<!-- Description / Item Notes (Placed below Variant and before Dimensions) -->
 					<div>
@@ -665,7 +717,6 @@
 							Data Pelanggan & Catatan Transaksi
 						</Typography>
 					</div>
-					<Badge variant="secondary" size="sm">Tersimpan Otomatis</Badge>
 				</div>
 
 				<div class="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
@@ -675,40 +726,46 @@
 						<div class="flex items-center gap-2">
 							<button
 								type="button"
+								title="Pelanggan Ritel (Walk-in)"
+								aria-label="Pelanggan Ritel (Walk-in)"
 								onclick={() => {
 									ticketOrderStore.activeCustomerType = 'end_user';
 									ticketOrderStore.activeResellerId = null;
 									ticketOrderStore.persistCartToStorage();
 								}}
-								class="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-colors {ticketOrderStore.activeCustomerType ===
+								class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors {ticketOrderStore.activeCustomerType ===
 								'end_user'
-									? 'bg-primary text-primary-foreground shadow-2xs'
-									: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:text-foreground'}"
+									? 'border border-red-600 bg-red-600 text-white shadow-2xs hover:bg-red-700'
+									: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:border-border hover:bg-surface-muted hover:text-foreground'}"
 							>
-								Pelanggan Ritel (Walk-in)
+								<IconUser class="size-3.5" />
+								<span>R</span>
 							</button>
 
 							<button
 								type="button"
+								title="Mitra Biro / Reseller"
+								aria-label="Mitra Biro / Reseller"
 								onclick={() => {
 									ticketOrderStore.activeCustomerType = 'reseller';
 									ticketOrderStore.persistCartToStorage();
 								}}
-								class="cursor-pointer rounded-lg px-3 py-1.5 text-xs font-medium transition-colors {ticketOrderStore.activeCustomerType ===
+								class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors {ticketOrderStore.activeCustomerType ===
 								'reseller'
-									? 'bg-primary text-primary-foreground shadow-2xs'
-									: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:text-foreground'}"
+									? 'border border-blue-600 bg-blue-600 text-white shadow-2xs hover:bg-blue-700'
+									: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:border-border hover:bg-surface-muted hover:text-foreground'}"
 							>
-								Mitra Biro / Reseller
+								<IconHandshake class="size-3.5" />
+								<span>B</span>
 							</button>
 						</div>
 					</div>
 
-					<!-- Reseller Dropdown if Reseller -->
+					<!-- Customer Selection / Input (Column 1) -->
 					{#if ticketOrderStore.activeCustomerType === 'reseller'}
-						<div class="sm:col-span-2">
+						<div>
 							<label for="reseller-combobox" class="mb-1 block font-medium text-foreground">
-								Pilih Mitra Reseller <span class="text-danger">*</span>
+								Pilih Pelanggan <span class="text-danger">*</span>
 							</label>
 							<Combobox
 								id="reseller-combobox"
@@ -730,32 +787,31 @@
 								size="sm"
 								clearable={false}
 								labels={{
-									placeholder: '-- Pilih Data Reseller --',
-									searchPlaceholder: 'Cari nama reseller / telepon...',
-									empty: 'Tidak ada data reseller ditemukan'
+									placeholder: '-- Pilih Pelanggan --',
+									searchPlaceholder: 'Cari nama pelanggan / telepon...',
+									empty: 'Tidak ada data pelanggan ditemukan'
 								}}
 								classes={{ content: 'z-60' }}
 								class="w-full"
 							/>
 						</div>
+					{:else}
+						<div>
+							<label for="customer-name" class="mb-1 block font-medium text-foreground">
+								Nama Pelanggan / Instansi <span class="text-danger">*</span>
+							</label>
+							<input
+								id="customer-name"
+								type="text"
+								bind:value={ticketOrderStore.activeCustomerName}
+								oninput={() => ticketOrderStore.persistCartToStorage()}
+								placeholder="Nama pemesan"
+								class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
+							/>
+						</div>
 					{/if}
 
-					<!-- Customer Name -->
-					<div>
-						<label for="customer-name" class="mb-1 block font-medium text-foreground">
-							Nama Pelanggan / Instansi <span class="text-danger">*</span>
-						</label>
-						<input
-							id="customer-name"
-							type="text"
-							bind:value={ticketOrderStore.activeCustomerName}
-							oninput={() => ticketOrderStore.persistCartToStorage()}
-							placeholder="Nama pemesan"
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
-						/>
-					</div>
-
-					<!-- Customer Phone -->
+					<!-- Customer Phone (Column 2) -->
 					<div>
 						<label for="customer-phone" class="mb-1 block font-medium text-foreground">
 							Nomor WhatsApp Pelanggan
@@ -772,20 +828,20 @@
 
 					<!-- Target Deadline -->
 					<div>
-						<label for="deadline-input" class="mb-1 block font-medium text-foreground">
-							Target Deadline Selesai
-						</label>
-						<input
+						<div class="mb-1 flex items-center gap-1.5 font-medium text-foreground">
+							<IconClock class="size-3.5 text-primary" />
+							<span>Deadline</span>
+							<span class="text-[11px] font-normal text-foreground-subtle">(Target Selesai)</span>
+						</div>
+						<DateTimePicker
 							id="deadline-input"
-							type="datetime-local"
-							value={ticketOrderStore.activeDeadline
-								? ticketOrderStore.activeDeadline.slice(0, 16)
-								: ''}
-							oninput={(e) => {
-								ticketOrderStore.activeDeadline = (e.target as HTMLInputElement).value || null;
+							value={ticketOrderStore.activeDeadline}
+							onValueChange={(val) => {
+								ticketOrderStore.activeDeadline = val;
 								ticketOrderStore.persistCartToStorage();
 							}}
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
+							placeholder="Pilih deadline selesai..."
+							class="w-full"
 						/>
 					</div>
 
@@ -819,14 +875,6 @@
 							Keranjang Item Pesanan ({ticketOrderStore.activeCartItems.length} Item)
 						</Typography>
 					</div>
-
-					{#if ticketOrderStore.totalCartAreaM2 > 0}
-						<span class="text-xs text-foreground-subtle">
-							Total Luas: <strong class="text-foreground">
-								{ticketOrderStore.totalCartAreaM2.toFixed(2)} m²
-							</strong>
-						</span>
-					{/if}
 				</div>
 
 				{#if ticketOrderStore.activeCartItems.length === 0}
@@ -848,32 +896,48 @@
 						<table class="w-full text-left text-xs">
 							<thead class="border-b border-border/70 bg-surface-subtle text-foreground-subtle">
 								<tr>
-									<th class="px-3 py-2.5 font-medium">No</th>
-									<th class="px-3 py-2.5 font-medium">Produk & Varian</th>
-									<th class="px-3 py-2.5 font-medium">Dimensi / Satuan</th>
+									<th class="px-3 py-2.5 font-medium">Detail Cetakan & Finishing</th>
+									<th class="px-3 py-2.5 font-medium">Ukuran</th>
 									<th class="px-3 py-2.5 font-medium">Qty</th>
-									<th class="px-3 py-2.5 font-medium">Instruksi Finishing</th>
 									<th class="px-3 py-2.5 text-center font-medium">Aksi</th>
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-border/70 text-foreground">
 								{#each ticketOrderStore.activeCartItems as item, index (item.productVariantId + '-' + index)}
 									<tr class="hover:bg-surface-subtle/50">
-										<td class="px-3 py-2.5 text-foreground-subtle">{index + 1}</td>
 										<td class="px-3 py-2.5">
-											<div class="font-medium text-foreground">{item.productName}</div>
-											{#if item.variantName}
-												<div class="text-[11px] text-foreground-subtle">{item.variantName}</div>
+											<div class="font-medium text-foreground">
+												{item.productName}{#if item.variantName && item.variantName.toLowerCase() !== 'default'}
+													({item.variantName}){/if}
+											</div>
+											{#if item.productionNotes}
+												<div class="mt-1">
+													<span
+														class="inline-block rounded bg-rose-500/10 px-2 py-0.5 text-[11px] font-medium text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+													>
+														Catatan: {item.productionNotes}
+													</span>
+												</div>
+											{/if}
+											{#if item.designFileUrl}
+												<div class="mt-1">
+													<a
+														href={item.designFileUrl}
+														target="_blank"
+														rel="external noopener noreferrer"
+														class="inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
+													>
+														<IconExternalLink class="size-3" />
+														File Desain
+													</a>
+												</div>
 											{/if}
 										</td>
 										<td class="px-3 py-2.5 text-foreground-subtle">
 											{formatDimensionText(item.uom, item.lengthM, item.widthM, item.quantity)}
 										</td>
-										<td class="px-3 py-2.5 font-semibold text-primary">
+										<td class="px-3 py-2.5 font-semibold text-foreground">
 											{item.quantity}
-										</td>
-										<td class="px-3 py-2.5 text-foreground-subtle">
-											{item.productionNotes || '-'}
 										</td>
 										<td class="px-3 py-2.5 text-center">
 											<div class="flex items-center justify-center gap-1">
@@ -881,16 +945,16 @@
 													variant="ghost"
 													size="sm"
 													onclick={() => handleEditItem(index)}
-													class="size-7 justify-center! p-0!"
+													class="size-7 justify-center! p-0! text-blue-600 hover:bg-blue-500/10 dark:text-blue-400"
 													title="Edit item"
 												>
-													<IconEdit2 class="size-3.5 text-foreground-subtle" />
+													<IconEdit2 class="size-3.5" />
 												</Button>
 												<Button
 													variant="ghost"
 													size="sm"
 													onclick={() => handleRemoveItem(index)}
-													class="size-7 justify-center! p-0! hover:text-danger"
+													class="size-7 justify-center! p-0! text-rose-500 hover:bg-rose-500/10 hover:text-rose-600 dark:text-rose-400"
 													title="Hapus item"
 												>
 													<IconTrash2 class="size-3.5" />
@@ -920,12 +984,12 @@
 								class="gap-1.5"
 							>
 								<IconSave class="size-3.5" />
-								<span>Simpan Draft</span>
+								<span>Simpan</span>
 							</Button>
 							<Button
 								variant="default"
 								size="sm"
-								onclick={handleSubmitToCashier}
+								onclick={handleOpenConfirmSubmit}
 								disabled={ticketOrderStore.isLoading}
 								class="gap-1.5"
 							>
@@ -939,3 +1003,10 @@
 		</div>
 	</div>
 </div>
+
+<TicketOrderConfirmSubmitDialog
+	bind:isOpen={isConfirmSubmitOpen}
+	data={confirmSubmitData}
+	isSubmitting={isSubmittingToCashier}
+	onConfirm={handleConfirmSubmitToCashier}
+/>

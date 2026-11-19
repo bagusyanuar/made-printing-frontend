@@ -313,7 +313,7 @@
 												{#each ticket.items.slice(0, 2) as item (item.id)}
 													<div class="leading-snug text-foreground-subtle">
 														<span class="font-medium text-foreground">{item.productName}</span>
-														{#if item.variantName}
+														{#if item.variantName && item.variantName.toLowerCase() !== 'default'}
 															<span>({item.variantName})</span>
 														{/if}
 														<span class="font-medium text-foreground">({item.quantity}x)</span>

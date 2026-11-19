@@ -1,10 +1,5 @@
 export type TicketOrderStatus =
-	| 'DRAFT'
-	| 'PENDING_PAYMENT'
-	| 'IN_PRODUCTION'
-	| 'READY_FOR_PICKUP'
-	| 'COMPLETED'
-	| 'CANCELLED';
+	'DRAFT' | 'PENDING_PAYMENT' | 'IN_PRODUCTION' | 'READY_FOR_PICKUP' | 'COMPLETED' | 'CANCELLED';
 
 export type TicketOrderCustomerType = 'end_user' | 'reseller';
 
@@ -73,6 +68,16 @@ export interface SaveDraftTicketOrderInput {
 	customerPhone: string;
 	resellerId?: string | null;
 	notes: string;
+	deadline?: string | null;
+	items: TicketOrderItemInput[];
+}
+
+export interface TicketOrderConfirmData {
+	customerType: TicketOrderCustomerType;
+	customerName: string;
+	customerPhone: string;
+	resellerName?: string;
+	notes?: string;
 	deadline?: string | null;
 	items: TicketOrderItemInput[];
 }

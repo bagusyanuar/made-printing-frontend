@@ -87,7 +87,9 @@
 			</div>
 
 			<!-- Customer & Order Meta -->
-			<div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 rounded-lg bg-surface-subtle p-3 text-xs">
+			<div
+				class="mt-4 grid grid-cols-1 gap-3 rounded-lg bg-surface-subtle p-3 text-xs sm:grid-cols-2"
+			>
 				<div>
 					<span class="block text-foreground-subtle">Pelanggan:</span>
 					<div class="mt-0.5 flex items-center gap-1.5 font-medium text-foreground">
@@ -126,7 +128,8 @@
 					</span>
 					{#if ticket.totalAreaM2 > 0}
 						<span class="text-xs text-foreground-subtle">
-							Total Luas: <strong class="text-foreground">{ticket.totalAreaM2.toFixed(2)} m²</strong>
+							Total Luas: <strong class="text-foreground">{ticket.totalAreaM2.toFixed(2)} m²</strong
+							>
 						</span>
 					{/if}
 				</div>
@@ -147,10 +150,10 @@
 								<tr class="hover:bg-surface-subtle/50">
 									<td class="px-3 py-2.5 text-foreground-subtle">{index + 1}</td>
 									<td class="px-3 py-2.5 font-medium">
-										<div>{item.productName}</div>
-										{#if item.variantName}
-											<div class="text-[11px] text-foreground-subtle">{item.variantName}</div>
-										{/if}
+										<div>
+											{item.productName}{#if item.variantName && item.variantName.toLowerCase() !== 'default'}
+												({item.variantName}){/if}
+										</div>
 									</td>
 									<td class="px-3 py-2.5 text-foreground-subtle">
 										{item.dimensionText}
