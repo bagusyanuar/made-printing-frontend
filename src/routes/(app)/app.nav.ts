@@ -29,12 +29,12 @@ export const appNavSections: NavSection[] = [
 		entries: [
 			{
 				title: 'Tiket Pesanan',
-				href: '/transactions/tickets',
+				href: '/tickets',
 				icon: IconTicket
 			},
 			{
 				title: 'Pesanan Baru',
-				href: '/transactions/new',
+				href: '/tickets/new',
 				icon: IconShoppingBag
 			},
 			{
