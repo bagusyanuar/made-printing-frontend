@@ -3,7 +3,6 @@
 	import { resolve } from '$app/paths';
 	import { Typography } from 'dystopia-linear-lib/components/typography';
 	import { Button } from 'dystopia-linear-lib/components/button';
-	import { Badge } from 'dystopia-linear-lib/components/badge';
 	import { TextField } from 'dystopia-linear-lib/components/text-field';
 	import { Dropdown, DropdownItem } from 'dystopia-linear-lib/components/dropdown';
 	import { Card } from 'dystopia-linear-lib/components/card';
@@ -27,17 +26,18 @@
 	import IconEye from '~icons/lucide/eye';
 	import IconSend from '~icons/lucide/send';
 	import IconBan from '~icons/lucide/ban';
-	import IconClock from '~icons/lucide/clock';
 	import IconAlertCircle from '~icons/lucide/alert-circle';
 	import IconEllipsisVertical from '~icons/lucide/ellipsis-vertical';
+	import IconCalendar from '~icons/lucide/calendar';
+	import IconUser from '~icons/lucide/user';
 
 	import type { TicketOrder } from '../../domain/ticket-order.entity';
-	import { getStatusBadgeVariant, getStatusLabel } from '../../domain/ticket-order.entity';
 	import { ticketOrderStore } from '../../application/ticket-order.store.svelte';
 	import TicketOrderDetailDialog from '../components/TicketOrderDetailDialog.svelte';
 	import TicketOrderCancelDialog from '../components/TicketOrderCancelDialog.svelte';
 
 	onMount(() => {
+		ticketOrderStore.statusTab = 'pending';
 		ticketOrderStore.load();
 	});
 
@@ -88,6 +88,19 @@
 		}
 		return success;
 	}
+
+	function formatDateTime(isoString?: string | null): string {
+		if (!isoString) return '-';
+		const d = new Date(isoString);
+		if (isNaN(d.getTime())) return isoString;
+		const year = d.getFullYear();
+		const month = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		const hours = String(d.getHours()).padStart(2, '0');
+		const minutes = String(d.getMinutes()).padStart(2, '0');
+		const seconds = String(d.getSeconds()).padStart(2, '0');
+		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+	}
 </script>
 
 <div class="flex flex-col gap-6">
@@ -103,83 +116,32 @@
 				Tiket Pesanan
 			</Typography>
 			<Typography variant="muted" as="p" class="mt-0.5 text-xs text-foreground-subtle sm:text-sm">
-				Antrean tiket kerja teknis desainer, spesifikasi cetak, dan pengiriman ke kasir untuk
-				penerbitan nota & SPK.
+				Antrean tiket kerja teknis desainer dan spesifikasi cetak yang belum dikirim ke kasir.
 			</Typography>
 		</div>
 	</div>
 
-	<!-- Content Section: Toolbar, Filter Tabs, Table, Pagination -->
+	<!-- Content Section: Toolbar, Table, Pagination -->
 	<div class="flex flex-col gap-3">
 		<!-- Action & Search Toolbar -->
 		<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-			<!-- Search & Status Tabs -->
-			<div class="flex flex-1 flex-col gap-2.5 sm:flex-row sm:items-center">
-				<div class="relative w-full max-w-sm">
-					<TextField
-						size="sm"
-						placeholder="Cari nomor tiket, nama pelanggan, memo..."
-						value={ticketOrderStore.searchQuery}
-						onValueChange={(val) => {
-							ticketOrderStore.searchQuery = val;
-							ticketOrderStore.page = 1;
-							ticketOrderStore.load();
-						}}
-						class="w-full pl-9"
-					/>
-					<div
-						class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-foreground-subtle"
-					>
-						<IconSearch class="size-4" />
-					</div>
-				</div>
-
-				<!-- Status Filter Tabs -->
-				<div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-					<button
-						type="button"
-						onclick={() => {
-							ticketOrderStore.statusTab = 'all';
-							ticketOrderStore.page = 1;
-							ticketOrderStore.load();
-						}}
-						class="cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors {ticketOrderStore.statusTab ===
-						'all'
-							? 'bg-primary text-primary-foreground shadow-2xs'
-							: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:bg-surface-subtle/80 hover:text-foreground'}"
-					>
-						Semua ({ticketOrderStore.stats.total})
-					</button>
-
-					<button
-						type="button"
-						onclick={() => {
-							ticketOrderStore.statusTab = 'pending';
-							ticketOrderStore.page = 1;
-							ticketOrderStore.load();
-						}}
-						class="cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors {ticketOrderStore.statusTab ===
-						'pending'
-							? 'bg-primary text-primary-foreground shadow-2xs'
-							: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:bg-surface-subtle/80 hover:text-foreground'}"
-					>
-						Draft Desainer ({ticketOrderStore.stats.pendingDraft})
-					</button>
-
-					<button
-						type="button"
-						onclick={() => {
-							ticketOrderStore.statusTab = 'submitted';
-							ticketOrderStore.page = 1;
-							ticketOrderStore.load();
-						}}
-						class="cursor-pointer rounded-lg px-2.5 py-1 text-xs font-medium transition-colors {ticketOrderStore.statusTab ===
-						'submitted'
-							? 'bg-primary text-primary-foreground shadow-2xs'
-							: 'border border-border/70 bg-surface-subtle text-foreground-subtle hover:bg-surface-subtle/80 hover:text-foreground'}"
-					>
-						Dikirim ke Kasir ({ticketOrderStore.stats.submitted})
-					</button>
+			<!-- Search -->
+			<div class="relative w-full max-w-sm">
+				<TextField
+					size="sm"
+					placeholder="Cari nomor tiket, nama pelanggan, memo..."
+					value={ticketOrderStore.searchQuery}
+					onValueChange={(val) => {
+						ticketOrderStore.searchQuery = val;
+						ticketOrderStore.page = 1;
+						ticketOrderStore.load();
+					}}
+					class="w-full pl-9"
+				/>
+				<div
+					class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-foreground-subtle"
+				>
+					<IconSearch class="size-4" />
 				</div>
 			</div>
 
@@ -203,7 +165,7 @@
 
 				<Button variant="default" size="sm" class="shrink-0 gap-1.5">
 					{#snippet child({ props })}
-						<a {...props} href={resolve('/(app)/transactions/new')}>
+						<a {...props} href={resolve('/(app)/tickets/new')}>
 							<IconCirclePlus class="size-4" />
 							<span>Buat Tiket Baru</span>
 						</a>
@@ -212,7 +174,7 @@
 			</div>
 		</div>
 
-		<!-- Table Container -->
+		<!-- Table or State Container -->
 		<Card class="overflow-hidden shadow-none">
 			{#if ticketOrderStore.isLoading && ticketOrderStore.items.length === 0}
 				<div class="flex flex-col items-center justify-center py-16 text-center">
@@ -239,128 +201,166 @@
 							</div>
 						{/snippet}
 						{#snippet title()}
-							<span class="text-sm font-semibold text-foreground">
-								Tidak ada tiket pesanan ditemukan
-							</span>
+							<Typography variant="h4" as="span" class="font-semibold text-foreground">
+								{ticketOrderStore.searchQuery
+									? 'Tiket Pesanan Tidak Ditemukan'
+									: 'Tidak Ada Antrean Tiket'}
+							</Typography>
 						{/snippet}
 						{#snippet description()}
-							<span class="text-xs text-foreground-subtle">
-								{ticketOrderStore.searchQuery || ticketOrderStore.statusTab !== 'all'
-									? 'Sesuaikan kata kunci pencarian atau tab filter status Anda.'
-									: 'Belum ada antrean tiket pesanan yang dibuat oleh desainer.'}
-							</span>
+							<Typography variant="muted" as="span" class="text-xs text-foreground-subtle">
+								{ticketOrderStore.searchQuery
+									? 'Tidak ada tiket yang cocok dengan kata kunci pencarian Anda.'
+									: 'Semua tiket telah diteruskan ke kasir atau belum ada tiket baru.'}
+							</Typography>
 						{/snippet}
+						{#if !ticketOrderStore.searchQuery}
+							<Button variant="default" size="sm" class="mt-2 gap-1.5">
+								{#snippet child({ props })}
+									<a {...props} href={resolve('/(app)/tickets/new')}>
+										<IconCirclePlus class="size-4" />
+										<span>Buat Tiket Baru</span>
+									</a>
+								{/snippet}
+							</Button>
+						{:else}
+							<Button
+								variant="outline"
+								size="sm"
+								onclick={() => {
+									ticketOrderStore.searchQuery = '';
+									ticketOrderStore.page = 1;
+									ticketOrderStore.load();
+								}}
+								class="mt-2"
+							>
+								Reset Pencarian
+							</Button>
+						{/if}
 					</EmptyState>
 				</div>
 			{:else}
-				<div class="overflow-x-auto">
-					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead class="w-12 text-center">No</TableHead>
-								<TableHead>Nomor Tiket & Waktu</TableHead>
-								<TableHead>Pelanggan</TableHead>
-								<TableHead>Rincian Item Spesifikasi</TableHead>
-								<TableHead>Target Deadline</TableHead>
-								<TableHead>Status Tiket</TableHead>
-								<TableHead class="w-20 text-center">Aksi</TableHead>
-							</TableRow>
-						</TableHeader>
-						<TableBody>
-							{#each ticketOrderStore.items as ticket, index (ticket.id)}
-								<TableRow class="hover:bg-surface-subtle/50">
-									<!-- Number -->
-									<TableCell class="text-center text-xs text-foreground-subtle">
-										{(ticketOrderStore.page - 1) * ticketOrderStore.limit + index + 1}
-									</TableCell>
+				<Table class="rounded-none border-0 bg-transparent">
+					<TableHeader>
+						<TableRow class="border-b-0 hover:bg-transparent">
+							<TableHead class="min-w-40">No. Tiket</TableHead>
+							<TableHead class="min-w-44">Tanggal Buat</TableHead>
+							<TableHead class="min-w-48">Pelanggan</TableHead>
+							<TableHead class="min-w-60">Daftar Cetakan (Multi-Product)</TableHead>
+							<TableHead class="w-28 text-center">Aksi</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{#each ticketOrderStore.items as ticket (ticket.id)}
+							<TableRow
+								class="border-b border-border/60 transition-colors last:border-b-0 hover:bg-surface-subtle/40"
+							>
+								<!-- 1. No. Tiket / Transaksi -->
+								<TableCell>
+									<span
+										class="inline-flex items-center rounded-lg border border-border/80 bg-surface px-2.5 py-1 text-xs font-semibold tracking-wider text-foreground shadow-2xs"
+									>
+										{ticket.jobNumber}
+									</span>
+								</TableCell>
 
-									<!-- Job Number & Date -->
-									<TableCell>
-										<div class="flex flex-col">
-											<span class="font-semibold text-primary">{ticket.jobNumber}</span>
-											<span class="text-[11px] text-foreground-subtle">
-												{new Date(ticket.createdAt).toLocaleDateString('id-ID', {
-													day: 'numeric',
-													month: 'short',
-													hour: '2-digit',
-													minute: '2-digit'
-												})}
-											</span>
-										</div>
-									</TableCell>
+								<!-- 2. Tanggal Buat -->
+								<TableCell>
+									<div class="flex items-center gap-2 text-xs font-medium text-foreground">
+										<IconCalendar class="size-4 shrink-0 text-foreground-subtle" />
+										<span>{formatDateTime(ticket.createdAt)}</span>
+									</div>
+								</TableCell>
 
-									<!-- Customer -->
-									<TableCell>
-										<div class="flex flex-col gap-0.5">
-											<div class="flex items-center gap-1.5 font-medium text-foreground">
-												<span>{ticket.customerName}</span>
-												{#if ticket.customerType === 'reseller'}
-													<Badge variant="outline" size="sm">Reseller</Badge>
-												{/if}
-											</div>
-											<span class="text-[11px] text-foreground-subtle">
-												{ticket.customerPhone}
-											</span>
-										</div>
-									</TableCell>
-
-									<!-- Items summary -->
-									<TableCell>
-										<div class="flex flex-col gap-0.5">
-											{#if ticket.items.length > 0}
-												<span class="font-medium text-foreground">
-													{ticket.items[0].productName}
-													{#if ticket.items.length > 1}
-														<span class="text-foreground-subtle font-normal">
-															(+{ticket.items.length - 1} item lain)
-														</span>
-													{/if}
-												</span>
-												<span class="text-[11px] text-foreground-subtle">
-													{ticket.items[0].dimensionText} • Qty {ticket.items[0].quantity}
-													{#if ticket.totalAreaM2 > 0}
-														• ({ticket.totalAreaM2.toFixed(2)} m²)
-													{/if}
+								<!-- 3. Pelanggan -->
+								<TableCell>
+									<div class="flex flex-col gap-0.5">
+										<div class="flex items-center gap-1.5 font-bold text-foreground">
+											<IconUser
+												class="size-4 shrink-0 {ticket.customerType === 'reseller'
+													? 'text-blue-500'
+													: 'text-rose-500'}"
+											/>
+											<span class="font-semibold text-foreground">{ticket.customerName}</span>
+											{#if ticket.customerType === 'reseller'}
+												<span
+													class="inline-flex items-center rounded border border-blue-500/40 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-blue-500 uppercase"
+												>
+													RESELLER
 												</span>
 											{:else}
-												<span class="text-foreground-faint">-</span>
+												<span
+													class="inline-flex items-center rounded border border-rose-500/40 bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-rose-500 uppercase"
+												>
+													RETAIL
+												</span>
 											{/if}
 										</div>
-									</TableCell>
+										<div class="pl-5.5 text-xs text-foreground-subtle">
+											{ticket.customerPhone || '-'}
+										</div>
+									</div>
+								</TableCell>
 
-									<!-- Deadline -->
-									<TableCell class="text-xs text-foreground-subtle">
-										{#if ticket.deadline}
-											<div class="flex items-center gap-1">
-												<IconClock class="size-3 text-foreground-faint" />
-												<span>
-													{new Date(ticket.deadline).toLocaleDateString('id-ID', {
-														day: 'numeric',
-														month: 'short',
-														hour: '2-digit',
-														minute: '2-digit'
-													})}
-												</span>
+								<!-- 4. Daftar Cetakan (Multi-Product) -->
+								<TableCell>
+									<div class="flex flex-col gap-1">
+										<span class="text-xs font-semibold text-rose-500">
+											{ticket.items.length} Item Cetakan:
+										</span>
+										{#if ticket.items.length > 0}
+											<div class="flex flex-col gap-0.5 text-xs">
+												{#each ticket.items.slice(0, 2) as item (item.id)}
+													<div class="leading-snug text-foreground-subtle">
+														<span class="font-medium text-foreground">{item.productName}</span>
+														{#if item.variantName}
+															<span>({item.variantName})</span>
+														{/if}
+														<span class="font-medium text-foreground">({item.quantity}x)</span>
+													</div>
+												{/each}
+												{#if ticket.items.length > 2}
+													<button
+														type="button"
+														onclick={() => openDetailModal(ticket)}
+														class="inline-flex w-fit cursor-pointer items-center text-[11px] font-medium text-primary hover:underline"
+														title="Klik untuk melihat semua rincian item"
+													>
+														+{ticket.items.length - 2} item lainnya...
+													</button>
+												{/if}
 											</div>
 										{:else}
-											<span class="text-foreground-faint">Normal</span>
+											<span class="text-xs text-foreground-faint">-</span>
 										{/if}
-									</TableCell>
+									</div>
+								</TableCell>
 
-									<!-- Status -->
-									<TableCell>
-										<Badge variant={getStatusBadgeVariant(ticket.status)} size="sm">
-											{getStatusLabel(ticket.status)}
-										</Badge>
-									</TableCell>
+								<!-- 5. Aksi -->
+								<TableCell class="text-center">
+									<div class="flex items-center justify-center gap-1.5">
+										{#if ticket.status === 'DRAFT'}
+											<button
+												type="button"
+												onclick={() => handleSubmitToCashier(ticket.id)}
+												disabled={ticketOrderStore.isLoading}
+												class="flex size-8 cursor-pointer items-center justify-center rounded-lg bg-emerald-600 text-white shadow-xs transition-colors hover:bg-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+												title="Kirim ke Kasir"
+												aria-label="Kirim ke Kasir"
+											>
+												<IconSend class="size-4" />
+											</button>
+										{/if}
 
-									<!-- Action Menu -->
-									<TableCell class="text-center">
 										<Dropdown
 											placement="bottom-end"
 											offset={4}
 											aria-label="Aksi Tiket Pesanan"
 											class="size-8 justify-center! rounded-lg border border-transparent p-0! text-foreground-subtle hover:border-border hover:bg-surface-subtle hover:text-foreground focus-visible:ring-1 focus-visible:ring-primary"
+											classes={{
+												trigger: 'size-8 justify-center! p-0!',
+												content: 'min-w-44 border-border bg-surface p-1 shadow-none'
+											}}
 										>
 											{#snippet trigger()}
 												<IconEllipsisVertical class="size-4" />
@@ -394,27 +394,35 @@
 												</DropdownItem>
 											{/if}
 										</Dropdown>
-									</TableCell>
-								</TableRow>
-							{/each}
-						</TableBody>
-					</Table>
-				</div>
-
-				<!-- Pagination -->
-				<div class="border-t border-border/70 p-3">
-					<TablePagination
-						currentPage={ticketOrderStore.page}
-						pageSize={ticketOrderStore.limit}
-						totalItems={ticketOrderStore.totalData}
-						onPageChange={(p) => {
-							ticketOrderStore.page = p;
-							ticketOrderStore.load();
-						}}
-					/>
-				</div>
+									</div>
+								</TableCell>
+							</TableRow>
+						{/each}
+					</TableBody>
+				</Table>
 			{/if}
 		</Card>
+
+		{#if !ticketOrderStore.isLoading && !ticketOrderStore.error && ticketOrderStore.items.length > 0}
+			<!-- Pagination & Table Controls -->
+			<TablePagination
+				bind:currentPage={ticketOrderStore.page}
+				bind:pageSize={ticketOrderStore.limit}
+				totalItems={ticketOrderStore.totalData}
+				pageSizeOptions={[5, 10, 20, 50]}
+				itemLabel="data"
+				rowsPerPageLabel="Baris per halaman"
+				onPageChange={(p) => {
+					ticketOrderStore.page = p;
+					ticketOrderStore.load();
+				}}
+				onPageSizeChange={(s) => {
+					ticketOrderStore.limit = s;
+					ticketOrderStore.page = 1;
+					ticketOrderStore.load();
+				}}
+			/>
+		{/if}
 	</div>
 </div>
 

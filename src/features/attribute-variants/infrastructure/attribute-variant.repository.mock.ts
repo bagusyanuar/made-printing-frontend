@@ -130,16 +130,16 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 		name: 'Finishing Banner & Spanduk',
 		code: 'finishing_banner',
 		description: 'Opsi pengolahan pasca-cetak untuk spanduk, baliho, dan banner roll.',
-		isRequired: false,
+		isRequired: true,
 		displayOrder: 3,
 		isActive: true,
 		variants: [
 			{
 				id: 'var-3-1',
 				attributeId: 'attr-3',
-				name: 'Tanpa Finishing',
-				code: 'tanpa_finishing',
-				description: 'Potong pas garis batas gambar cetak.',
+				name: 'KOLONG ATAS BAWAH',
+				code: 'kolong_atas_bawah',
+				description: 'Kolong pipa/selongsong pada bagian atas dan bawah spanduk.',
 				displayOrder: 1,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
@@ -148,9 +148,9 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 			{
 				id: 'var-3-2',
 				attributeId: 'attr-3',
-				name: 'Mata Ayam 4 Sudut',
-				code: 'mata_ayam_4_sudut',
-				description: 'Ring besi lubang pengikat tali pada 4 pojok.',
+				name: 'SPGK',
+				code: 'spgk',
+				description: 'Seaming Pas Gambar Gendeng / Lipat Lem Tanpa Keling.',
 				displayOrder: 2,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
@@ -159,9 +159,9 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 			{
 				id: 'var-3-3',
 				attributeId: 'attr-3',
-				name: 'Mata Ayam Per 1 Meter',
-				code: 'mata_ayam_per_meter',
-				description: 'Ring besi di 4 pojok ditambah interval per 1 meter keliling.',
+				name: 'SPK',
+				code: 'spk',
+				description: 'Seaming Pas Gambar + Keling (Mata Ayam).',
 				displayOrder: 3,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
@@ -170,9 +170,9 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 			{
 				id: 'var-3-4',
 				attributeId: 'attr-3',
-				name: 'Lipat Seaming Keliling',
-				code: 'lipat_seaming',
-				description: 'Lipatan tepi berpemanas/lem tanpa lubang ring.',
+				name: 'POLOSAN',
+				code: 'polosan',
+				description: 'Potong pas batas gambar cetak tanpa lipat seaming atau keling.',
 				displayOrder: 4,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
@@ -181,9 +181,9 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 			{
 				id: 'var-3-5',
 				attributeId: 'attr-3',
-				name: 'Selongsong Atas & Bawah',
-				code: 'selongsong_atas_bawah',
-				description: 'Kolong tabung untuk dimasuki pipa/kayu bentang.',
+				name: 'KOLONG KANAN KIRI',
+				code: 'kolong_kanan_kiri',
+				description: 'Kolong pipa/selongsong pada sisi samping kanan dan kiri.',
 				displayOrder: 5,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
@@ -192,10 +192,54 @@ const INITIAL_ATTRIBUTES: ProductAttribute[] = [
 			{
 				id: 'var-3-6',
 				attributeId: 'attr-3',
+				name: 'KOLONG KELILING',
+				code: 'kolong_keliling',
+				description: 'Kolong pipa/selongsong 4 sisi keliling.',
+				displayOrder: 6,
+				isActive: true,
+				createdAt: '2026-02-01T08:00:00.000Z',
+				updatedAt: '2026-02-01T08:00:00.000Z'
+			},
+			{
+				id: 'var-3-7',
+				attributeId: 'attr-3',
+				name: 'SIMING TANPA KELING',
+				code: 'siming_tanpa_keling',
+				description: 'Lipat seaming keliling tanpa lubang ring mata ayam.',
+				displayOrder: 7,
+				isActive: true,
+				createdAt: '2026-02-01T08:00:00.000Z',
+				updatedAt: '2026-02-01T08:00:00.000Z'
+			},
+			{
+				id: 'var-3-8',
+				attributeId: 'attr-3',
+				name: 'Mata Ayam 4 Sudut',
+				code: 'mata_ayam_4_sudut',
+				description: 'Ring besi lubang pengikat tali pada 4 pojok.',
+				displayOrder: 8,
+				isActive: true,
+				createdAt: '2026-02-01T08:00:00.000Z',
+				updatedAt: '2026-02-01T08:00:00.000Z'
+			},
+			{
+				id: 'var-3-9',
+				attributeId: 'attr-3',
+				name: 'Mata Ayam Per 1 Meter',
+				code: 'mata_ayam_per_meter',
+				description: 'Ring besi di 4 pojok ditambah interval per 1 meter keliling.',
+				displayOrder: 9,
+				isActive: true,
+				createdAt: '2026-02-01T08:00:00.000Z',
+				updatedAt: '2026-02-01T08:00:00.000Z'
+			},
+			{
+				id: 'var-3-10',
+				attributeId: 'attr-3',
 				name: 'Lebih Bahan 5cm',
 				code: 'lebih_bahan_5cm',
 				description: 'Sisa tepi putih keliling 5 cm untuk dipaku ke kayu reklame.',
-				displayOrder: 6,
+				displayOrder: 10,
 				isActive: true,
 				createdAt: '2026-02-01T08:00:00.000Z',
 				updatedAt: '2026-02-01T08:00:00.000Z'
@@ -361,19 +405,13 @@ export class AttributeVariantRepositoryMock implements AttributeVariantRepositor
 		return Res.ok(JSON.parse(JSON.stringify(found)));
 	}
 
-	async createAttribute(
-		input: ProductAttributeInput
-	): Promise<Result<ProductAttribute, AppError>> {
+	async createAttribute(input: ProductAttributeInput): Promise<Result<ProductAttribute, AppError>> {
 		await new Promise((resolve) => setTimeout(resolve, 200));
 		const code = input.code?.trim() || generateSlug(input.name);
 
-		const exists = this.#attributes.some(
-			(a) => a.code.toLowerCase() === code.toLowerCase()
-		);
+		const exists = this.#attributes.some((a) => a.code.toLowerCase() === code.toLowerCase());
 		if (exists) {
-			return Res.error(
-				new AppError(`Kode atribut "${code}" sudah terdaftar.`, 'CONFLICT')
-			);
+			return Res.error(new AppError(`Kode atribut "${code}" sudah terdaftar.`, 'CONFLICT'));
 		}
 
 		const now = new Date().toISOString();
@@ -458,7 +496,8 @@ export class AttributeVariantRepositoryMock implements AttributeVariantRepositor
 			...current,
 			name: input.name.trim(),
 			code,
-			description: input.description !== undefined ? input.description?.trim() || null : current.description,
+			description:
+				input.description !== undefined ? input.description?.trim() || null : current.description,
 			isRequired: input.isRequired ?? current.isRequired,
 			displayOrder: input.displayOrder ?? current.displayOrder,
 			isActive: input.isActive ?? current.isActive,
@@ -544,7 +583,9 @@ export class AttributeVariantRepositoryMock implements AttributeVariantRepositor
 					name: input.name.trim(),
 					code,
 					description:
-						input.description !== undefined ? input.description?.trim() || null : current.description,
+						input.description !== undefined
+							? input.description?.trim() || null
+							: current.description,
 					displayOrder: input.displayOrder ?? current.displayOrder,
 					isActive: input.isActive ?? current.isActive,
 					updatedAt: new Date().toISOString()

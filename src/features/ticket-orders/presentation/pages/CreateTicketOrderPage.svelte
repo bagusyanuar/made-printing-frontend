@@ -7,6 +7,8 @@
 	import { Badge } from 'dystopia-linear-lib/components/badge';
 	import { Card } from 'dystopia-linear-lib/components/card';
 	import { toast } from 'dystopia-linear-lib/components/toast';
+	import { Combobox, type ComboboxOption } from 'dystopia-linear-lib/components/combobox';
+	import { NumberField } from '$lib/components/number-field';
 
 	import IconArrowLeft from '~icons/lucide/arrow-left';
 	import IconPlus from '~icons/lucide/plus';
@@ -23,6 +25,7 @@
 	import { productCategoryStore } from '$features/product-categories/application/product-category.store.svelte';
 	import { productStore } from '$features/products/application/product.store.svelte';
 	import { resellerStore } from '$features/resellers/application/reseller.store.svelte';
+	import { attributeVariantStore } from '$features/attribute-variants/application/attribute-variant.store.svelte';
 
 	import type { TicketOrderItemInput } from '../../domain/ticket-order.entity';
 	import { formatDimensionText } from '../../domain/ticket-order.entity';
@@ -32,6 +35,7 @@
 		productCategoryStore.load();
 		productStore.load();
 		resellerStore.load();
+		attributeVariantStore.load();
 		ticketOrderStore.initCartFromStorage();
 	});
 
@@ -42,15 +46,16 @@
 	let uom = $state<'m2' | 'm_lari' | 'lembar' | 'pcs' | 'box'>('m2');
 	let lengthM = $state<number | null>(3);
 	let widthM = $state<number | null>(1);
-	let quantity = $state(1);
+	let quantity = $state<number | null>(1);
 	let productionNotes = $state('Mata ayam 4 sudut');
 	let designFileUrl = $state('');
 
 	let editingItemIndex = $state<number | null>(null);
+	let lastAppliedProductId = $state<string | null>(null);
 
 	// Derived products filtered by selected category
 	const availableProducts = $derived.by(() => {
-		if (!selectedCategoryId) return productStore.items;
+		if (!selectedCategoryId) return [];
 		return productStore.items.filter((p) => p.categoryId === selectedCategoryId);
 	});
 
@@ -58,34 +63,123 @@
 		return productStore.items.find((p) => p.id === selectedProductId) || null;
 	});
 
+	const categoryOptions = $derived.by<ComboboxOption<string>[]>(() => {
+		return productCategoryStore.items.map((cat) => ({
+			value: cat.id,
+			label: cat.name
+		}));
+	});
+
+	const productOptions = $derived.by<ComboboxOption<string>[]>(() => {
+		return availableProducts.map((prod) => ({
+			value: prod.id,
+			label: prod.name
+		}));
+	});
+
+	const resellerOptions = $derived.by<ComboboxOption<string>[]>(() => {
+		return resellerStore.items.map((r) => ({
+			value: r.id,
+			label: `${r.ownerName} (${r.phone})`
+		}));
+	});
+
+	// Derived variants filtered by selected product's assigned attributes
+	const variantOptions = $derived.by<ComboboxOption<string>[]>(() => {
+		if (!selectedProductId || !selectedProductObj) return [];
+
+		// 1. If product has assignedAttributes configured, look them up from master data
+		if (selectedProductObj.assignedAttributes && selectedProductObj.assignedAttributes.length > 0) {
+			const matchedVariants: { id: string; name: string }[] = [];
+			for (const assigned of selectedProductObj.assignedAttributes) {
+				const masterAttr = attributeVariantStore.items.find((a) => a.id === assigned.attributeId);
+				if (masterAttr) {
+					const activeVars = masterAttr.variants.filter((v) => v.isActive);
+					if (assigned.selectedVariantIds && assigned.selectedVariantIds.length > 0) {
+						for (const varId of assigned.selectedVariantIds) {
+							const v = activeVars.find((item) => item.id === varId);
+							if (v) matchedVariants.push(v);
+						}
+					} else {
+						matchedVariants.push(...activeVars);
+					}
+				}
+			}
+
+			if (matchedVariants.length > 0) {
+				const uniqueOptions: Record<string, ComboboxOption<string>> = {};
+				for (const v of matchedVariants) {
+					if (!uniqueOptions[v.name]) {
+						uniqueOptions[v.name] = { value: v.name, label: v.name };
+					}
+				}
+				// If currently selected variant is not in options (e.g. custom or loaded from draft), preserve it
+				if (selectedVariantName && !uniqueOptions[selectedVariantName]) {
+					return [
+						{ value: selectedVariantName, label: selectedVariantName },
+						...Object.values(uniqueOptions)
+					];
+				}
+				return Object.values(uniqueOptions);
+			}
+		}
+
+		// 2. Fallback if product has no specific assignedAttributes:
+		// Collect active variants from attributeVariantStore
+		const options: ComboboxOption<string>[] = [];
+		const seenNames: Record<string, boolean> = {};
+
+		if (selectedVariantName) {
+			seenNames[selectedVariantName] = true;
+			options.push({ value: selectedVariantName, label: selectedVariantName });
+		}
+
+		for (const attr of attributeVariantStore.items.filter((a) => a.isActive)) {
+			for (const v of attr.variants) {
+				if (v.isActive && !seenNames[v.name]) {
+					seenNames[v.name] = true;
+					options.push({ value: v.name, label: v.name });
+				}
+			}
+		}
+
+		return options;
+	});
+
 	// Auto-update UOM when product changes
 	$effect(() => {
-		if (selectedProductObj) {
-			const type = selectedProductObj.calculationType;
-			if (type === 'square_meter') {
-				uom = 'm2';
-				if (!lengthM) lengthM = 3;
-				if (!widthM) widthM = 1;
-			} else if (type === 'meter_run') {
-				uom = 'm_lari';
-				if (!lengthM) lengthM = 2;
-				widthM = null;
-			} else if (type === 'sheet') {
-				uom = 'lembar';
-				lengthM = null;
-				widthM = null;
-			} else {
-				uom = 'pcs';
-				lengthM = null;
-				widthM = null;
+		const currentId = selectedProductId;
+		if (currentId && currentId !== lastAppliedProductId) {
+			lastAppliedProductId = currentId;
+			if (selectedProductObj) {
+				const type = selectedProductObj.calculationType;
+				if (type === 'square_meter') {
+					uom = 'm2';
+					lengthM = 3;
+					widthM = 1;
+				} else if (type === 'meter_run') {
+					uom = 'm_lari';
+					lengthM = 2;
+					widthM = null;
+				} else if (type === 'sheet') {
+					uom = 'lembar';
+					lengthM = null;
+					widthM = null;
+				} else {
+					uom = 'pcs';
+					lengthM = null;
+					widthM = null;
+				}
 			}
+		} else if (!currentId) {
+			lastAppliedProductId = null;
 		}
 	});
 
 	// Calculated item preview
 	const calculatedItemArea = $derived.by(() => {
 		if (uom === 'm2' && lengthM && widthM) {
-			return lengthM * widthM * quantity;
+			return lengthM * widthM * (quantity || 0);
 		}
 		return 0;
 	});
@@ -94,10 +188,11 @@
 		editingItemIndex = null;
 		selectedCategoryId = '';
 		selectedProductId = '';
+		lastAppliedProductId = null;
 		selectedVariantName = '';
 		uom = 'm2';
-		lengthM = 3;
-		widthM = 1;
+		lengthM = null;
+		widthM = null;
 		quantity = 1;
 		productionNotes = '';
 		designFileUrl = '';
@@ -106,6 +201,13 @@
 	function handleAddOrUpdateItem() {
 		if (!selectedProductObj) {
 			toast.danger('Pilih produk', { description: 'Pilih produk cetak yang diinginkan.' });
+			return;
+		}
+
+		if (variantOptions.length > 0 && !selectedVariantName.trim()) {
+			toast.danger('Pilih variasi produk', {
+				description: 'Variasi produk wajib dipilih untuk spesifikasi cetak ini.'
+			});
 			return;
 		}
 
@@ -125,7 +227,8 @@
 			}
 		}
 
-		if (quantity <= 0) {
+		const finalQuantity = quantity && quantity > 0 ? quantity : 1;
+		if (finalQuantity <= 0) {
 			toast.danger('Jumlah tidak valid', { description: 'Jumlah cetak minimal 1.' });
 			return;
 		}
@@ -137,7 +240,7 @@
 			categoryId: selectedProductObj.categoryId,
 			categoryName: selectedProductObj.categoryName,
 			uom,
-			quantity,
+			quantity: finalQuantity,
 			lengthM: uom === 'm2' || uom === 'm_lari' ? lengthM : null,
 			widthM: uom === 'm2' ? widthM : null,
 			productionNotes: productionNotes.trim() || null,
@@ -167,10 +270,11 @@
 		editingItemIndex = index;
 		selectedCategoryId = target.categoryId || '';
 		selectedProductId = target.productVariantId;
+		lastAppliedProductId = target.productVariantId;
 		selectedVariantName = target.variantName || '';
 		uom = (target.uom as 'm2' | 'm_lari' | 'lembar' | 'pcs' | 'box') || 'm2';
-		lengthM = target.lengthM ?? 3;
-		widthM = target.widthM ?? 1;
+		lengthM = target.lengthM ?? null;
+		widthM = target.widthM ?? null;
 		quantity = target.quantity;
 		productionNotes = target.productionNotes || '';
 		designFileUrl = target.designFileUrl || '';
@@ -200,7 +304,7 @@
 			toast.success('Draft tersimpan', {
 				description: `Tiket "${saved.jobNumber}" berhasil disimpan sebagai draft desainer.`
 			});
-			goto(resolve('/(app)/transactions/tickets'));
+			goto(resolve('/(app)/tickets'));
 		} else {
 			toast.danger('Gagal menyimpan draft', {
 				description: ticketOrderStore.error || 'Terjadi kesalahan sistem saat menyimpan.'
@@ -221,7 +325,7 @@
 			toast.success('Tiket terkirim ke kasir', {
 				description: `Tiket "${saved.jobNumber}" berhasil dikirim. Menunggu kasir menerbitkan nota & SPK.`
 			});
-			goto(resolve('/(app)/transactions/tickets'));
+			goto(resolve('/(app)/tickets'));
 		} else {
 			toast.danger('Gagal mengirim ke kasir', {
 				description: ticketOrderStore.error || 'Terjadi kesalahan sistem saat submit.'
@@ -236,7 +340,7 @@
 		<div class="flex items-center gap-3">
 			<Button variant="outline" size="sm" class="size-8 justify-center! p-0!">
 				{#snippet child({ props })}
-					<a {...props} href={resolve('/(app)/transactions/tickets')} aria-label="Kembali ke antrean">
+					<a {...props} href={resolve('/(app)/tickets')} aria-label="Kembali ke antrean">
 						<IconArrowLeft class="size-4" />
 					</a>
 				{/snippet}
@@ -317,137 +421,108 @@
 				<div class="flex flex-col gap-3.5 text-xs">
 					<!-- Category Selection -->
 					<div>
-						<label for="category-select" class="mb-1 block font-medium text-foreground">
-							Kategori Produk
+						<label for="category-combobox" class="mb-1 block font-medium text-foreground">
+							Kategori Produk <span class="text-danger">*</span>
 						</label>
-						<select
-							id="category-select"
-							bind:value={selectedCategoryId}
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
-						>
-							<option value="">Semua Kategori</option>
-							{#each productCategoryStore.items as cat (cat.id)}
-								<option value={cat.id}>{cat.name}</option>
-							{/each}
-						</select>
+						<Combobox
+							id="category-combobox"
+							options={categoryOptions}
+							value={selectedCategoryId || undefined}
+							onValueChange={(val) => {
+								const catId =
+									(typeof val === 'string' ? val : (val?.[0] as string | undefined)) ?? '';
+								if (catId !== selectedCategoryId) {
+									selectedCategoryId = catId;
+									selectedProductId = '';
+									selectedVariantName = '';
+								}
+							}}
+							size="sm"
+							clearable={false}
+							labels={{
+								placeholder: 'Pilih Kategori Produk',
+								searchPlaceholder: 'Cari kategori...',
+								empty: 'Tidak ada kategori ditemukan'
+							}}
+							classes={{ content: 'z-60' }}
+							class="w-full"
+						/>
 					</div>
 
 					<!-- Product Selection -->
 					<div>
-						<label for="product-select" class="mb-1 block font-medium text-foreground">
+						<label for="product-combobox" class="mb-1 block font-medium text-foreground">
 							Pilihan Produk / Bahan <span class="text-danger">*</span>
 						</label>
-						<select
-							id="product-select"
-							bind:value={selectedProductId}
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
-						>
-							<option value="" disabled>-- Pilih Produk Cetak --</option>
-							{#each availableProducts as prod (prod.id)}
-								<option value={prod.id}>{prod.name} ({prod.categoryName})</option>
-							{/each}
-						</select>
-					</div>
-
-					<!-- Variant / Sub-type -->
-					<div>
-						<label for="variant-input" class="mb-1 block font-medium text-foreground">
-							Varian / Tipe Spesifik (Opsional)
-						</label>
-						<input
-							id="variant-input"
-							type="text"
-							bind:value={selectedVariantName}
-							placeholder="Contoh: Korea Tebal / Cetak 4/0 (1 Sisi) / Doff"
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground placeholder:text-foreground-faint focus:border-primary focus:outline-hidden"
+						<Combobox
+							id="product-combobox"
+							options={productOptions}
+							value={selectedProductId || undefined}
+							disabled={!selectedCategoryId}
+							onValueChange={(val) => {
+								const prodId =
+									(typeof val === 'string' ? val : (val?.[0] as string | undefined)) ?? '';
+								if (prodId !== selectedProductId) {
+									selectedProductId = prodId;
+									selectedVariantName = '';
+								}
+							}}
+							size="sm"
+							clearable={false}
+							labels={{
+								placeholder: !selectedCategoryId
+									? 'Pilih kategori terlebih dahulu'
+									: '-- Pilih Produk Cetak --',
+								searchPlaceholder: 'Cari produk / bahan...',
+								empty: !selectedCategoryId
+									? 'Pilih kategori terlebih dahulu'
+									: 'Tidak ada produk dalam kategori ini'
+							}}
+							classes={{ content: 'z-60' }}
+							class="w-full"
 						/>
 					</div>
 
-					<!-- Dimension & Units (Dynamic based on UOM) -->
-					<div class="rounded-lg border border-border/70 bg-surface-subtle p-3">
-						<span class="mb-2 block font-semibold text-foreground">
-							Dimensi & Satuan Produksi
-						</span>
-
-						{#if uom === 'm2'}
-							<div class="grid grid-cols-2 gap-2">
-								<div>
-									<label for="length-input" class="mb-1 block text-[11px] text-foreground-subtle">
-										Panjang (meter)
-									</label>
-									<input
-										id="length-input"
-										type="number"
-										step="0.05"
-										min="0.1"
-										bind:value={lengthM}
-										class="h-8 w-full rounded-md border border-border bg-canvas px-2.5 text-xs text-foreground focus:border-primary focus:outline-hidden"
-									/>
-								</div>
-								<div>
-									<label for="width-input" class="mb-1 block text-[11px] text-foreground-subtle">
-										Lebar (meter)
-									</label>
-									<input
-										id="width-input"
-										type="number"
-										step="0.05"
-										min="0.1"
-										bind:value={widthM}
-										class="h-8 w-full rounded-md border border-border bg-canvas px-2.5 text-xs text-foreground focus:border-primary focus:outline-hidden"
-									/>
-								</div>
-							</div>
-							<div class="mt-2 text-[11px] text-foreground-subtle">
-								Luas: <span class="font-semibold text-primary"
-									>{((lengthM || 0) * (widthM || 0)).toFixed(2)} m²</span
-								>
-								• Total: <span class="font-semibold text-foreground"
-									>{calculatedItemArea.toFixed(2)} m²</span
-								>
-							</div>
-						{:else if uom === 'm_lari'}
-							<div>
-								<label for="length-run-input" class="mb-1 block text-[11px] text-foreground-subtle">
-									Panjang Tarikan Roll (meter lari)
-								</label>
-								<input
-									id="length-run-input"
-									type="number"
-									step="0.1"
-									min="0.1"
-									bind:value={lengthM}
-									class="h-8 w-full rounded-md border border-border bg-canvas px-2.5 text-xs text-foreground focus:border-primary focus:outline-hidden"
-								/>
-							</div>
-						{:else}
-							<div class="text-[11px] text-foreground-subtle">
-								Satuan hitung: <strong class="text-foreground">{uom.toUpperCase()}</strong> (Dihitung
-								berdasarkan kuantitas lembar/pcs).
-							</div>
-						{/if}
-
-						<div class="mt-2.5">
-							<label for="qty-input" class="mb-1 block text-[11px] font-medium text-foreground">
-								Jumlah Kuantitas (Qty)
-							</label>
-							<input
-								id="qty-input"
-								type="number"
-								min="1"
-								bind:value={quantity}
-								class="h-8 w-24 rounded-md border border-border bg-canvas px-2.5 text-xs text-foreground focus:border-primary focus:outline-hidden"
-							/>
-						</div>
+					<!-- Variant Selection via Combobox -->
+					<div>
+						<label for="variant-combobox" class="mb-1 block font-medium text-foreground">
+							Variasi Produk <span class="text-[11px] font-normal text-foreground-subtle"
+								>(Wajib Dipilih)</span
+							>
+						</label>
+						<Combobox
+							id="variant-combobox"
+							options={variantOptions}
+							value={selectedVariantName || undefined}
+							disabled={!selectedProductId}
+							onValueChange={(val) => {
+								selectedVariantName =
+									(typeof val === 'string' ? val : (val?.[0] as string | undefined)) ?? '';
+							}}
+							size="sm"
+							clearable={false}
+							creatable={true}
+							labels={{
+								placeholder: !selectedProductId
+									? 'Pilih produk terlebih dahulu'
+									: '-- Pilih Varian --',
+								searchPlaceholder: 'Cari varian...',
+								empty: !selectedProductId
+									? 'Pilih produk terlebih dahulu'
+									: 'Tidak ada varian ditemukan'
+							}}
+							classes={{ content: 'z-60' }}
+							class="w-full"
+						/>
 					</div>
 
-					<!-- Finishing & Production Notes -->
+					<!-- Description / Item Notes (Placed below Variant and before Dimensions) -->
 					<div>
-						<label for="finishing-notes" class="mb-1 block font-medium text-foreground">
-							Instruksi Finishing & Catatan Mesin
+						<label for="item-description" class="mb-1 block font-medium text-foreground">
+							Deskripsi / Catatan Item
 						</label>
 						<textarea
-							id="finishing-notes"
+							id="item-description"
 							bind:value={productionNotes}
 							rows={2}
 							placeholder="Contoh: Mata ayam 4 sudut, seaming keliling, potong pas..."
@@ -455,17 +530,104 @@
 						></textarea>
 					</div>
 
-					<!-- Design File Link -->
+					<!-- Dimension & Units (Dynamic based on UOM - hidden for pcs/sheets/etc) -->
+					{#if selectedProductObj && (uom === 'm2' || uom === 'm_lari')}
+						<div class="rounded-lg border border-border/70 bg-surface-subtle p-3">
+							<span class="mb-2 block font-semibold text-foreground">
+								Dimensi Produksi ({uom === 'm2' ? 'Meter Persegi' : 'Meter Lari'})
+							</span>
+
+							{#if uom === 'm2'}
+								<div class="grid grid-cols-2 gap-2">
+									<div>
+										<label for="length-input" class="mb-1 block text-[11px] text-foreground-subtle">
+											Panjang (meter)
+										</label>
+										<NumberField
+											id="length-input"
+											size="sm"
+											thousandSeparator
+											value={lengthM ?? undefined}
+											onValueChange={(val) => {
+												lengthM = val ?? null;
+											}}
+											placeholder="0"
+											class="w-full"
+										/>
+									</div>
+									<div>
+										<label for="width-input" class="mb-1 block text-[11px] text-foreground-subtle">
+											Lebar (meter)
+										</label>
+										<NumberField
+											id="width-input"
+											size="sm"
+											thousandSeparator
+											value={widthM ?? undefined}
+											onValueChange={(val) => {
+												widthM = val ?? null;
+											}}
+											placeholder="0"
+											class="w-full"
+										/>
+									</div>
+								</div>
+								<div class="mt-2 text-[11px] text-foreground-subtle">
+									Luas: <span class="font-semibold text-primary">
+										{((lengthM || 0) * (widthM || 0)).toFixed(2)} m²
+									</span>
+									• Total:
+									<span class="font-semibold text-foreground">
+										{calculatedItemArea.toFixed(2)} m²
+									</span>
+								</div>
+							{:else if uom === 'm_lari'}
+								<div>
+									<label
+										for="length-run-input"
+										class="mb-1 block text-[11px] text-foreground-subtle"
+									>
+										Panjang Tarikan Roll (meter lari)
+									</label>
+									<NumberField
+										id="length-run-input"
+										size="sm"
+										thousandSeparator
+										value={lengthM ?? undefined}
+										onValueChange={(val) => {
+											lengthM = val ?? null;
+										}}
+										placeholder="0"
+										class="w-full"
+									/>
+								</div>
+								<div class="mt-2 text-[11px] text-foreground-subtle">
+									Lebar: <span class="font-medium text-foreground">Default lebar roll</span>
+									{#if lengthM}
+										• Total: <span class="font-semibold text-primary"
+											>{((lengthM || 0) * (quantity || 1)).toFixed(2)} m lari</span
+										>
+									{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
+
+					<!-- Quantity -->
 					<div>
-						<label for="file-url" class="mb-1 block font-medium text-foreground">
-							URL / Link Berkas Desain Siap Cetak
+						<label for="qty-input" class="mb-1 block font-medium text-foreground">
+							Jumlah Kuantitas (Qty) <span class="text-danger">*</span>
 						</label>
-						<input
-							id="file-url"
-							type="url"
-							bind:value={designFileUrl}
-							placeholder="https://drive.google.com/... atau link storage"
-							class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground placeholder:text-foreground-faint focus:border-primary focus:outline-hidden"
+						<NumberField
+							id="qty-input"
+							size="sm"
+							thousandSeparator
+							value={quantity ?? undefined}
+							onValueChange={(val) => {
+								quantity = val ?? null;
+							}}
+							placeholder="1"
+							class="w-32"
 						/>
 					</div>
 
@@ -506,7 +668,7 @@
 					<Badge variant="secondary" size="sm">Tersimpan Otomatis</Badge>
 				</div>
 
-				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 text-xs">
+				<div class="grid grid-cols-1 gap-3 text-xs sm:grid-cols-2">
 					<!-- Customer Type Selector -->
 					<div class="sm:col-span-2">
 						<span class="mb-1.5 block font-medium text-foreground">Tipe Pelanggan:</span>
@@ -545,27 +707,36 @@
 					<!-- Reseller Dropdown if Reseller -->
 					{#if ticketOrderStore.activeCustomerType === 'reseller'}
 						<div class="sm:col-span-2">
-							<label for="reseller-select" class="mb-1 block font-medium text-foreground">
+							<label for="reseller-combobox" class="mb-1 block font-medium text-foreground">
 								Pilih Mitra Reseller <span class="text-danger">*</span>
 							</label>
-							<select
-								id="reseller-select"
-								bind:value={ticketOrderStore.activeResellerId}
-								onchange={(e) => {
-									const found = resellerStore.items.find((r) => r.id === (e.target as HTMLSelectElement).value);
-									if (found) {
-										ticketOrderStore.activeCustomerName = found.ownerName;
-										ticketOrderStore.activeCustomerPhone = found.phone;
+							<Combobox
+								id="reseller-combobox"
+								options={resellerOptions}
+								value={ticketOrderStore.activeResellerId ?? undefined}
+								onValueChange={(val) => {
+									const resellerId =
+										typeof val === 'string' ? val : ((val?.[0] as string | undefined) ?? null);
+									ticketOrderStore.activeResellerId = resellerId;
+									if (resellerId) {
+										const found = resellerStore.items.find((r) => r.id === resellerId);
+										if (found) {
+											ticketOrderStore.activeCustomerName = found.ownerName;
+											ticketOrderStore.activeCustomerPhone = found.phone;
+										}
 									}
 									ticketOrderStore.persistCartToStorage();
 								}}
-								class="h-9 w-full rounded-md border border-border bg-canvas px-3 text-xs text-foreground focus:border-primary focus:outline-hidden"
-							>
-								<option value="" disabled>-- Pilih Data Reseller --</option>
-								{#each resellerStore.items as r (r.id)}
-									<option value={r.id}>{r.ownerName} ({r.phone})</option>
-								{/each}
-							</select>
+								size="sm"
+								clearable={false}
+								labels={{
+									placeholder: '-- Pilih Data Reseller --',
+									searchPlaceholder: 'Cari nama reseller / telepon...',
+									empty: 'Tidak ada data reseller ditemukan'
+								}}
+								classes={{ content: 'z-60' }}
+								class="w-full"
+							/>
 						</div>
 					{/if}
 
@@ -607,7 +778,9 @@
 						<input
 							id="deadline-input"
 							type="datetime-local"
-							value={ticketOrderStore.activeDeadline ? ticketOrderStore.activeDeadline.slice(0, 16) : ''}
+							value={ticketOrderStore.activeDeadline
+								? ticketOrderStore.activeDeadline.slice(0, 16)
+								: ''}
 							oninput={(e) => {
 								ticketOrderStore.activeDeadline = (e.target as HTMLInputElement).value || null;
 								ticketOrderStore.persistCartToStorage();
@@ -649,9 +822,9 @@
 
 					{#if ticketOrderStore.totalCartAreaM2 > 0}
 						<span class="text-xs text-foreground-subtle">
-							Total Luas: <strong class="text-foreground"
-								>{ticketOrderStore.totalCartAreaM2.toFixed(2)} m²</strong
-							>
+							Total Luas: <strong class="text-foreground">
+								{ticketOrderStore.totalCartAreaM2.toFixed(2)} m²
+							</strong>
 						</span>
 					{/if}
 				</div>
@@ -734,9 +907,9 @@
 						class="flex items-center justify-between border-t border-border/70 bg-surface-subtle/50 px-4 py-3 text-xs"
 					>
 						<span class="text-foreground-subtle">
-							Total Keseluruhan: <strong class="text-foreground"
-								>{ticketOrderStore.totalCartItemsCount} Item</strong
-							>
+							Total Keseluruhan: <strong class="text-foreground">
+								{ticketOrderStore.totalCartItemsCount} Item
+							</strong>
 						</span>
 						<div class="flex items-center gap-2">
 							<Button

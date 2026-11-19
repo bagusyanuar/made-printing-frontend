@@ -10,7 +10,7 @@ const INITIAL_PRODUCTS: Product[] = [
 	{
 		id: 'prod-001',
 		code: 'PRD-LGF-001',
-		name: 'Banner Flexy Outdoor Standar',
+		name: 'MMT 280 GR',
 		categoryId: 'cat-1',
 		categoryName: 'Large Format Outdoor',
 		baseMaterial: 'Flexy 280 gsm',
@@ -24,9 +24,17 @@ const INITIAL_PRODUCTS: Product[] = [
 		},
 		assignedAttributes: [
 			{
-				attributeId: 'attr-1',
-				attributeName: 'Sisi Cetak',
-				selectedVariantIds: ['var-1-1'],
+				attributeId: 'attr-3',
+				attributeName: 'Finishing Banner & Spanduk',
+				selectedVariantIds: [
+					'var-3-1',
+					'var-3-2',
+					'var-3-3',
+					'var-3-4',
+					'var-3-5',
+					'var-3-6',
+					'var-3-7'
+				],
 				isRequired: true
 			}
 		],
@@ -53,7 +61,22 @@ const INITIAL_PRODUCTS: Product[] = [
 			silverPrice: 33000,
 			goldPrice: 31500
 		},
-		assignedAttributes: [],
+		assignedAttributes: [
+			{
+				attributeId: 'attr-3',
+				attributeName: 'Finishing Banner & Spanduk',
+				selectedVariantIds: [
+					'var-3-1',
+					'var-3-2',
+					'var-3-3',
+					'var-3-4',
+					'var-3-5',
+					'var-3-6',
+					'var-3-7'
+				],
+				isRequired: true
+			}
+		],
 		minOrderQty: 1,
 		leadTimeHours: 3,
 		description: 'Bahan spanduk tebal serat halus, tahan angin kencang dan tidak mudah sobek.',

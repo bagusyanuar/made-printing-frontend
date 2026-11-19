@@ -34,7 +34,7 @@ export class TicketOrderStore {
 	error = $state<string | null>(null);
 
 	searchQuery = $state('');
-	statusTab = $state<TicketStatusFilterTab>('all');
+	statusTab = $state<TicketStatusFilterTab>('pending');
 	page = $state(1);
 	limit = $state(10);
 	totalData = $state(0);
