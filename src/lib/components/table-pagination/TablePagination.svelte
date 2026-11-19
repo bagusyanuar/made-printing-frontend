@@ -42,7 +42,7 @@
 	class={cn('flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between', className)}
 >
 	<!-- Left: Rows per page selector & data range counter -->
-	<div class="flex flex-wrap items-center gap-2.5 text-xs">
+	<div class="flex flex-wrap items-center gap-3 text-xs">
 		<div class="flex items-center gap-2">
 			<Typography variant="muted" as="span" class="text-xs text-foreground-subtle">
 				{rowsPerPageLabel}
@@ -84,8 +84,10 @@
 			</Dropdown>
 		</div>
 
+		<div class="hidden h-3.5 w-px bg-border/70 sm:block"></div>
+
 		<Typography variant="muted" as="span" class="text-xs text-foreground-subtle">
-			<strong class="font-medium text-foreground">{startIndex}</strong>–<strong
+			Menampilkan <strong class="font-medium text-foreground">{startIndex}</strong>–<strong
 				class="font-medium text-foreground">{endIndex}</strong
 			>
 			dari <strong class="font-medium text-foreground">{totalItems}</strong>
@@ -94,5 +96,5 @@
 	</div>
 
 	<!-- Right: Page navigation links -->
-	<Pagination bind:currentPage {totalPages} size="sm" />
+	<Pagination bind:currentPage {totalPages} size="sm" onPageChange={(p) => onPageChange?.(p)} />
 </div>
