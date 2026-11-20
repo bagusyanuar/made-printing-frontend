@@ -16,6 +16,7 @@
 	} from 'dystopia-linear-lib/components/table';
 	import { EmptyState } from 'dystopia-linear-lib/components/empty-state';
 	import { Spinner } from 'dystopia-linear-lib/components/spinner';
+	import { Tooltip } from 'dystopia-linear-lib/components/tooltip';
 	import { TablePagination } from '$lib/components/table-pagination';
 	import { toast } from 'dystopia-linear-lib/components/toast';
 
@@ -31,7 +32,7 @@
 	import IconCalendar from '~icons/lucide/calendar';
 	import IconUser from '~icons/lucide/user';
 
-	import type { TicketOrder } from '../../domain/ticket-order.entity';
+	import type { TicketOrder, TicketOrderItem } from '../../domain/ticket-order.entity';
 	import { ticketOrderStore } from '../../application/ticket-order.store.svelte';
 	import TicketOrderDetailDialog from '../components/TicketOrderDetailDialog.svelte';
 	import TicketOrderCancelDialog from '../components/TicketOrderCancelDialog.svelte';
@@ -100,6 +101,18 @@
 		const minutes = String(d.getMinutes()).padStart(2, '0');
 		const seconds = String(d.getSeconds()).padStart(2, '0');
 		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+	}
+
+	function formatItemSummary(item: TicketOrderItem): string {
+		const variant =
+			item.variantName && item.variantName.toLowerCase() !== 'default'
+				? ` (${item.variantName})`
+				: '';
+		return `${item.productName}${variant} (${item.quantity}x)`;
+	}
+
+	function formatItemsSummary(items: TicketOrderItem[]): string {
+		return items.map(formatItemSummary).join(', ');
 	}
 </script>
 
@@ -264,11 +277,16 @@
 									</span>
 								</TableCell>
 
-								<!-- 2. Tanggal Buat -->
+								<!-- 2. Tanggal Buat & Desainer -->
 								<TableCell>
-									<div class="flex items-center gap-2 text-xs font-medium text-foreground">
-										<IconCalendar class="size-4 shrink-0 text-foreground-subtle" />
-										<span>{formatDateTime(ticket.createdAt)}</span>
+									<div class="flex flex-col gap-0.5">
+										<div class="flex items-center gap-2 text-xs font-medium text-foreground">
+											<IconCalendar class="size-4 shrink-0 text-foreground-subtle" />
+											<span>{formatDateTime(ticket.createdAt)}</span>
+										</div>
+										<div class="pl-6 text-xs text-foreground-subtle">
+											{ticket.designerName || '-'}
+										</div>
 									</div>
 								</TableCell>
 
@@ -304,32 +322,55 @@
 
 								<!-- 4. Daftar Cetakan (Multi-Product) -->
 								<TableCell>
-									<div class="flex flex-col gap-1">
+									<div class="flex flex-col gap-0.5">
 										<span class="text-xs font-semibold text-rose-500">
 											{ticket.items.length} Item Cetakan:
 										</span>
 										{#if ticket.items.length > 0}
-											<div class="flex flex-col gap-0.5 text-xs">
-												{#each ticket.items.slice(0, 2) as item (item.id)}
-													<div class="leading-snug text-foreground-subtle">
-														<span class="font-medium text-foreground">{item.productName}</span>
-														{#if item.variantName && item.variantName.toLowerCase() !== 'default'}
-															<span>({item.variantName})</span>
-														{/if}
-														<span class="font-medium text-foreground">({item.quantity}x)</span>
+											<Tooltip
+												as="div"
+												placement="top-start"
+												offset={6}
+												delayDuration={150}
+												class="max-w-xs min-w-0 sm:max-w-sm"
+												classes={{
+													content:
+														'max-w-md border border-border bg-app-surface p-2.5 text-xs text-foreground shadow-lg rounded-lg z-50'
+												}}
+											>
+												{#snippet content()}
+													<div class="flex flex-col gap-1.5 text-left">
+														<div
+															class="border-b border-border/60 pb-1 font-semibold text-foreground"
+														>
+															Daftar Cetakan ({ticket.items.length} item)
+														</div>
+														<ul class="flex list-disc flex-col gap-1 pl-3 text-xs">
+															{#each ticket.items as item (item.id)}
+																<li class="leading-relaxed">
+																	<span class="font-medium text-foreground">
+																		{item.productName}
+																	</span>
+																	{#if item.variantName && item.variantName.toLowerCase() !== 'default'}
+																		<span class="text-foreground-subtle">({item.variantName})</span>
+																	{/if}
+																	{#if item.dimensionText}
+																		<span class="text-foreground-subtle">
+																			• {item.dimensionText}
+																		</span>
+																	{/if}
+																	<span class="font-semibold text-primary">({item.quantity}x)</span>
+																</li>
+															{/each}
+														</ul>
 													</div>
-												{/each}
-												{#if ticket.items.length > 2}
-													<button
-														type="button"
-														onclick={() => openDetailModal(ticket)}
-														class="inline-flex w-fit cursor-pointer items-center text-[11px] font-medium text-primary hover:underline"
-														title="Klik untuk melihat semua rincian item"
-													>
-														+{ticket.items.length - 2} item lainnya...
-													</button>
-												{/if}
-											</div>
+												{/snippet}
+												<div
+													class="cursor-help truncate text-xs text-foreground-subtle transition-colors hover:text-foreground"
+												>
+													{formatItemsSummary(ticket.items)}
+												</div>
+											</Tooltip>
 										{:else}
 											<span class="text-xs text-foreground-faint">-</span>
 										{/if}
