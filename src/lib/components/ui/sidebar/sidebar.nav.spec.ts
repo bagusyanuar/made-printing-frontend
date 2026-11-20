@@ -38,6 +38,16 @@ describe('isActiveHref', () => {
 	it('does not match an unrelated route with shared prefix string', () => {
 		expect(isActiveHref('/production/queues-archive', '/production/queues')).toBe(false);
 	});
+
+	it('activates /tickets on /tickets/new but leaves /orders/new inactive', () => {
+		expect(isActiveHref('/tickets/new', '/tickets')).toBe(true);
+		expect(isActiveHref('/tickets/new', '/orders/new')).toBe(false);
+	});
+
+	it('activates /orders/new and leaves /tickets inactive when on /orders/new', () => {
+		expect(isActiveHref('/orders/new', '/orders/new')).toBe(true);
+		expect(isActiveHref('/orders/new', '/tickets')).toBe(false);
+	});
 });
 
 describe('sectionContainsActive', () => {

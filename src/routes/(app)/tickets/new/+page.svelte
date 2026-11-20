@@ -2,7 +2,7 @@
 	import { pageTitleStore } from '$lib/shared/presentation/page-title.store.svelte';
 	import CreateTicketOrderPage from '$features/ticket-orders/presentation/pages/CreateTicketOrderPage.svelte';
 
-	pageTitleStore.set('Pesanan Baru');
+	pageTitleStore.set('Buat Tiket Pesanan');
 </script>
 
 <CreateTicketOrderPage />

@@ -34,7 +34,7 @@ export const appNavSections: NavSection[] = [
 			},
 			{
 				title: 'Pesanan Baru',
-				href: '/tickets/new',
+				href: '/orders/new',
 				icon: IconShoppingBag
 			},
 			{
