@@ -84,9 +84,9 @@
     "semantic_hash": "d35dccce23b717c59db537211df7bd59"
   },
   "src/lib/components/ui/sidebar/sidebar.nav.spec.ts": {
-    "mtime": 1795183219.46975,
-    "seen": 1795183298.925088,
-    "ast_hash": "dd0c04d3df45a58c1b34ab503f8bb1d7",
+    "mtime": 1795185293.7924483,
+    "seen": 1795186765.705035,
+    "ast_hash": "97da57d0b58fa891e9db2b07577cb5e3",
     "semantic_hash": ""
   },
   "src/lib/components/ui/sidebar/sidebar.nav.ts": {
@@ -150,9 +150,9 @@
     "semantic_hash": "11fd3337bc7773fe35ffd378aa54e658"
   },
   "src/routes/(app)/app.nav.ts": {
-    "mtime": 1795183316.799465,
-    "seen": 1795183713.250134,
-    "ast_hash": "477af488e7f173cf6624e5317a10ddab",
+    "mtime": 1795185293.9007442,
+    "seen": 1795186765.705048,
+    "ast_hash": "6ce50f69e40b6dd132b2c6b7bc8b3977",
     "semantic_hash": ""
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -216,9 +216,9 @@
     "semantic_hash": "132dac3891921cedc62974461e130175"
   },
   "src/routes/(app)/orders/+page.ts": {
-    "mtime": 1795183317.2741737,
-    "seen": 1795183713.250141,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185294.0223906,
+    "seen": 1795186765.705057,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/routes/(app)/pos/+page.svelte": {
@@ -228,9 +228,9 @@
     "semantic_hash": "1789393ac3fde5fabcdcbe0987a7733f"
   },
   "src/routes/(app)/pos/+page.ts": {
-    "mtime": 1795183317.3904073,
-    "seen": 1795183713.250143,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185066.0279574,
+    "seen": 1795185133.4771001,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/routes/(app)/production/finishing/+page.svelte": {
@@ -474,9 +474,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1794990189.946641,
-    "seen": 1794991531.2865,
-    "ast_hash": "137791064ebfbe63513597bf1b715aa7",
+    "mtime": 1795187708.7917955,
+    "seen": 1795229161.992542,
+    "ast_hash": "9b50fc2c8366e7020e08e884cb3442ca",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -1602,9 +1602,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/transactions/new/+page.ts": {
-    "mtime": 1795183317.6523747,
-    "seen": 1795183713.2501602,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185294.321476,
+    "seen": 1795186765.7050781,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/lib/components/number-field/NumberField.svelte": {
@@ -1641,6 +1641,156 @@
     "mtime": 1795183875.3075478,
     "seen": 1795184193.615082,
     "ast_hash": "8a0d78a9f82bac9f5cc5295e74d08d25",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/cashier/+page.svelte": {
+    "mtime": 1795230321.238503,
+    "seen": 1795230530.478776,
+    "ast_hash": "0505e878fe4ededce114695f9740372c",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/orders/new/+page.ts": {
+    "mtime": 1795185073.5991447,
+    "seen": 1795185133.477099,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
+    "semantic_hash": ""
+  },
+  "docs/kasir-pos-mini-prd.md": {
+    "mtime": 1795187707.6314588,
+    "seen": 1795229161.992619,
+    "ast_hash": "cb36a3889b3f2c9ac79cebacfe87c7b9",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/application/cashier.container.ts": {
+    "mtime": 1795186124.6523519,
+    "seen": 1795186765.704905,
+    "ast_hash": "39477d9b358e1138b18a336d35f4af6f",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/application/cashier.store.svelte.ts": {
+    "mtime": 1795242063.420982,
+    "seen": 1795242340.0319989,
+    "ast_hash": "41866968b1f3c04707a185f82e99cb05",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/domain/cashier.entity.ts": {
+    "mtime": 1795231586.4364214,
+    "seen": 1795231686.927476,
+    "ast_hash": "e23c1c8c6fc456d9cb02b574b9e3d52f",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/domain/cashier.repository.ts": {
+    "mtime": 1795240510.672087,
+    "seen": 1795240819.4912808,
+    "ast_hash": "f8a64329d33cb1cf8e8d8e8588a27972",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/domain/cashier.schema.ts": {
+    "mtime": 1795186039.7625613,
+    "seen": 1795186765.704911,
+    "ast_hash": "5cd2d5cec833b8e4abd420e755816305",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.dto.ts": {
+    "mtime": 1795186047.6029425,
+    "seen": 1795186765.704911,
+    "ast_hash": "73775f1719e69ddc2fbcb4e7340d7dc7",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.mapper.spec.ts": {
+    "mtime": 1795186458.666285,
+    "seen": 1795186765.704912,
+    "ast_hash": "3394c6c22dc2269820fb745ae343a908",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.mapper.ts": {
+    "mtime": 1795186076.8237884,
+    "seen": 1795186765.704913,
+    "ast_hash": "d45a278d1aba588df310d98ffa466234",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.repository.impl.ts": {
+    "mtime": 1795240541.4042041,
+    "seen": 1795240819.491285,
+    "ast_hash": "537a866ea609a2956191624eba8c72e3",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.repository.mock.spec.ts": {
+    "mtime": 1795240716.5035083,
+    "seen": 1795240819.491286,
+    "ast_hash": "7353c4de7121d032955d22a63aa6d3d3",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.repository.mock.ts": {
+    "mtime": 1795240836.764017,
+    "seen": 1795241084.116229,
+    "ast_hash": "612a060f02282f099de229b2b7400020",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/infrastructure/cashier.validator.ts": {
+    "mtime": 1795186067.9830585,
+    "seen": 1795186765.704915,
+    "ast_hash": "c5ff9f3efc338c18ae5af0a7dc0182c5",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/AddRetailItemDialog.svelte": {
+    "mtime": 1795240100.7905946,
+    "seen": 1795240819.4912891,
+    "ast_hash": "39dabb75481ef907871fa5ec3805f6da",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/CashierCheckoutPanel.svelte": {
+    "mtime": 1795244528.3898857,
+    "seen": 1795244803.819393,
+    "ast_hash": "a95af7a052bd266e783dbab176da522f",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/CashierQueueCard.svelte": {
+    "mtime": 1795232069.587454,
+    "seen": 1795232581.7143621,
+    "ast_hash": "e61a1c5fc7afb8ad56a22316161ac65b",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/CashierQueueList.svelte": {
+    "mtime": 1795231446.226577,
+    "seen": 1795231686.927488,
+    "ast_hash": "12bf90d103eee80b41d7d04765a64f6e",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/CashierReceiptDialog.svelte": {
+    "mtime": 1795245642.4987824,
+    "seen": 1795245838.9611342,
+    "ast_hash": "77ae298c12fa126fe0418a1b40f74111",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/CreateRetailOrderDialog.svelte": {
+    "mtime": 1795233493.3086948,
+    "seen": 1795233588.382357,
+    "ast_hash": "d58ebea181244b1eb37f141969a4ea27",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/MergeToProductionTicketDialog.svelte": {
+    "mtime": 1795233493.459251,
+    "seen": 1795233588.382358,
+    "ast_hash": "8ffda981027a4816b71af98d07e380b9",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/ResellerCreditLimitDialog.svelte": {
+    "mtime": 1795234970.6019275,
+    "seen": 1795235405.65714,
+    "ast_hash": "4a207ebeb018b4c0f8163beeee51ac29",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/pages/CashierPage.svelte": {
+    "mtime": 1795243189.5727198,
+    "seen": 1795243299.919563,
+    "ast_hash": "d60da888dfc63565dd738b0f2df87bc1",
+    "semantic_hash": ""
+  },
+  "src/features/cashier/presentation/components/SplitRetailBatchDialog.svelte": {
+    "mtime": 1795240581.9103873,
+    "seen": 1795240819.491296,
+    "ast_hash": "b29ba587f57d5fd5dd15b47bd63595d2",
     "semantic_hash": ""
   }
 }

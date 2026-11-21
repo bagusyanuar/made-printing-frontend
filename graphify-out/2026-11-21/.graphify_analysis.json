@@ -1,0 +1,455 @@
+{
+  "communities": {
+    "0": [
+      "eslint_config",
+      "eslint_config_gitignorepath",
+      "package_imports",
+      "package_imports_features",
+      "package_imports_lib",
+      "package_json_package",
+      "package_name",
+      "package_private",
+      "package_type",
+      "package_version",
+      "playwright_config",
+      "ref_axios",
+      "ref_class_variance_authority",
+      "ref_clsx",
+      "ref_dystopia_linear_lib",
+      "ref_eslint",
+      "ref_eslint_config_prettier",
+      "ref_eslint_js",
+      "ref_eslint_plugin_svelte",
+      "ref_floating_ui_dom",
+      "ref_globals",
+      "ref_iconify_json_lucide",
+      "ref_iconify_json_mdi",
+      "ref_iconify_svelte",
+      "ref_playwright",
+      "ref_playwright_test",
+      "ref_prettier",
+      "ref_prettier_plugin_svelte",
+      "ref_prettier_plugin_tailwindcss",
+      "ref_svelte_check",
+      "ref_sveltejs_adapter_static",
+      "ref_sveltejs_vite_plugin_svelte",
+      "ref_sveltekit_superforms",
+      "ref_tailwind_merge",
+      "ref_tailwindcss",
+      "ref_tailwindcss_typography",
+      "ref_tailwindcss_vite",
+      "ref_tanstack_svelte_query",
+      "ref_tanstack_svelte_table",
+      "ref_types_node",
+      "ref_typescript",
+      "ref_typescript_eslint",
+      "ref_unplugin_icons",
+      "ref_vite",
+      "ref_vitest_browser_playwright",
+      "ref_zod",
+      "src_routes_page_svelte_e2e",
+      "vite_config"
+    ],
+    "1": [
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_prettier",
+      "package_devdependencies_eslint_js",
+      "package_devdependencies_eslint_plugin_svelte",
+      "package_devdependencies_globals",
+      "package_devdependencies_iconify_json_lucide",
+      "package_devdependencies_iconify_json_mdi",
+      "package_devdependencies_iconify_svelte",
+      "package_devdependencies_playwright",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_prettier",
+      "package_devdependencies_prettier_plugin_svelte",
+      "package_devdependencies_prettier_plugin_tailwindcss",
+      "package_devdependencies_svelte",
+      "package_devdependencies_svelte_check",
+      "package_devdependencies_sveltejs_adapter_static",
+      "package_devdependencies_sveltejs_kit",
+      "package_devdependencies_sveltejs_vite_plugin_svelte",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_typography",
+      "package_devdependencies_tailwindcss_vite",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_typescript_eslint",
+      "package_devdependencies_unplugin_icons",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitest",
+      "package_devdependencies_vitest_browser_playwright",
+      "package_devdependencies_vitest_browser_svelte"
+    ],
+    "2": [
+      "arrow_left",
+      "bar_chart_3",
+      "card",
+      "droplets",
+      "layers",
+      "printer",
+      "receipt",
+      "scissors",
+      "sparkles",
+      "src_lib_shared_presentation_page_title_store_svelte",
+      "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore",
+      "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore_set",
+      "src_routes_app_finance_page_svelte_src_routes_app_finance_page",
+      "src_routes_app_inventory_consumables_page",
+      "src_routes_app_inventory_materials_page",
+      "src_routes_app_master_customers_page",
+      "src_routes_app_master_finishings_page",
+      "src_routes_app_master_materials_page",
+      "src_routes_app_production_finishing_page",
+      "src_routes_app_production_prepress_page",
+      "src_routes_app_production_queues_page",
+      "src_routes_app_transactions_new_page",
+      "typography",
+      "users"
+    ],
+    "3": [
+      "favicon_svg",
+      "navigation",
+      "src_lib_components_layout_route_progress_index",
+      "src_lib_components_layout_route_progress_routeprogress",
+      "src_lib_shared_presentation_theme_store_svelte",
+      "src_lib_shared_presentation_theme_store_svelte_istheme",
+      "src_lib_shared_presentation_theme_store_svelte_readstoredtheme",
+      "src_lib_shared_presentation_theme_store_svelte_theme",
+      "src_lib_shared_presentation_theme_store_svelte_theme_storage_key",
+      "src_lib_shared_presentation_theme_store_svelte_themestore",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_apply",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_constructor",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_isdark",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_persist",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_set",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_sync",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_theme",
+      "src_lib_shared_presentation_theme_store_svelte_themestore_toggle",
+      "src_routes_app_layout",
+      "src_routes_layout_svelte_src_routes_layout",
+      "src_routes_types",
+      "state",
+      "svelte_query",
+      "toast"
+    ],
+    "4": [
+      "chevrons_up_down",
+      "cn",
+      "hover_card",
+      "log_out",
+      "moon",
+      "panel_left",
+      "popover",
+      "sidebar",
+      "src_lib_components_layout_app_layout_applayout",
+      "src_lib_components_layout_app_layout_index",
+      "src_lib_components_layout_navbar_appnavbar",
+      "src_lib_components_layout_navbar_index",
+      "src_lib_components_layout_sidebar_appsidebar",
+      "src_lib_components_layout_sidebar_appsidebar_grouptrigger",
+      "src_lib_components_layout_sidebar_appsidebar_leafitem",
+      "src_lib_components_layout_sidebar_appsidebar_linkcontent",
+      "src_lib_components_layout_sidebar_appsidebar_logo",
+      "src_lib_components_layout_sidebar_appsidebar_snippet",
+      "src_lib_components_layout_sidebar_index",
+      "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore_title",
+      "sun",
+      "svelte",
+      "tooltip"
+    ],
+    "5": [
+      "ref_svelte",
+      "src_lib_components_ui_sidebar_index",
+      "src_lib_components_ui_sidebar_sidebar_nav",
+      "src_lib_components_ui_sidebar_sidebar_nav_isactivehref",
+      "src_lib_components_ui_sidebar_sidebar_nav_sectioncontainsactive",
+      "src_lib_components_ui_sidebar_sidebar_nav_spec",
+      "src_lib_components_ui_sidebar_sidebar_nav_spec_testsections",
+      "src_lib_components_ui_sidebar_sidebar_types",
+      "src_lib_components_ui_sidebar_sidebar_types_isnavgroup",
+      "src_lib_components_ui_sidebar_sidebar_types_naventry",
+      "src_lib_components_ui_sidebar_sidebar_types_navgroup",
+      "src_lib_components_ui_sidebar_sidebar_types_navlink",
+      "src_lib_components_ui_sidebar_sidebar_types_navsection",
+      "src_lib_components_ui_sidebar_sidebar_types_sidebarclasses",
+      "src_routes_app_app_nav",
+      "src_routes_app_app_nav_appnavsections"
+    ],
+    "6": [
+      "badge",
+      "handshake",
+      "key_round",
+      "landmark",
+      "lock",
+      "search",
+      "shield_alert",
+      "shield_check",
+      "src_routes_app_finance_capital_deposit_page",
+      "src_routes_app_products_page",
+      "src_routes_app_resellers_page",
+      "src_routes_app_settings_access_page",
+      "src_routes_page_svelte_src_routes_page",
+      "tag",
+      "wallet"
+    ],
+    "7": [
+      "button",
+      "calendar",
+      "circle_alert",
+      "coins",
+      "file_check",
+      "file_text",
+      "hand_coins",
+      "plus",
+      "src_routes_app_dashboard_page",
+      "src_routes_app_finance_withdrawals_page",
+      "src_routes_app_orders_page_svelte_src_routes_app_orders_page",
+      "src_routes_app_pos_page_svelte_src_routes_app_pos_page",
+      "src_routes_app_transactions_invoices_page"
+    ],
+    "8": [
+      "ref_sveltejs_kit",
+      "src_routes_app_finance_page_load",
+      "src_routes_app_finance_page_ts_src_routes_app_finance_page",
+      "src_routes_app_orders_page_load",
+      "src_routes_app_orders_page_ts_src_routes_app_orders_page",
+      "src_routes_app_pos_page_load",
+      "src_routes_app_pos_page_ts_src_routes_app_pos_page",
+      "src_routes_app_reports_page",
+      "src_routes_app_reports_page_load",
+      "src_routes_app_transactions_page",
+      "src_routes_app_transactions_page_load",
+      "src_routes_page_load",
+      "src_routes_page_ts_src_routes_page"
+    ],
+    "9": [
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_check",
+      "package_scripts_check_watch",
+      "package_scripts_dev",
+      "package_scripts_format",
+      "package_scripts_lint",
+      "package_scripts_prepare",
+      "package_scripts_preview",
+      "package_scripts_test",
+      "package_scripts_test_e2e",
+      "package_scripts_test_unit"
+    ],
+    "10": [
+      "package_dependencies",
+      "package_dependencies_axios",
+      "package_dependencies_class_variance_authority",
+      "package_dependencies_clsx",
+      "package_dependencies_dystopia_linear_lib",
+      "package_dependencies_floating_ui_dom",
+      "package_dependencies_sveltekit_superforms",
+      "package_dependencies_tailwind_merge",
+      "package_dependencies_tanstack_svelte_query",
+      "package_dependencies_tanstack_svelte_table",
+      "package_dependencies_zod"
+    ],
+    "11": [
+      "banknote",
+      "download",
+      "percent",
+      "pie_chart",
+      "scale",
+      "src_routes_app_reports_cash_flow_page",
+      "src_routes_app_reports_expenses_page",
+      "src_routes_app_reports_profit_loss_page",
+      "trending_down",
+      "trending_up"
+    ],
+    "12": [
+      "ref_app_tsconfig",
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_types",
+      "tsconfig_extends",
+      "tsconfig_include",
+      "tsconfig_paths_features",
+      "tsconfig_paths_lib"
+    ],
+    "13": [
+      "arrow_left_right",
+      "award",
+      "building_2",
+      "check_circle_2",
+      "clock",
+      "src_routes_app_finance_transfers_page",
+      "src_routes_app_reports_sales_page",
+      "src_routes_app_transactions_tickets_page",
+      "ticket"
+    ],
+    "14": [
+      "arrow_right",
+      "credit_card",
+      "fuel",
+      "paths",
+      "src_routes_app_finance_expenses_page",
+      "src_routes_app_master_machines_page",
+      "src_routes_app_settings_page",
+      "store",
+      "wrench"
+    ],
+    "15": [
+      "ref_vitest",
+      "ref_vitest_browser_svelte",
+      "src_lib_vitest_examples_greet",
+      "src_lib_vitest_examples_greet_greet",
+      "src_lib_vitest_examples_greet_spec",
+      "src_lib_vitest_examples_welcome",
+      "src_lib_vitest_examples_welcome_svelte_spec"
+    ],
+    "16": [
+      "prettier",
+      "prettier_config",
+      "prettier_config_config"
+    ],
+    "17": [
+      "src_routes_layout_prerender",
+      "src_routes_layout_ssr",
+      "src_routes_layout_ts_src_routes_layout"
+    ],
+    "18": [
+      "src_app_d",
+      "src_app_d_app"
+    ],
+    "19": [
+      "icons_lucide_package_package"
+    ],
+    "20": [
+      "src_lib_index"
+    ]
+  },
+  "cohesion": {
+    "0": 0.04698581560283688,
+    "1": 0.06666666666666667,
+    "2": 0.15942028985507245,
+    "3": 0.10507246376811594,
+    "4": 0.10276679841897234,
+    "5": 0.20833333333333334,
+    "6": 0.18095238095238095,
+    "7": 0.23076923076923078,
+    "8": 0.15384615384615385,
+    "9": 0.16666666666666666,
+    "10": 0.18181818181818182,
+    "11": 0.26666666666666666,
+    "12": 0.2,
+    "13": 0.25,
+    "14": 0.25,
+    "15": 0.38095238095238093,
+    "16": 0.6666666666666666,
+    "17": 0.6666666666666666,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0
+  },
+  "gods": [
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 12
+    },
+    {
+      "id": "src_lib_shared_presentation_theme_store_svelte_themestore",
+      "label": "ThemeStore",
+      "degree": 9
+    },
+    {
+      "id": "ref_sveltejs_kit",
+      "label": "@sveltejs/kit",
+      "degree": 7
+    },
+    {
+      "id": "src_lib_components_ui_sidebar_sidebar_types_navsection",
+      "label": "NavSection",
+      "degree": 4
+    },
+    {
+      "id": "src_lib_components_ui_sidebar_sidebar_nav_sectioncontainsactive",
+      "label": "sectionContainsActive()",
+      "degree": 4
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 4
+    },
+    {
+      "id": "ref_vitest",
+      "label": "vitest",
+      "degree": 4
+    },
+    {
+      "id": "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore",
+      "label": "PageTitleStore",
+      "degree": 3
+    },
+    {
+      "id": "src_lib_components_layout_sidebar_appsidebar_linkcontent",
+      "label": "linkContent()",
+      "degree": 3
+    },
+    {
+      "id": "src_lib_components_ui_sidebar_sidebar_nav_isactivehref",
+      "label": "isActiveHref()",
+      "degree": 3
+    }
+  ],
+  "surprises": [
+    {
+      "source": "sectionContainsActive()",
+      "target": "isNavGroup()",
+      "source_files": [
+        "src/lib/components/ui/sidebar/sidebar.nav.ts",
+        "src/lib/components/ui/sidebar/sidebar.types.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "cross-file semantic connection"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `svelte` connect `sidebar.types.ts` to `package.json`?",
+      "why": "High betweenness centrality (0.395) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `devDependencies` connect `devDependencies` to `package.json`?",
+      "why": "High betweenness centrality (0.180) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `@sveltejs/kit` connect `@sveltejs/kit` to `package.json`?",
+      "why": "High betweenness centrality (0.077) - this node is a cross-community bridge."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `Theme`, `NavEntry`, `NavGroup` to the rest of the system?",
+      "why": "102 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `package.json` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.04698581560283688 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `devDependencies` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `ThemeStore` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.10507246376811594 - nodes in this community are weakly interconnected."
+    }
+  ]
+}

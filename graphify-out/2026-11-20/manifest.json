@@ -84,9 +84,9 @@
     "semantic_hash": "d35dccce23b717c59db537211df7bd59"
   },
   "src/lib/components/ui/sidebar/sidebar.nav.spec.ts": {
-    "mtime": 1795183219.46975,
-    "seen": 1795183298.925088,
-    "ast_hash": "dd0c04d3df45a58c1b34ab503f8bb1d7",
+    "mtime": 1795185073.6166089,
+    "seen": 1795185133.4770718,
+    "ast_hash": "97da57d0b58fa891e9db2b07577cb5e3",
     "semantic_hash": ""
   },
   "src/lib/components/ui/sidebar/sidebar.nav.ts": {
@@ -150,9 +150,9 @@
     "semantic_hash": "11fd3337bc7773fe35ffd378aa54e658"
   },
   "src/routes/(app)/app.nav.ts": {
-    "mtime": 1795183316.799465,
-    "seen": 1795183713.250134,
-    "ast_hash": "477af488e7f173cf6624e5317a10ddab",
+    "mtime": 1795185066.002997,
+    "seen": 1795185133.4770849,
+    "ast_hash": "6ce50f69e40b6dd132b2c6b7bc8b3977",
     "semantic_hash": ""
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -216,9 +216,9 @@
     "semantic_hash": "132dac3891921cedc62974461e130175"
   },
   "src/routes/(app)/orders/+page.ts": {
-    "mtime": 1795183317.2741737,
-    "seen": 1795183713.250141,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185066.0454197,
+    "seen": 1795185133.477097,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/routes/(app)/pos/+page.svelte": {
@@ -228,9 +228,9 @@
     "semantic_hash": "1789393ac3fde5fabcdcbe0987a7733f"
   },
   "src/routes/(app)/pos/+page.ts": {
-    "mtime": 1795183317.3904073,
-    "seen": 1795183713.250143,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185066.0279574,
+    "seen": 1795185133.4771001,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/routes/(app)/production/finishing/+page.svelte": {
@@ -1602,9 +1602,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/transactions/new/+page.ts": {
-    "mtime": 1795183317.6523747,
-    "seen": 1795183713.2501602,
-    "ast_hash": "517e7469556d80acf153dd86f79f8b8b",
+    "mtime": 1795185066.0630233,
+    "seen": 1795185133.4771252,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
     "semantic_hash": ""
   },
   "src/lib/components/number-field/NumberField.svelte": {
@@ -1641,6 +1641,24 @@
     "mtime": 1795183875.3075478,
     "seen": 1795184193.615082,
     "ast_hash": "8a0d78a9f82bac9f5cc5295e74d08d25",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/cashier/+page.svelte": {
+    "mtime": 1795185085.010618,
+    "seen": 1795185133.477089,
+    "ast_hash": "bee02afbec2f6b8bba8cec7030dc5b6a",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/orders/new/+page.ts": {
+    "mtime": 1795185073.5991447,
+    "seen": 1795185133.477099,
+    "ast_hash": "dfc28c99cdd00c327a09d80250576b8c",
+    "semantic_hash": ""
+  },
+  "docs/kasir-pos-mini-prd.md": {
+    "mtime": 1795185085.2308085,
+    "seen": 1795185133.477168,
+    "ast_hash": "d570e32af77fcd97b482f2344055eb7d",
     "semantic_hash": ""
   }
 }
