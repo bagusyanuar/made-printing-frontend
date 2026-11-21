@@ -39,14 +39,14 @@ describe('isActiveHref', () => {
 		expect(isActiveHref('/production/queues-archive', '/production/queues')).toBe(false);
 	});
 
-	it('activates /tickets on /tickets/new but leaves /orders/new inactive', () => {
+	it('activates /tickets on /tickets/new but leaves /cashier inactive', () => {
 		expect(isActiveHref('/tickets/new', '/tickets')).toBe(true);
-		expect(isActiveHref('/tickets/new', '/orders/new')).toBe(false);
+		expect(isActiveHref('/tickets/new', '/cashier')).toBe(false);
 	});
 
-	it('activates /orders/new and leaves /tickets inactive when on /orders/new', () => {
-		expect(isActiveHref('/orders/new', '/orders/new')).toBe(true);
-		expect(isActiveHref('/orders/new', '/tickets')).toBe(false);
+	it('activates /cashier and leaves /tickets inactive when on /cashier', () => {
+		expect(isActiveHref('/cashier', '/cashier')).toBe(true);
+		expect(isActiveHref('/cashier', '/tickets')).toBe(false);
 	});
 });
 

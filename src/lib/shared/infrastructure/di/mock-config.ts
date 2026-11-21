@@ -6,5 +6,6 @@ export const MOCK_FLAGS = {
 	resellers: true,
 	suppliers: true,
 	expenseCategories: true,
-	ticketOrders: true
+	ticketOrders: true,
+	cashier: true
 } as const;

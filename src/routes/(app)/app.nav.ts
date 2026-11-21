@@ -33,8 +33,8 @@ export const appNavSections: NavSection[] = [
 				icon: IconTicket
 			},
 			{
-				title: 'Pesanan Baru',
-				href: '/orders/new',
+				title: 'Kasir',
+				href: '/cashier',
 				icon: IconShoppingBag
 			},
 			{

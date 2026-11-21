@@ -33,6 +33,7 @@
 	/* Dark mode semantic roles */
 	--color-canvas: var(--color-slate-950);
 	--color-app-surface: var(--color-slate-900);
+	--color-card: var(--color-app-surface);
 	--color-surface-raised: var(--color-slate-800);
 	--color-surface-muted: rgb(255 255 255 / 0.05);
 
@@ -80,6 +81,7 @@
 	/* Light mode semantic roles */
 	--color-canvas: var(--color-slate-50);
 	--color-app-surface: #ffffff;
+	--color-card: var(--color-app-surface);
 	--color-surface-raised: #ffffff;
 	--color-surface-muted: var(--color-slate-100);
 
@@ -112,4 +114,23 @@
 
 [role='region'][aria-label='Notifications'] {
 	z-index: 9999 !important;
+}
+
+/* Number input without spinner arrows (Linear-style steppers) */
+input[type='number'].no-spinner::-webkit-outer-spin-button,
+input[type='number'].no-spinner::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type='number'].no-spinner {
+	-moz-appearance: textfield;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
 }
