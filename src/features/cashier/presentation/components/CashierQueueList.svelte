@@ -16,39 +16,76 @@
 
 	let { onCreateRetailOrder }: Props = $props();
 
+	let prodTabEl = $state<HTMLButtonElement | null>(null);
+	let retailTabEl = $state<HTMLButtonElement | null>(null);
+	let indicatorStyle = $state('opacity: 0;');
+	let isMounted = $state(false);
+
+	function updateIndicator() {
+		const el = cashierStore.activeTab === 'PRODUCTION' ? prodTabEl : retailTabEl;
+		if (el) {
+			indicatorStyle = `transform: translate3d(${el.offsetLeft}px, ${el.offsetTop}px, 0); width: ${el.offsetWidth}px; height: ${el.offsetHeight}px; opacity: 1;`;
+		}
+	}
+
+	$effect(() => {
+		void cashierStore.activeTab;
+		void cashierStore.productionQueueCount;
+		void cashierStore.retailQueueCount;
+		if (prodTabEl && retailTabEl) {
+			updateIndicator();
+			if (!isMounted) {
+				requestAnimationFrame(() => {
+					isMounted = true;
+				});
+			}
+		}
+	});
+
 	function handleTabChange(tab: 'PRODUCTION' | 'RETAIL') {
 		cashierStore.setTab(tab);
 	}
 </script>
 
 <div class="flex flex-col gap-3">
-	<!-- Discrete Tabs (No Wrapper Container, Produksi = Merah, Ritel = Orange) -->
+	<!-- Discrete Compact Tabs (No Wrapper, Animated Sliding Pill) -->
 	<div
 		role="tablist"
 		aria-label="Pilihan Antrean Transaksi Kasir"
-		class="grid grid-cols-2 gap-2.5 select-none"
+		class="relative flex items-center gap-2 select-none"
 	>
-		<!-- Tab 1: Tiket Produksi (Merah) -->
+		<!-- Sliding Pill Indicator -->
+		<div
+			class="pointer-events-none absolute top-0 left-0 rounded-md {isMounted
+				? 'transition-all duration-250 ease-out'
+				: ''} {cashierStore.activeTab === 'PRODUCTION'
+				? 'bg-red-600 shadow-xs dark:bg-red-600'
+				: 'bg-orange-500 shadow-xs dark:bg-orange-500'}"
+			style={indicatorStyle}
+		></div>
+
+		<!-- Tab 1: Tiket Produksi -->
 		<button
+			bind:this={prodTabEl}
 			type="button"
 			role="tab"
 			aria-selected={cashierStore.activeTab === 'PRODUCTION'}
 			onclick={() => handleTabChange('PRODUCTION')}
-			class="group relative flex items-center justify-center gap-2 rounded-lg border py-2.5 px-3 transition-all duration-150 cursor-pointer active:scale-[0.98] {cashierStore.activeTab ===
+			class="group relative z-10 inline-flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-xs transition-all duration-150 active:scale-95 {cashierStore.activeTab ===
 			'PRODUCTION'
-				? 'border-red-600 bg-red-600 text-white font-bold shadow-xs dark:border-red-600 dark:bg-red-600'
-				: 'border-border bg-card text-foreground-subtle hover:border-red-500/40 hover:bg-red-500/5 hover:text-foreground'}"
+				? 'border-transparent font-bold text-white'
+				: 'border-border bg-app-surface font-medium text-foreground-subtle hover:border-red-500/40 hover:bg-red-500/5 hover:text-foreground'}"
 		>
 			<IconLayers
-				class="size-4 shrink-0 transition-transform duration-150 {cashierStore.activeTab ===
+				class="size-3.5 shrink-0 transition-transform duration-150 {cashierStore.activeTab ===
 				'PRODUCTION'
 					? 'text-white'
 					: 'text-red-500 group-hover:scale-105'}"
 			/>
-			<span class="text-xs">Tiket Produksi</span>
+			<span>Tiket Produksi</span>
 			{#if cashierStore.productionQueueCount > 0}
 				<span
-					class="flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold transition-all duration-150 {cashierStore.activeTab ===
+					class="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold transition-all duration-150 {cashierStore.activeTab ===
 					'PRODUCTION'
 						? 'bg-white text-red-600'
 						: 'border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400'}"
@@ -58,27 +95,28 @@
 			{/if}
 		</button>
 
-		<!-- Tab 2: Pesanan Ritel (Orange) -->
+		<!-- Tab 2: Pesanan Ritel -->
 		<button
+			bind:this={retailTabEl}
 			type="button"
 			role="tab"
 			aria-selected={cashierStore.activeTab === 'RETAIL'}
 			onclick={() => handleTabChange('RETAIL')}
-			class="group relative flex items-center justify-center gap-2 rounded-lg border py-2.5 px-3 transition-all duration-150 cursor-pointer active:scale-[0.98] {cashierStore.activeTab ===
+			class="group relative z-10 inline-flex cursor-pointer items-center gap-2 rounded-md border px-3 py-1.5 text-xs transition-all duration-150 active:scale-95 {cashierStore.activeTab ===
 			'RETAIL'
-				? 'border-orange-500 bg-orange-500 text-white font-bold shadow-xs dark:border-orange-500 dark:bg-orange-500'
-				: 'border-border bg-card text-foreground-subtle hover:border-orange-500/40 hover:bg-orange-500/5 hover:text-foreground'}"
+				? 'border-transparent font-bold text-white'
+				: 'border-border bg-app-surface font-medium text-foreground-subtle hover:border-orange-500/40 hover:bg-orange-500/5 hover:text-foreground'}"
 		>
 			<IconShoppingBag
-				class="size-4 shrink-0 transition-transform duration-150 {cashierStore.activeTab ===
+				class="size-3.5 shrink-0 transition-transform duration-150 {cashierStore.activeTab ===
 				'RETAIL'
 					? 'text-white'
 					: 'text-orange-500 group-hover:scale-105'}"
 			/>
-			<span class="text-xs">Pesanan Ritel</span>
+			<span>Pesanan Ritel</span>
 			{#if cashierStore.retailQueueCount > 0}
 				<span
-					class="flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold transition-all duration-150 {cashierStore.activeTab ===
+					class="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-bold transition-all duration-150 {cashierStore.activeTab ===
 					'RETAIL'
 						? 'bg-white text-orange-600'
 						: 'border border-orange-500/30 bg-orange-500/10 text-orange-600 dark:text-orange-400'}"

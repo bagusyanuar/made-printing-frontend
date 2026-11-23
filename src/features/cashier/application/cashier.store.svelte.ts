@@ -11,7 +11,7 @@ export class CashierStore {
 
 	activeTab = $state<'PRODUCTION' | 'RETAIL'>('PRODUCTION');
 	searchQuery = $state<string>('');
-	selectedOrderId = $state<string | null>('ord-prod-001');
+	selectedOrderId = $state<string | null>(null);
 
 	orders = $state<CashierOrder[]>([]);
 	retailCatalog = $state<CashierRetailCatalogItem[]>([]);
@@ -118,12 +118,6 @@ export class CashierStore {
 
 			if (ordersRes.success) {
 				this.orders = ordersRes.data;
-				if (
-					(!this.selectedOrderId || !this.orders.some((o) => o.id === this.selectedOrderId)) &&
-					this.orders.length > 0
-				) {
-					this.selectedOrderId = this.orders[0].id;
-				}
 			} else {
 				this.errorMessage = ordersRes.error.message;
 			}
@@ -145,7 +139,14 @@ export class CashierStore {
 	}
 
 	setTab(tab: 'PRODUCTION' | 'RETAIL') {
-		this.activeTab = tab;
+		if (this.activeTab !== tab) {
+			this.activeTab = tab;
+			this.selectedOrderId = null;
+			this.singleAmount = null;
+			this.isSplitPayment = false;
+			this.paymentMethod = 'CASH';
+			this.splitAmounts = { cash: 0, transfer: 0, qris: 0 };
+		}
 	}
 
 	setSearch(q: string) {
@@ -282,6 +283,9 @@ export class CashierStore {
 			if (idx !== -1) {
 				this.orders[idx] = updated;
 			}
+			if (this.selectedOrderId === orderId) {
+				this.selectedOrderId = null;
+			}
 			return true;
 		}
 		return false;
@@ -294,6 +298,9 @@ export class CashierStore {
 			const idx = this.orders.findIndex((o) => o.id === orderId);
 			if (idx !== -1) {
 				this.orders[idx] = updated;
+			}
+			if (this.selectedOrderId === orderId) {
+				this.selectedOrderId = null;
 			}
 			return true;
 		}

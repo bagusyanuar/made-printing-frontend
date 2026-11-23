@@ -1,70 +1,207 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import { cashierStore } from '../../application/cashier.store.svelte';
 	import { formatCurrency } from '../../domain/cashier.entity';
 	import type { CashierRetailCatalogItem } from '../../domain/cashier.entity';
 	import { Button } from 'dystopia-linear-lib/components/button';
-	import IconShoppingBag from '~icons/lucide/shopping-bag';
+	import IconMinus from '~icons/lucide/minus';
 	import IconPlus from '~icons/lucide/plus';
+	import IconSearch from '~icons/lucide/search';
+	import IconShoppingBag from '~icons/lucide/shopping-bag';
 	import IconTrash2 from '~icons/lucide/trash-2';
 	import IconX from '~icons/lucide/x';
+	import IconCheck from '~icons/lucide/check';
+	import IconChevronLeft from '~icons/lucide/chevron-left';
+	import IconChevronRight from '~icons/lucide/chevron-right';
+	import IconUser from '~icons/lucide/user';
+	import IconAlertCircle from '~icons/lucide/alert-circle';
 
 	interface Props {
 		open: boolean;
 		onClose: () => void;
 	}
 
+	interface BasketItem {
+		catalogItemId: string;
+		name: string;
+		price: number;
+		quantity: number;
+		uom: string;
+		categoryName: string;
+		stock: number;
+	}
+
 	let { open, onClose }: Props = $props();
 
-	let customerName = $state('');
-	let customerPhone = $state('');
-	let selectedItems = $state<
-		Array<{
-			catalogItemId: string;
-			name: string;
-			price: number;
-			quantity: number;
-			uom: string;
-		}>
-	>([]);
+	let customerName = $state('Pelanggan Walk-in');
+	let searchQuery = $state('');
+	let selectedCategory = $state('ALL');
+	let basket = $state<BasketItem[]>([]);
+	let isSubmitting = $state(false);
 
-	let catalog = $derived(cashierStore.retailCatalog);
+	let categories = $derived.by(() => {
+		const cats: string[] = [];
+		for (const item of cashierStore.retailCatalog) {
+			if (item.categoryName && !cats.includes(item.categoryName)) {
+				cats.push(item.categoryName);
+			}
+		}
+		return ['ALL', ...cats];
+	});
 
-	let totalCalculated = $derived(
-		selectedItems.reduce((acc, it) => acc + it.price * it.quantity, 0)
-	);
+	let filteredCatalog = $derived.by(() => {
+		let list = cashierStore.retailCatalog;
+		if (selectedCategory !== 'ALL') {
+			list = list.filter((item) => item.categoryName === selectedCategory);
+		}
+		if (searchQuery.trim()) {
+			const q = searchQuery.toLowerCase().trim();
+			list = list.filter(
+				(item) => item.name.toLowerCase().includes(q) || item.categoryName.toLowerCase().includes(q)
+			);
+		}
+		return list;
+	});
 
-	function addItem(catItem: CashierRetailCatalogItem) {
-		const existing = selectedItems.find((i) => i.catalogItemId === catItem.id);
-		if (existing) {
-			existing.quantity += 1;
+	let totalQuantity = $derived(basket.reduce((sum, item) => sum + item.quantity, 0));
+	let totalAmount = $derived(basket.reduce((sum, item) => sum + item.price * item.quantity, 0));
+	let isFormValid = $derived(customerName.trim().length > 0 && basket.length > 0);
+
+	let chipsContainer = $state<HTMLDivElement | null>(null);
+	let canScrollLeft = $state(false);
+	let canScrollRight = $state(false);
+
+	function updateScrollButtons() {
+		if (!chipsContainer) return;
+		const { scrollLeft, scrollWidth, clientWidth } = chipsContainer;
+		canScrollLeft = scrollLeft > 4;
+		canScrollRight = scrollLeft + clientWidth < scrollWidth - 4;
+	}
+
+	function scrollChips(direction: 'left' | 'right') {
+		if (!chipsContainer) return;
+		const offset = 180;
+		chipsContainer.scrollBy({
+			left: direction === 'left' ? -offset : offset,
+			behavior: 'smooth'
+		});
+	}
+
+	$effect(() => {
+		if (!open || !chipsContainer) return;
+		updateScrollButtons();
+		const ro = new ResizeObserver(() => {
+			updateScrollButtons();
+		});
+		ro.observe(chipsContainer);
+		return () => ro.disconnect();
+	});
+
+	function addToBasket(catalogItem: CashierRetailCatalogItem) {
+		const existingIndex = basket.findIndex((i) => i.catalogItemId === catalogItem.id);
+		if (existingIndex !== -1) {
+			basket[existingIndex].quantity += 1;
 		} else {
-			selectedItems.push({
-				catalogItemId: catItem.id,
-				name: catItem.name,
-				price: catItem.price,
+			basket.push({
+				catalogItemId: catalogItem.id,
+				name: catalogItem.name,
+				price: catalogItem.price,
 				quantity: 1,
-				uom: catItem.uom
+				uom: catalogItem.uom,
+				categoryName: catalogItem.categoryName,
+				stock: catalogItem.stock
 			});
 		}
 	}
 
-	function removeItem(index: number) {
-		selectedItems.splice(index, 1);
+	function incrementQuantity(catalogItemId: string) {
+		const item = basket.find((i) => i.catalogItemId === catalogItemId);
+		if (item) {
+			item.quantity += 1;
+		}
+	}
+
+	function decrementQuantity(catalogItemId: string) {
+		const index = basket.findIndex((i) => i.catalogItemId === catalogItemId);
+		if (index !== -1) {
+			if (basket[index].quantity > 1) {
+				basket[index].quantity -= 1;
+			} else {
+				basket.splice(index, 1);
+			}
+		}
+	}
+
+	function setQuantity(catalogItemId: string, qty: number) {
+		const index = basket.findIndex((i) => i.catalogItemId === catalogItemId);
+		if (index !== -1) {
+			if (qty <= 0) {
+				basket.splice(index, 1);
+			} else {
+				basket[index].quantity = Math.floor(qty);
+			}
+		}
+	}
+
+	function removeFromBasket(catalogItemId: string) {
+		const index = basket.findIndex((i) => i.catalogItemId === catalogItemId);
+		if (index !== -1) {
+			basket.splice(index, 1);
+		}
+	}
+
+	function clearBasket() {
+		basket = [];
+	}
+
+	function handleClose() {
+		customerName = 'Pelanggan Walk-in';
+		basket = [];
+		searchQuery = '';
+		selectedCategory = 'ALL';
+		onClose();
 	}
 
 	async function handleCreate() {
-		if (!customerName.trim() || selectedItems.length === 0) return;
+		if (!isFormValid || isSubmitting) return;
 
-		await cashierStore.createRetailOrder({
-			customerName: customerName.trim(),
-			customerPhone: customerPhone.trim() || undefined,
-			items: selectedItems
-		});
+		isSubmitting = true;
+		try {
+			const payload = basket.map((item) => ({
+				catalogItemId: item.catalogItemId,
+				name: item.name,
+				price: item.price,
+				quantity: item.quantity,
+				uom: item.uom
+			}));
 
-		customerName = '';
-		customerPhone = '';
-		selectedItems = [];
-		onClose();
+			const success = await cashierStore.createRetailOrder({
+				customerName: customerName.trim() || 'Pelanggan Walk-in',
+				customerPhone: '-',
+				items: payload
+			});
+
+			if (success) {
+				handleClose();
+			}
+		} finally {
+			isSubmitting = false;
+		}
+	}
+
+	function modalSlideIn(node: Element, { duration = 220 } = {}) {
+		return {
+			duration,
+			css: (t: number) => {
+				const eased = 1 - Math.pow(1 - t, 3);
+				const y = (1 - eased) * 20;
+				const scale = 0.96 + 0.04 * eased;
+				return `
+					transform: translateY(${y}px) scale(${scale});
+					opacity: ${eased};
+				`;
+			}
+		};
 	}
 </script>
 
@@ -77,184 +214,416 @@
 		<!-- Backdrop -->
 		<button
 			type="button"
-			class="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity cursor-pointer"
-			onclick={onClose}
+			class="fixed inset-0 cursor-pointer bg-black/50 backdrop-blur-xs transition-opacity"
+			onclick={handleClose}
 			aria-label="Tutup dialog"
+			transition:fade={{ duration: 150 }}
 		></button>
 
-		<!-- Dialog Container -->
+		<!-- Dialog Container with Smooth Slide-in Animation -->
 		<div
-			class="relative z-10 flex w-full max-w-xl flex-col rounded-lg border border-border bg-app-surface p-5 shadow-2xl"
+			class="relative z-10 flex h-[85vh] max-h-180 w-full max-w-4xl flex-col overflow-hidden rounded-xl border border-border bg-app-surface shadow-2xl"
+			transition:modalSlideIn={{ duration: 220 }}
 		>
 			<!-- Header -->
-			<div class="flex items-center justify-between pb-3 border-b border-border/30">
-				<div class="flex items-center gap-2.5">
+			<div class="flex items-center justify-between border-b border-border/40 px-6 py-4">
+				<div class="flex items-center gap-3">
 					<div
-						class="flex size-9 items-center justify-center rounded-md bg-primary/10 text-primary"
+						class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-orange-500/20 bg-orange-500/10 text-orange-600 dark:text-orange-400"
 					>
 						<IconShoppingBag class="size-5" />
 					</div>
 					<div class="flex flex-col">
-						<span class="text-sm font-bold text-foreground">
-							Buat Nota Transaksi Ritel Walk-in
-						</span>
+						<div class="flex items-center gap-2">
+							<span class="text-sm font-bold text-foreground">Buat Nota Transaksi Ritel Walk-in</span>
+							<span
+								class="bg-orange-500/10 text-orange-600 dark:text-orange-400 inline-flex items-center rounded border border-orange-500/20 px-2 py-0.5 text-[10px] font-semibold"
+							>
+								Ritel Baru
+							</span>
+						</div>
 						<span class="text-xs text-foreground-subtle">
-							Penjualan barang non-produksi (minuman, ATK, standing roll up, frame)
+							Penjualan langsung produk non-produksi (minuman, ATK, standing roll up banner, dsb)
 						</span>
 					</div>
 				</div>
 				<button
 					type="button"
-					onclick={onClose}
-					class="rounded-md p-1.5 text-foreground-subtle hover:bg-muted hover:text-foreground"
+					onclick={handleClose}
+					class="hover:bg-muted cursor-pointer rounded-md p-1.5 text-foreground-subtle transition-colors hover:text-foreground"
+					aria-label="Tutup modal"
 				>
 					<IconX class="size-4" />
 				</button>
 			</div>
 
-			<!-- Customer Info Form -->
-			<div class="my-3 grid grid-cols-2 gap-3">
-				<div class="flex flex-col gap-1">
-					<span class="text-[10px] font-bold text-foreground-subtle uppercase">
-						Nama Pelanggan <span class="text-rose-500">*</span>
-					</span>
-					<input
-						type="text"
-						bind:value={customerName}
-						placeholder="Contoh: Pak Budi Walk-in"
-						class="h-8 rounded-md border border-border bg-muted/40 px-3 text-xs font-bold text-foreground focus:border-primary focus:outline-none"
-					/>
-				</div>
+			<!-- Two-Panel Grid Layout -->
+			<div
+				class="grid min-h-0 flex-1 grid-cols-1 divide-y divide-border/40 overflow-hidden md:grid-cols-12 md:divide-x md:divide-y-0"
+			>
+				<!-- LEFT PANEL: Retail Product Catalog (7 Cols) -->
+				<div class="flex min-h-0 flex-col bg-card/20 p-5 md:col-span-7">
+					<!-- Search & Filter Bar -->
+					<div class="shrink-0 space-y-3">
+						<div class="relative">
+							<IconSearch
+								class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-foreground-subtle"
+							/>
+							<input
+								type="text"
+								bind:value={searchQuery}
+								placeholder="Cari nama produk ritel atau kategori..."
+								class="h-9 w-full rounded-lg border border-border bg-app-surface pr-8 pl-9 text-xs font-medium text-foreground transition-colors placeholder:text-foreground-faint focus:border-orange-500 focus:outline-none"
+							/>
+							{#if searchQuery}
+								<button
+									type="button"
+									onclick={() => (searchQuery = '')}
+									class="absolute top-1/2 right-2.5 -translate-y-1/2 cursor-pointer text-foreground-subtle hover:text-foreground"
+									aria-label="Hapus pencarian"
+								>
+									<IconX class="size-3.5" />
+								</button>
+							{/if}
+						</div>
 
-				<div class="flex flex-col gap-1">
-					<span class="text-[10px] font-bold text-foreground-subtle uppercase">
-						No. Handphone (Opsional)
-					</span>
-					<input
-						type="text"
-						bind:value={customerPhone}
-						placeholder="0812..."
-						class="h-8 rounded-md border border-border bg-muted/40 px-3 text-xs font-bold text-foreground focus:border-primary focus:outline-none"
-					/>
-				</div>
-			</div>
-
-			<!-- Quick Catalog Add List -->
-			<div class="flex flex-col gap-2">
-				<span class="text-[10px] font-bold text-foreground-subtle uppercase tracking-wider">
-					Pilih Produk Ritel
-				</span>
-				<div class="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto pr-1">
-					{#each catalog as catItem (catItem.id)}
-						<button
-							type="button"
-							onclick={() => addItem(catItem)}
-							class="flex items-center justify-between rounded-md border border-border/60 bg-muted/20 p-2 text-left hover:border-primary/50 hover:bg-primary/5 transition-all"
-						>
-							<div class="flex flex-col truncate pr-1">
-								<span class="text-xs font-bold text-foreground truncate">{catItem.name}</span>
-								<span class="text-[10px] text-foreground-subtle">{catItem.categoryName}</span>
-							</div>
-							<span class="text-xs font-black text-primary shrink-0">
-								{formatCurrency(catItem.price)}
-							</span>
-						</button>
-					{/each}
-				</div>
-			</div>
-
-			<!-- Selected Items Table -->
-			<div class="mt-3 flex flex-col gap-2">
-				<span class="text-[10px] font-bold text-foreground-subtle uppercase tracking-wider">
-					Item Terpilih ({selectedItems.length})
-				</span>
-
-				{#if selectedItems.length === 0}
-					<div
-						class="rounded-lg border border-border/40 p-4 text-center text-xs text-foreground-subtle"
-					>
-						Klik produk di atas untuk menambahkan ke keranjang nota ritel.
-					</div>
-				{:else}
-					<div class="flex flex-col divide-y divide-border/20 max-h-36 overflow-y-auto">
-						{#each selectedItems as it, idx (it.catalogItemId)}
-							<div class="flex items-center justify-between py-2 text-xs">
-								<div class="flex flex-1 flex-col">
-									<span class="font-bold text-foreground">{it.name}</span>
-									<span class="text-[10px] text-foreground-subtle">
-										{formatCurrency(it.price)} x {it.quantity} {it.uom}
-									</span>
+						<!-- Category Chips with Carousel Overlay Chevrons -->
+						<div class="group/chips relative">
+							<!-- Left Chevron Overlay -->
+							{#if canScrollLeft}
+								<div
+									class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center bg-linear-to-r from-app-surface via-app-surface/90 to-transparent pr-4 pl-0.5"
+								>
+									<button
+										type="button"
+										onclick={() => scrollChips('left')}
+										class="hover:bg-muted pointer-events-auto flex size-6 -translate-x-1 cursor-pointer items-center justify-center rounded-full border border-border bg-app-surface text-foreground opacity-0 shadow-xs transition-all duration-200 group-hover/chips:translate-x-0 group-hover/chips:opacity-100 hover:text-foreground"
+										aria-label="Scroll kategori ke kiri"
+									>
+										<IconChevronLeft class="size-3.5" />
+									</button>
 								</div>
+							{/if}
 
-								<div class="flex items-center gap-3">
-									<div class="flex items-center gap-1">
+							<!-- Scrollable Chips Container -->
+							<div
+								bind:this={chipsContainer}
+								onscroll={updateScrollButtons}
+								class="no-scrollbar flex scrollbar-none items-center gap-1.5 overflow-x-auto scroll-smooth py-0.5 text-xs [&::-webkit-scrollbar]:hidden"
+							>
+								{#each categories as cat (cat)}
+									{@const isActive = selectedCategory === cat}
+									<button
+										type="button"
+										onclick={() => (selectedCategory = cat)}
+										class="shrink-0 cursor-pointer rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors {isActive
+											? 'bg-orange-500 text-white shadow-xs'
+											: 'hover:bg-muted border border-border/80 bg-app-surface text-foreground-subtle hover:text-foreground'}"
+									>
+										{cat === 'ALL' ? 'Semua Kategori' : cat}
+									</button>
+								{/each}
+							</div>
+
+							<!-- Right Chevron Overlay -->
+							{#if canScrollRight}
+								<div
+									class="pointer-events-none absolute inset-y-0 right-0 z-10 flex items-center bg-linear-to-l from-app-surface via-app-surface/90 to-transparent pr-0.5 pl-4"
+								>
+									<button
+										type="button"
+										onclick={() => scrollChips('right')}
+										class="hover:bg-muted pointer-events-auto flex size-6 translate-x-1 cursor-pointer items-center justify-center rounded-full border border-border bg-app-surface text-foreground opacity-0 shadow-xs transition-all duration-200 group-hover/chips:translate-x-0 group-hover/chips:opacity-100 hover:text-foreground"
+										aria-label="Scroll kategori ke kanan"
+									>
+										<IconChevronRight class="size-3.5" />
+									</button>
+								</div>
+							{/if}
+						</div>
+					</div>
+
+					<!-- Catalog Items List -->
+					<div class="mt-3 min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+						{#if filteredCatalog.length === 0}
+							<div class="flex flex-col items-center justify-center py-12 text-center">
+								<div
+									class="bg-muted mb-2 flex size-10 items-center justify-center rounded-full text-foreground-subtle"
+								>
+									<IconSearch class="size-5" />
+								</div>
+								<span class="text-xs font-semibold text-foreground">Produk tidak ditemukan</span>
+								<span class="text-[11px] text-foreground-subtle">
+									Coba ubah kata kunci pencarian atau kategori filter
+								</span>
+							</div>
+						{:else}
+							{#each filteredCatalog as item (item.id)}
+								{@const inBasket = basket.find((b) => b.catalogItemId === item.id)}
+								<div
+									class="group flex items-center justify-between rounded-lg border p-3 transition-all {inBasket
+										? 'border-orange-500/40 bg-orange-500/5'
+										: 'hover:bg-muted/30 border-border/70 bg-app-surface hover:border-border'}"
+								>
+									<div class="flex min-w-0 flex-col pr-3">
+										<div class="flex items-center gap-2">
+											<span class="truncate text-xs font-bold text-foreground">{item.name}</span>
+											{#if inBasket}
+												<span
+													class="inline-flex items-center gap-0.5 rounded bg-orange-500/15 px-1.5 py-0.5 text-[9px] font-bold text-orange-600 dark:text-orange-400"
+												>
+													<IconCheck class="size-2.5" />
+													<span>{inBasket.quantity} dipilih</span>
+												</span>
+											{/if}
+										</div>
+										<div class="flex items-center gap-2 pt-0.5 text-[11px] text-foreground-subtle">
+											<span class="bg-muted py-0.2 rounded px-1.5 text-[10px] font-medium">
+												{item.categoryName}
+											</span>
+											<span>•</span>
+											<span>Stok: {item.stock} {item.uom}</span>
+										</div>
+										<span class="pt-1 text-xs font-bold text-foreground">
+											{formatCurrency(item.price)}
+										</span>
+									</div>
+
+									<div class="shrink-0">
+										{#if inBasket}
+											<div
+												class="inline-flex items-center overflow-hidden rounded-md border border-border bg-app-surface shadow-2xs"
+											>
+												<button
+													type="button"
+													onclick={() => decrementQuantity(item.id)}
+													class="hover:bg-muted flex size-7 cursor-pointer items-center justify-center border-r border-border/60 text-foreground-subtle transition-colors hover:text-foreground"
+													aria-label="Kurangi kuantitas"
+												>
+													<IconMinus class="size-3" />
+												</button>
+												<span class="w-7 text-center text-xs font-bold text-foreground select-none">
+													{inBasket.quantity}
+												</span>
+												<button
+													type="button"
+													onclick={() => incrementQuantity(item.id)}
+													class="hover:bg-muted flex size-7 cursor-pointer items-center justify-center border-l border-border/60 text-foreground-subtle transition-colors hover:text-foreground"
+													aria-label="Tambah kuantitas"
+												>
+													<IconPlus class="size-3" />
+												</button>
+											</div>
+										{:else}
+											<Button
+												variant="outline"
+												size="sm"
+												onclick={() => addToBasket(item)}
+												class="h-7 cursor-pointer gap-1 border-orange-500/30 px-2.5 text-[11px] font-bold text-orange-600 hover:border-orange-500/50 hover:bg-orange-500/10 dark:text-orange-400"
+											>
+												<IconPlus class="size-3.5" />
+												<span>Tambah</span>
+											</Button>
+										{/if}
+									</div>
+								</div>
+							{/each}
+						{/if}
+					</div>
+				</div>
+
+				<!-- RIGHT PANEL: Customer Info & Selected Items Basket (5 Cols) -->
+				<div class="bg-muted/20 flex min-h-0 flex-col p-5 md:col-span-5">
+					<!-- Customer Info Card -->
+					<div class="shrink-0 space-y-2 rounded-lg border border-border bg-app-surface p-3">
+						<div class="flex items-center justify-between">
+							<div class="flex items-center gap-1.5 text-xs font-bold text-foreground">
+								<IconUser class="size-3.5 text-orange-600 dark:text-orange-400" />
+								<span>Identitas Pelanggan Walk-in</span>
+							</div>
+							<span
+								class="rounded bg-orange-500/10 px-1.5 py-0.5 text-[9px] font-bold text-orange-600 dark:text-orange-400"
+							>
+								Cash & Carry
+							</span>
+						</div>
+						<div class="flex flex-col gap-1">
+							<label
+								for="retail-customer-name"
+								class="text-[10px] font-bold tracking-wider text-foreground-subtle uppercase"
+							>
+								Nama Pelanggan / Panggilan <span class="text-rose-500">*</span>
+							</label>
+							<input
+								id="retail-customer-name"
+								type="text"
+								bind:value={customerName}
+								placeholder="Contoh: Pak Budi / Walk-in"
+								class="h-8 w-full rounded-md border border-border bg-muted/30 px-2.5 text-xs font-semibold text-foreground placeholder:text-foreground-faint transition-colors focus:border-orange-500 focus:outline-none"
+							/>
+						</div>
+					</div>
+
+					<!-- Basket Header -->
+					<div class="mt-3 flex shrink-0 items-center justify-between pb-2">
+						<div class="flex items-center gap-2">
+							<span class="text-xs font-bold tracking-wider text-foreground uppercase">
+								Item Terpilih
+							</span>
+							<span
+								class="inline-flex items-center rounded-full bg-orange-500/15 px-2 py-0.5 text-[10px] font-bold text-orange-600 dark:text-orange-400"
+							>
+								{basket.length}
+							</span>
+						</div>
+						{#if basket.length > 0}
+							<button
+								type="button"
+								onclick={clearBasket}
+								class="cursor-pointer text-[11px] font-medium text-foreground-subtle transition-colors hover:text-rose-600"
+							>
+								Kosongkan
+							</button>
+						{/if}
+					</div>
+
+					<!-- Basket Items Scrollable List -->
+					<div class="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+						{#if basket.length === 0}
+							<div
+								class="bg-muted/10 flex h-full min-h-35 flex-col items-center justify-center rounded-lg border border-border/60 p-4 text-center"
+							>
+								<div
+									class="bg-muted mb-2 flex size-8 items-center justify-center rounded-full text-foreground-subtle"
+								>
+									<IconShoppingBag class="size-4" />
+								</div>
+								<span class="text-xs font-bold text-foreground">Keranjang Masih Kosong</span>
+								<span class="max-w-45 pt-0.5 text-[10px] text-foreground-subtle">
+									Klik tombol + Tambah pada katalog di sebelah kiri untuk memilih item ritel.
+								</span>
+							</div>
+						{:else}
+							{#each basket as item (item.catalogItemId)}
+								<div
+									class="flex flex-col gap-2 rounded-lg border border-border bg-app-surface p-3 shadow-xs"
+								>
+									<div class="flex items-start justify-between gap-2">
+										<div class="flex min-w-0 flex-col">
+											<span class="truncate text-xs font-bold text-foreground">{item.name}</span>
+											<span class="text-[10px] text-foreground-subtle">
+												{formatCurrency(item.price)} / {item.uom}
+											</span>
+										</div>
 										<button
 											type="button"
-											onclick={() => {
-												if (it.quantity > 1) it.quantity -= 1;
-											}}
-											class="size-6 rounded-md border border-border text-center font-bold hover:bg-muted"
+											onclick={() => removeFromBasket(item.catalogItemId)}
+											class="cursor-pointer rounded p-1 text-foreground-subtle transition-colors hover:bg-rose-500/10 hover:text-rose-600"
+											aria-label="Hapus item"
 										>
-											-
-										</button>
-										<span class="w-6 text-center font-bold">{it.quantity}</span>
-										<button
-											type="button"
-											onclick={() => (it.quantity += 1)}
-											class="size-6 rounded-md border border-border text-center font-bold hover:bg-muted"
-										>
-											+
+											<IconTrash2 class="size-3.5" />
 										</button>
 									</div>
 
-									<span class="w-20 text-right font-black text-foreground">
-										{formatCurrency(it.price * it.quantity)}
-									</span>
+									<div class="flex items-center justify-between border-t border-border/30 pt-1">
+										<!-- Stepper wrapped as 1 unified control -->
+										<div
+											class="inline-flex items-center overflow-hidden rounded-md border border-border bg-app-surface shadow-2xs"
+										>
+											<button
+												type="button"
+												onclick={() => decrementQuantity(item.catalogItemId)}
+												class="hover:bg-muted flex size-7 cursor-pointer items-center justify-center border-r border-border/60 text-foreground-subtle transition-colors hover:text-foreground"
+												aria-label="Kurangi kuantitas"
+											>
+												<IconMinus class="size-3" />
+											</button>
+											<input
+												type="number"
+												min="1"
+												value={item.quantity}
+												oninput={(e) =>
+													setQuantity(item.catalogItemId, Number(e.currentTarget.value))}
+												class="no-spinner h-7 w-10 [appearance:textfield] bg-transparent text-center text-xs font-bold text-foreground focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+											/>
+											<button
+												type="button"
+												onclick={() => incrementQuantity(item.catalogItemId)}
+												class="hover:bg-muted flex size-7 cursor-pointer items-center justify-center border-l border-border/60 text-foreground-subtle transition-colors hover:text-foreground"
+												aria-label="Tambah kuantitas"
+											>
+												<IconPlus class="size-3" />
+											</button>
+										</div>
 
-									<button
-										type="button"
-										onclick={() => removeItem(idx)}
-										class="p-1 text-rose-500 hover:bg-rose-500/10 rounded-md"
-									>
-										<IconTrash2 class="size-3.5" />
-									</button>
+										<!-- Subtotal per item -->
+										<div class="text-right">
+											<span class="text-xs font-bold text-foreground">
+												{formatCurrency(item.price * item.quantity)}
+											</span>
+										</div>
+									</div>
 								</div>
-							</div>
-						{/each}
+							{/each}
+						{/if}
 					</div>
-				{/if}
-			</div>
 
-			<!-- Total & Submit -->
-			<div class="mt-4 flex items-center justify-between border-t border-border/30 pt-3">
-				<div class="flex flex-col">
-					<span class="text-[10px] font-bold uppercase text-foreground-subtle">
-						Total Tagihan
-					</span>
-					<span class="text-base font-black text-foreground">
-						{formatCurrency(totalCalculated)}
-					</span>
-				</div>
+					<!-- Basket Summary & Submit (Fixed at Bottom of Right Panel) -->
+					<div class="mt-3 shrink-0 space-y-2.5 border-t border-border/40 pt-3">
+						<!-- Summary Card -->
+						<div class="space-y-1.5 rounded-lg border border-border bg-app-surface p-3">
+							<div class="flex items-center justify-between text-[11px] text-foreground-subtle">
+								<span>Total Item Terpilih:</span>
+								<span class="font-semibold text-foreground">
+									{basket.length} jenis ({totalQuantity} pcs)
+								</span>
+							</div>
+							<div class="flex items-center justify-between border-t border-border/30 pt-1">
+								<span class="text-xs font-bold text-foreground">Total Tagihan:</span>
+								<span class="text-sm font-black text-orange-600 dark:text-orange-400">
+									{formatCurrency(totalAmount)}
+								</span>
+							</div>
+						</div>
 
-				<div class="flex items-center gap-2">
-					<Button
-						variant="outline"
-						size="sm"
-						onclick={onClose}
-						class="h-8 rounded-md text-xs font-bold"
-					>
-						Batal
-					</Button>
-					<Button
-						variant="default"
-						size="sm"
-						onclick={handleCreate}
-						disabled={!customerName.trim() || selectedItems.length === 0}
-						class="h-8 gap-1.5 rounded-md text-xs font-bold"
-					>
-						<IconPlus class="size-4" />
-						<span>Buat Nota & Masuk Antrean</span>
-					</Button>
+						<!-- Validation Warning if customer name is empty but items exist -->
+						{#if !customerName.trim() && basket.length > 0}
+							<div
+								class="flex items-center gap-1.5 rounded-md border border-amber-500/20 bg-amber-500/10 px-2.5 py-1.5 text-[11px] text-amber-700 dark:text-amber-300"
+							>
+								<IconAlertCircle class="size-3.5 shrink-0" />
+								<span>Harap isi nama pelanggan untuk membuat nota ritel.</span>
+							</div>
+						{/if}
+
+						<!-- Action Buttons -->
+						<div class="flex items-center gap-2">
+							<Button
+								variant="outline"
+								size="sm"
+								onclick={handleClose}
+								class="h-9 flex-1 cursor-pointer rounded-lg text-xs font-bold"
+							>
+								Batal
+							</Button>
+							<Button
+								variant="default"
+								size="sm"
+								disabled={!isFormValid || isSubmitting}
+								onclick={handleCreate}
+								class="h-9 flex-[1.6] cursor-pointer gap-1.5 rounded-lg bg-orange-500 text-xs font-bold text-white hover:bg-orange-600 disabled:opacity-50"
+							>
+								{#if isSubmitting}
+									<span>Membuat Nota...</span>
+								{:else}
+									<IconPlus class="size-3.5" />
+									<span>
+										Buat Nota Ritel {basket.length > 0 ? `(${basket.length})` : ''}
+									</span>
+								{/if}
+							</Button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

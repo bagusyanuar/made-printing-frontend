@@ -52,6 +52,12 @@
 	let retailItemsCount = $derived(activeOrder?.items.filter((i) => !i.isProduction).length ?? 0);
 	let isProcessing = $state(false);
 
+	$effect(() => {
+		if (activeOrder?.orderType === 'RETAIL' && cashierStore.paymentMethod === 'PIUTANG') {
+			cashierStore.paymentMethod = 'CASH';
+		}
+	});
+
 	async function handlePay() {
 		isProcessing = true;
 		try {
@@ -87,6 +93,7 @@
 	}
 
 	function selectPaymentMethod(method: CashierPaymentMethod) {
+		if (activeOrder?.orderType === 'RETAIL' && method === 'PIUTANG') return;
 		cashierStore.paymentMethod = method;
 		if (method === 'PIUTANG') {
 			cashierStore.singleAmount = 0;
@@ -648,7 +655,11 @@
 							Pilih Metode Pembayaran
 						</span>
 
-						<div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+						<div
+							class="grid gap-2 {activeOrder.orderType === 'RETAIL'
+								? 'grid-cols-3'
+								: 'grid-cols-2 sm:grid-cols-4'}"
+						>
 							<!-- 1. CASH / Tunai (Emerald accent) -->
 							<button
 								type="button"
@@ -688,18 +699,20 @@
 								<span class="text-xs font-bold">QRIS</span>
 							</button>
 
-							<!-- 4. TEMPO (Amber accent) -->
-							<button
-								type="button"
-								onclick={() => selectPaymentMethod('PIUTANG')}
-								class="flex h-9 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 text-center transition-all {cashierStore.paymentMethod ===
-								'PIUTANG'
-									? 'border-amber-500/50 bg-amber-500/10 font-bold text-amber-700 shadow-2xs dark:text-amber-300'
-									: 'border-border/80 bg-app-surface text-foreground-subtle hover:border-border hover:bg-muted/40 hover:text-foreground'}"
-							>
-								<IconClock class="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
-								<span class="text-xs font-bold">Tempo</span>
-							</button>
+							{#if activeOrder.orderType !== 'RETAIL'}
+								<!-- 4. TEMPO (Amber accent) -->
+								<button
+									type="button"
+									onclick={() => selectPaymentMethod('PIUTANG')}
+									class="flex h-9 cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 text-center transition-all {cashierStore.paymentMethod ===
+									'PIUTANG'
+										? 'border-amber-500/50 bg-amber-500/10 font-bold text-amber-700 shadow-2xs dark:text-amber-300'
+										: 'border-border/80 bg-app-surface text-foreground-subtle hover:border-border hover:bg-muted/40 hover:text-foreground'}"
+								>
+									<IconClock class="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
+									<span class="text-xs font-bold">Tempo</span>
+								</button>
+							{/if}
 						</div>
 
 						<!-- Cash & Transfer Nominal Input with NumberField (thousandSeparator) -->
