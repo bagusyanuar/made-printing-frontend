@@ -17,6 +17,22 @@ export class OrderStore {
 	isLoading = $state<boolean>(false);
 	error = $state<string | null>(null);
 
+	// Primary Tabs: Nota Aktif vs Nota Selesai
+	mainTab = $state<'ACTIVE' | 'COMPLETED'>('ACTIVE');
+
+	// Active Orders Filter State
+	activeFulfillmentFilter = $state<OrderFulfillmentStatus | 'ALL'>('ALL');
+	activePaymentFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
+	activeOrderTypeFilter = $state<OrderType | 'ALL'>('ALL');
+	activeSearchQuery = $state<string>('');
+
+	// Completed Orders Filter State
+	completedStatusFilter = $state<'ALL' | 'PICKED_UP' | 'CANCELLED'>('ALL');
+	completedPaymentFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
+	completedOrderTypeFilter = $state<OrderType | 'ALL'>('ALL');
+	completedSearchQuery = $state<string>('');
+
+	// Backward compatibility filter properties
 	statusFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
 	fulfillmentFilter = $state<OrderFulfillmentStatus | 'ALL'>('ALL');
 	orderTypeFilter = $state<OrderType | 'ALL'>('ALL');
@@ -35,7 +51,33 @@ export class OrderStore {
 		);
 	});
 
+	completedOrders = $derived.by(() => {
+		return this.orders.filter(
+			(o) => o.fulfillmentStatus === 'PICKED_UP' || o.status === 'CANCELLED'
+		);
+	});
+
 	activeCount = $derived.by(() => this.activeOrders.length);
+	completedCount = $derived.by(() => this.completedOrders.length);
+
+	// Active Orders breakdown
+	queuedCount = $derived.by(() => {
+		return this.activeOrders.filter((o) => o.fulfillmentStatus === 'QUEUED').length;
+	});
+
+	processingCount = $derived.by(() => {
+		return this.activeOrders.filter((o) => o.fulfillmentStatus === 'PROCESSING').length;
+	});
+
+	readyCount = $derived.by(() => {
+		return this.activeOrders.filter((o) => o.fulfillmentStatus === 'READY_FOR_PICKUP').length;
+	});
+
+	readyUnpaidCount = $derived.by(() => {
+		return this.activeOrders.filter(
+			(o) => o.fulfillmentStatus === 'READY_FOR_PICKUP' && o.remainingAmount > 0
+		).length;
+	});
 
 	prodActiveCount = $derived.by(() => {
 		return this.activeOrders.filter((o) => o.orderType === 'PRODUCTION').length;
@@ -45,33 +87,34 @@ export class OrderStore {
 		return this.activeOrders.filter((o) => o.orderType === 'RETAIL').length;
 	});
 
-	processingCount = $derived.by(() => {
-		return this.orders.filter(
-			(o) =>
-				(o.fulfillmentStatus === 'PROCESSING' || o.fulfillmentStatus === 'QUEUED') &&
-				o.status !== 'CANCELLED'
+	activeUnsettledCount = $derived.by(() => {
+		return this.activeOrders.filter(
+			(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
 		).length;
 	});
 
-	readyCount = $derived.by(() => {
-		return this.orders.filter(
-			(o) => o.fulfillmentStatus === 'READY_FOR_PICKUP' && o.status !== 'CANCELLED'
-		).length;
+	activePaidCount = $derived.by(() => {
+		return this.activeOrders.filter((o) => o.status === 'LUNAS').length;
 	});
 
-	readyUnpaidCount = $derived.by(() => {
-		return this.orders.filter(
-			(o) =>
-				o.fulfillmentStatus === 'READY_FOR_PICKUP' &&
-				o.remainingAmount > 0 &&
-				o.status !== 'CANCELLED'
-		).length;
-	});
-
+	// Completed Orders breakdown
 	pickedUpCount = $derived.by(() => {
 		return this.orders.filter((o) => o.fulfillmentStatus === 'PICKED_UP').length;
 	});
 
+	cancelledCount = $derived.by(() => {
+		return this.orders.filter((o) => o.status === 'CANCELLED').length;
+	});
+
+	prodCompletedCount = $derived.by(() => {
+		return this.completedOrders.filter((o) => o.orderType === 'PRODUCTION').length;
+	});
+
+	retailCompletedCount = $derived.by(() => {
+		return this.completedOrders.filter((o) => o.orderType === 'RETAIL').length;
+	});
+
+	// Global legacy counts
 	unsettledCount = $derived.by(() => {
 		return this.orders.filter(
 			(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
@@ -86,39 +129,91 @@ export class OrderStore {
 		return this.orders.filter((o) => o.status === 'LUNAS').length;
 	});
 
-	filteredOrders = $derived.by(() => {
-		let list = [...this.orders];
+	// Filtered Active Orders
+	filteredActiveOrders = $derived.by(() => {
+		let list = [...this.activeOrders];
 
-		if (this.statusFilter !== 'ALL') {
-			if (this.statusFilter === 'UNSETTLED') {
+		if (this.activeFulfillmentFilter !== 'ALL') {
+			list = list.filter((o) => o.fulfillmentStatus === this.activeFulfillmentFilter);
+		}
+
+		if (this.activeOrderTypeFilter !== 'ALL') {
+			list = list.filter((o) => o.orderType === this.activeOrderTypeFilter);
+		}
+
+		if (this.activePaymentFilter !== 'ALL') {
+			if (this.activePaymentFilter === 'UNSETTLED') {
 				list = list.filter(
 					(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
 				);
 			} else {
-				list = list.filter((o) => o.status === this.statusFilter);
+				list = list.filter((o) => o.status === this.activePaymentFilter);
 			}
 		}
 
-		if (this.fulfillmentFilter !== 'ALL') {
-			list = list.filter((o) => o.fulfillmentStatus === this.fulfillmentFilter);
-		}
-
-		if (this.orderTypeFilter !== 'ALL') {
-			list = list.filter((o) => o.orderType === this.orderTypeFilter);
-		}
-
-		if (this.searchQuery.trim()) {
-			const q = this.searchQuery.toLowerCase().trim();
+		if (this.activeSearchQuery.trim()) {
+			const q = this.activeSearchQuery.toLowerCase().trim();
 			list = list.filter(
 				(o) =>
 					o.invoiceNumber.toLowerCase().includes(q) ||
 					o.jobNumber.toLowerCase().includes(q) ||
 					o.customerName.toLowerCase().includes(q) ||
-					(o.resellerName && o.resellerName.toLowerCase().includes(q))
+					(o.resellerName && o.resellerName.toLowerCase().includes(q)) ||
+					(o.rackLocation && o.rackLocation.toLowerCase().includes(q))
 			);
 		}
 
 		return list;
+	});
+
+	// Filtered Completed Orders
+	filteredCompletedOrders = $derived.by(() => {
+		let list = [...this.completedOrders];
+
+		if (this.completedStatusFilter !== 'ALL') {
+			if (this.completedStatusFilter === 'PICKED_UP') {
+				list = list.filter((o) => o.fulfillmentStatus === 'PICKED_UP');
+			} else if (this.completedStatusFilter === 'CANCELLED') {
+				list = list.filter((o) => o.status === 'CANCELLED');
+			}
+		}
+
+		if (this.completedOrderTypeFilter !== 'ALL') {
+			list = list.filter((o) => o.orderType === this.completedOrderTypeFilter);
+		}
+
+		if (this.completedPaymentFilter !== 'ALL') {
+			if (this.completedPaymentFilter === 'UNSETTLED') {
+				list = list.filter(
+					(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
+				);
+			} else {
+				list = list.filter((o) => o.status === this.completedPaymentFilter);
+			}
+		}
+
+		if (this.completedSearchQuery.trim()) {
+			const q = this.completedSearchQuery.toLowerCase().trim();
+			list = list.filter(
+				(o) =>
+					o.invoiceNumber.toLowerCase().includes(q) ||
+					o.jobNumber.toLowerCase().includes(q) ||
+					o.customerName.toLowerCase().includes(q) ||
+					(o.resellerName && o.resellerName.toLowerCase().includes(q)) ||
+					(o.pickedUpBy && o.pickedUpBy.toLowerCase().includes(q)) ||
+					(o.cancelReason && o.cancelReason.toLowerCase().includes(q))
+			);
+		}
+
+		return list;
+	});
+
+	// Active tab's current filtered orders
+	filteredOrders = $derived.by(() => {
+		if (this.mainTab === 'ACTIVE') {
+			return this.filteredActiveOrders;
+		}
+		return this.filteredCompletedOrders;
 	});
 
 	async load() {
@@ -146,6 +241,56 @@ export class OrderStore {
 
 	async refresh() {
 		await this.load();
+	}
+
+	setMainTab(tab: 'ACTIVE' | 'COMPLETED') {
+		this.mainTab = tab;
+	}
+
+	setActiveFulfillmentFilter(status: OrderFulfillmentStatus | 'ALL') {
+		this.activeFulfillmentFilter = status;
+	}
+
+	setActivePaymentFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {
+		this.activePaymentFilter = status;
+	}
+
+	setActiveOrderTypeFilter(type: OrderType | 'ALL') {
+		this.activeOrderTypeFilter = type;
+	}
+
+	setActiveSearch(q: string) {
+		this.activeSearchQuery = q;
+	}
+
+	resetActiveFilters() {
+		this.activeFulfillmentFilter = 'ALL';
+		this.activePaymentFilter = 'ALL';
+		this.activeOrderTypeFilter = 'ALL';
+		this.activeSearchQuery = '';
+	}
+
+	setCompletedStatusFilter(status: 'ALL' | 'PICKED_UP' | 'CANCELLED') {
+		this.completedStatusFilter = status;
+	}
+
+	setCompletedPaymentFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {
+		this.completedPaymentFilter = status;
+	}
+
+	setCompletedOrderTypeFilter(type: OrderType | 'ALL') {
+		this.completedOrderTypeFilter = type;
+	}
+
+	setCompletedSearch(q: string) {
+		this.completedSearchQuery = q;
+	}
+
+	resetCompletedFilters() {
+		this.completedStatusFilter = 'ALL';
+		this.completedPaymentFilter = 'ALL';
+		this.completedOrderTypeFilter = 'ALL';
+		this.completedSearchQuery = '';
 	}
 
 	setStatusFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {

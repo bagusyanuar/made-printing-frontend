@@ -339,6 +339,76 @@ export class MockOrderRepository implements OrderRepository {
 			notes: 'Paket diletakkan di rak kasir depan',
 			issuedAt: '2026-11-23T09:15:00.000Z',
 			updatedAt: '2026-11-23T09:15:00.000Z'
+		},
+		{
+			id: 'ord-202611-008',
+			invoiceNumber: 'INV/202611/0008',
+			orderId: 'ord-prod-008',
+			jobNumber: 'TKT/20261123/0003',
+			orderType: 'PRODUCTION',
+			status: 'UNPAID',
+			fulfillmentStatus: 'QUEUED',
+			customerType: 'end_user',
+			customerName: 'Koperasi Mandiri Sejahtera',
+			customerPhone: '081233445566',
+			items: [
+				{
+					id: 'item-ord-008',
+					productId: 'prod-002',
+					productName: 'Buku Agenda Custom Hardcover Spiral A5',
+					isProduction: true,
+					uom: 'pcs',
+					dimensionText: '50 Pcs (Isi 100 Hal Bookpaper)',
+					finishingText: 'Jilid Spiral Kawat + Foil Emas Cover',
+					quantity: 50,
+					pricePerUnit: 35000,
+					subtotal: 1750000
+				}
+			],
+			subtotal: 1750000,
+			totalPaid: 0,
+			remainingAmount: 1750000,
+			dueDate: '2026-11-28T17:00:00.000Z',
+			paymentHistory: [],
+			notes: 'Waiting list antrean pra-cetak dan plat cetak',
+			issuedAt: '2026-11-23T11:00:00.000Z',
+			updatedAt: '2026-11-23T11:00:00.000Z'
+		},
+		{
+			id: 'ord-202611-009',
+			invoiceNumber: 'INV/202611/0009',
+			orderId: 'ord-prod-009',
+			jobNumber: 'TKT/20261118/0005',
+			orderType: 'PRODUCTION',
+			status: 'CANCELLED',
+			fulfillmentStatus: 'QUEUED',
+			customerType: 'end_user',
+			customerName: 'Ahmad Fauzi',
+			customerPhone: '085699887766',
+			items: [
+				{
+					id: 'item-ord-009',
+					productId: 'prod-001',
+					productName: 'Spanduk Banner Pecel Lele 280gr',
+					isProduction: true,
+					uom: 'm2',
+					dimensionText: '3.0 x 1.0 m (3.00 m²)',
+					finishingText: 'Mata Ayam 4 Pojok',
+					quantity: 1,
+					pricePerUnit: 25000,
+					subtotal: 75000
+				}
+			],
+			subtotal: 75000,
+			totalPaid: 0,
+			remainingAmount: 75000,
+			dueDate: null,
+			paymentHistory: [],
+			notes: 'Dibatalkan sebelum masuk antrean mesin cetak',
+			cancelReason: 'Permintaan pelanggan (salah ukuran materi desain banner)',
+			cancelledAt: '2026-11-18T16:00:00.000Z',
+			issuedAt: '2026-11-18T15:20:00.000Z',
+			updatedAt: '2026-11-18T16:00:00.000Z'
 		}
 	];
 
@@ -453,7 +523,10 @@ export class MockOrderRepository implements OrderRepository {
 		return Result.ok(JSON.parse(JSON.stringify(order)));
 	}
 
-	async markAsPickedUp(orderId: string, input?: OrderPickupInput): Promise<Result<Order, AppError>> {
+	async markAsPickedUp(
+		orderId: string,
+		input?: OrderPickupInput
+	): Promise<Result<Order, AppError>> {
 		const order = this.orders.find((o) => o.id === orderId);
 		if (!order) {
 			return Result.error(new NotFoundError(`Pesanan "${orderId}" tidak ditemukan.`));
