@@ -38,8 +38,8 @@ export const appNavSections: NavSection[] = [
 				icon: IconShoppingBag
 			},
 			{
-				title: 'Invoice',
-				href: '/transactions/invoices',
+				title: 'Pesanan',
+				href: '/orders',
 				icon: IconReceipt
 			}
 		]
