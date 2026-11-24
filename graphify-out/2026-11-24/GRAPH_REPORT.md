@@ -1,7 +1,7 @@
 # Graph Report - made-printing-frontend  (2026-11-24)
 
 ## Corpus Check
-- 313 files · ~157,773 words
+- 313 files · ~157,796 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `bb5ed8ba`
+- Built from commit: `34e8ec7e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -54,7 +54,7 @@
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
 - Order
-- product.validator.ts
+- attribute-variant.repository.impl.ts
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
@@ -98,7 +98,7 @@
 - Design System & Aesthetics (Anti-AI Slop)
 - ticket-order.mapper.ts
 - orderStore
-- attribute-variant.repository.impl.ts
+- AppSidebar.svelte
 - Reseller
 - product.entity.ts
 - Mini PRD: Modul Invoice & Monitoring Nota Pesanan
@@ -109,12 +109,11 @@
 - order.mapper.ts
 - CreateTicketOrderPage.svelte
 - product.schema.ts
-- themeStore
+- product.validator.ts
 - CVA & Tailwind UI Components
 - safeApiCall
-- AppSidebar.svelte
-- cashierStore
 - reseller.entity.ts
+- cashierStore
 - ticket-order.schema.ts
 - cashier.mapper.ts
 - ValidationError
@@ -122,6 +121,7 @@
 - cashier.validator.ts
 - order.entity.ts
 - (app)/+layout.svelte
+- themeStore
 - reseller.container.ts
 - order.schema.ts
 - OrderListPage.svelte
@@ -291,9 +291,9 @@ Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe I
 Cohesion: 0.17
 Nodes (9): getOrderRepository(), Order, OrderCustomerType, OrderPickupInput, OrderStats, OrderListParams, OrderRepository, OrderRepositoryImpl (+1 more)
 
-### Community 40 - "product.validator.ts"
-Cohesion: 0.23
-Nodes (10): PriceTierItemDto, ProductAttributeSelectionDto, ProductInputDto, ProductTierPricingDto, VariantTierPricingDto, priceTierItemDtoSchema, productAttributeSelectionDtoSchema, productDtoSchema (+2 more)
+### Community 40 - "attribute-variant.repository.impl.ts"
+Cohesion: 0.16
+Nodes (13): generateSlug(), ProductAttributeDto, ProductAttributeRequestDto, ProductAttributeVariantBatchDto, ProductAttributeVariantDto, ProductAttributeVariantRequestDto, mapAttributeDtoToEntity(), mapAttributeInputToDto() (+5 more)
 
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
@@ -439,9 +439,9 @@ Nodes (8): formatDimensionText(), DraftOrderItemRequestDto, DraftOrderRequestDto
 Cohesion: 0.09
 Nodes (4): orderStore, OrderFulfillmentStatus, OrderPaymentStatus, OrderType
 
-### Community 84 - "attribute-variant.repository.impl.ts"
+### Community 84 - "AppSidebar.svelte"
 Cohesion: 0.16
-Nodes (13): generateSlug(), ProductAttributeDto, ProductAttributeRequestDto, ProductAttributeVariantBatchDto, ProductAttributeVariantDto, ProductAttributeVariantRequestDto, mapAttributeDtoToEntity(), mapAttributeInputToDto() (+5 more)
+Nodes (3): groupTrigger(), linkContent(), pageTitleStore
 
 ### Community 86 - "Reseller"
 Cohesion: 0.15
@@ -479,6 +479,10 @@ Nodes (4): index(), if(), if(), v()
 Cohesion: 0.22
 Nodes (8): priceTierItemSchema, productAttributeSelectionSchema, ProductFormSchema, productSchema, productStep1Schema, productStep3Schema, productTierPricingSchema, variantTierPricingSchema
 
+### Community 96 - "product.validator.ts"
+Cohesion: 0.23
+Nodes (10): PriceTierItemDto, ProductAttributeSelectionDto, ProductInputDto, ProductTierPricingDto, VariantTierPricingDto, priceTierItemDtoSchema, productAttributeSelectionDtoSchema, productDtoSchema (+2 more)
+
 ### Community 97 - "CVA & Tailwind UI Components"
 Cohesion: 0.40
 Nodes (4): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component
@@ -487,11 +491,7 @@ Nodes (4): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA
 Cohesion: 0.16
 Nodes (6): mapProductCategoryDtoToEntity(), ProductCategoryRepositoryImpl, mapResellerDtoToEntity(), mapResellerInputToDto(), ResellerRepositoryImpl, safeApiCall()
 
-### Community 99 - "AppSidebar.svelte"
-Cohesion: 0.16
-Nodes (3): groupTrigger(), linkContent(), pageTitleStore
-
-### Community 101 - "reseller.entity.ts"
+### Community 99 - "reseller.entity.ts"
 Cohesion: 0.20
 Nodes (6): RESELLER_STATUSES, RESELLER_TIERS, ResellerStatus, ResellerStatusOption, ResellerTier, ResellerTierOption
 
@@ -539,11 +539,11 @@ Nodes (3): formatItemsSummary(), formatItemSummary(), TablePaginationProps
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `zod` to `package.json`, `app-error.ts`, `ExpenseCategory`, `ticket-order.schema.ts`, `product.validator.ts`, `cashier.schema.ts`, `cashier.validator.ts`, `parseApiResponse`, `order.schema.ts`, `attribute-variant.repository.impl.ts`, `product.entity.ts`, `reseller.schema.ts`, `order.mapper.ts`, `product.schema.ts`, `result.ts`?**
+- **Why does `zod` connect `zod` to `package.json`, `product.validator.ts`, `app-error.ts`, `ExpenseCategory`, `ticket-order.schema.ts`, `attribute-variant.repository.impl.ts`, `cashier.schema.ts`, `cashier.validator.ts`, `parseApiResponse`, `order.schema.ts`, `product.entity.ts`, `reseller.schema.ts`, `order.mapper.ts`, `product.schema.ts`, `result.ts`?**
   _High betweenness centrality (0.098) - this node is a cross-community bridge._
-- **Why does `Result` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `attribute-variant.repository.impl.ts`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
+- **Why does `Result` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `attribute-variant.repository.impl.ts`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
   _High betweenness centrality (0.090) - this node is a cross-community bridge._
-- **Why does `AppError` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `attribute-variant.repository.impl.ts`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
+- **Why does `AppError` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `attribute-variant.repository.impl.ts`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
   _High betweenness centrality (0.082) - this node is a cross-community bridge._
 - **What connects `gitignorePath`, `name`, `private` to the rest of the system?**
   _579 weakly-connected nodes found - possible documentation gaps or missing edges._
