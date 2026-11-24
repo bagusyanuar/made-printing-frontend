@@ -22,7 +22,9 @@ export class OrderStore {
 
 	// Active Orders Filter State
 	activeFulfillmentFilter = $state<OrderFulfillmentStatus | 'ALL'>('ALL');
+	activeFulfillmentFilters = $state<OrderFulfillmentStatus[]>([]);
 	activePaymentFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
+	activePaymentFilters = $state<OrderPaymentStatus[]>([]);
 	activeOrderTypeFilter = $state<OrderType | 'ALL'>('ALL');
 	activeSearchQuery = $state<string>('');
 
@@ -47,7 +49,10 @@ export class OrderStore {
 
 	activeOrders = $derived.by(() => {
 		return this.orders.filter(
-			(o) => o.fulfillmentStatus !== 'PICKED_UP' && o.status !== 'CANCELLED'
+			(o) =>
+				o.fulfillmentStatus !== 'PICKED_UP' &&
+				o.status !== 'CANCELLED' &&
+				o.orderType !== 'RETAIL'
 		);
 	});
 
@@ -133,7 +138,9 @@ export class OrderStore {
 	filteredActiveOrders = $derived.by(() => {
 		let list = [...this.activeOrders];
 
-		if (this.activeFulfillmentFilter !== 'ALL') {
+		if (this.activeFulfillmentFilters.length > 0) {
+			list = list.filter((o) => this.activeFulfillmentFilters.includes(o.fulfillmentStatus));
+		} else if (this.activeFulfillmentFilter !== 'ALL') {
 			list = list.filter((o) => o.fulfillmentStatus === this.activeFulfillmentFilter);
 		}
 
@@ -141,7 +148,16 @@ export class OrderStore {
 			list = list.filter((o) => o.orderType === this.activeOrderTypeFilter);
 		}
 
-		if (this.activePaymentFilter !== 'ALL') {
+		if (this.activePaymentFilters.length > 0) {
+			list = list.filter((o) => {
+				return this.activePaymentFilters.some((status) => {
+					if (status === 'UNPAID') {
+						return o.status === 'UNPAID' || o.status === 'OVERDUE';
+					}
+					return o.status === status;
+				});
+			});
+		} else if (this.activePaymentFilter !== 'ALL') {
 			if (this.activePaymentFilter === 'UNSETTLED') {
 				list = list.filter(
 					(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
@@ -249,10 +265,51 @@ export class OrderStore {
 
 	setActiveFulfillmentFilter(status: OrderFulfillmentStatus | 'ALL') {
 		this.activeFulfillmentFilter = status;
+		if (status === 'ALL') {
+			this.activeFulfillmentFilters = [];
+		} else {
+			this.activeFulfillmentFilters = [status];
+		}
+	}
+
+	toggleActiveFulfillmentFilter(status: OrderFulfillmentStatus) {
+		if (this.activeFulfillmentFilters.includes(status)) {
+			this.activeFulfillmentFilters = this.activeFulfillmentFilters.filter((s) => s !== status);
+		} else {
+			this.activeFulfillmentFilters = [...this.activeFulfillmentFilters, status];
+		}
+		if (this.activeFulfillmentFilters.length === 1) {
+			this.activeFulfillmentFilter = this.activeFulfillmentFilters[0];
+		} else if (this.activeFulfillmentFilters.length === 0) {
+			this.activeFulfillmentFilter = 'ALL';
+		} else {
+			this.activeFulfillmentFilter = 'ALL';
+		}
+	}
+
+	toggleActivePaymentFilter(status: OrderPaymentStatus) {
+		if (this.activePaymentFilters.includes(status)) {
+			this.activePaymentFilters = this.activePaymentFilters.filter((s) => s !== status);
+		} else {
+			this.activePaymentFilters = [...this.activePaymentFilters, status];
+		}
+	}
+
+	clearActiveFulfillmentFilters() {
+		this.activeFulfillmentFilters = [];
+		this.activeFulfillmentFilter = 'ALL';
+	}
+
+	clearActivePaymentFilters() {
+		this.activePaymentFilters = [];
+		this.activePaymentFilter = 'ALL';
 	}
 
 	setActivePaymentFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {
 		this.activePaymentFilter = status;
+		if (status === 'ALL') {
+			this.activePaymentFilters = [];
+		}
 	}
 
 	setActiveOrderTypeFilter(type: OrderType | 'ALL') {
@@ -265,7 +322,9 @@ export class OrderStore {
 
 	resetActiveFilters() {
 		this.activeFulfillmentFilter = 'ALL';
+		this.activeFulfillmentFilters = [];
 		this.activePaymentFilter = 'ALL';
+		this.activePaymentFilters = [];
 		this.activeOrderTypeFilter = 'ALL';
 		this.activeSearchQuery = '';
 	}
@@ -311,6 +370,27 @@ export class OrderStore {
 
 	selectOrder(id: string | null) {
 		this.selectedOrderId = id;
+	}
+
+	async updateFulfillmentStatus(
+		orderId: string,
+		status: OrderFulfillmentStatus
+	): Promise<boolean> {
+		const res = await this.repo.updateFulfillmentStatus(orderId, status);
+		if (res.success) {
+			const updated = res.data;
+			const idx = this.orders.findIndex((o) => o.id === orderId);
+			if (idx !== -1) {
+				this.orders[idx] = updated;
+			}
+			const statsRes = await this.repo.getOrderStats();
+			if (statsRes.success) {
+				this.stats = statsRes.data;
+			}
+			return true;
+		}
+		this.error = res.error.message;
+		return false;
 	}
 
 	async settlePayment(orderId: string, input: OrderSettlePaymentInput): Promise<boolean> {

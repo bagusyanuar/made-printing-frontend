@@ -9,6 +9,7 @@ export const orderPaymentStatusSchema = z.enum([
 ]);
 
 export const orderFulfillmentStatusSchema = z.enum([
+	'CREATED',
 	'QUEUED',
 	'PROCESSING',
 	'READY_FOR_PICKUP',

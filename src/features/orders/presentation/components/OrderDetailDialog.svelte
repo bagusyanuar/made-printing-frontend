@@ -38,11 +38,10 @@
 			case 'LUNAS':
 				return { label: 'LUNAS', variant: 'success' as const };
 			case 'PARTIAL_PAID':
-				return { label: 'DP / SEBAGIAN', variant: 'warning' as const };
+				return { label: 'BAYAR SEBAGIAN', variant: 'warning' as const };
 			case 'UNPAID':
-				return { label: 'TEMPO', variant: 'info' as const };
 			case 'OVERDUE':
-				return { label: 'JATUH TEMPO', variant: 'danger' as const };
+				return { label: 'BELUM DIBAYAR', variant: 'danger' as const };
 			case 'CANCELLED':
 				return { label: 'DIBATALKAN', variant: 'secondary' as const };
 			default:

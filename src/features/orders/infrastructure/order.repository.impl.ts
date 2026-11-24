@@ -2,6 +2,7 @@ import type { Result } from '$lib/shared/domain/types/result';
 import type { AppError } from '$lib/shared/domain/errors/app-error';
 import type {
 	Order,
+	OrderFulfillmentStatus,
 	OrderStats,
 	OrderSettlePaymentInput,
 	OrderPickupInput
@@ -22,6 +23,13 @@ export class OrderRepositoryImpl implements OrderRepository {
 
 	async getOrderStats(): Promise<Result<OrderStats, AppError>> {
 		return this.mock.getOrderStats();
+	}
+
+	async updateFulfillmentStatus(
+		orderId: string,
+		status: OrderFulfillmentStatus
+	): Promise<Result<Order, AppError>> {
+		return this.mock.updateFulfillmentStatus(orderId, status);
 	}
 
 	async settlePayment(

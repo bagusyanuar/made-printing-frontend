@@ -2,6 +2,7 @@ import { Result } from '$lib/shared/domain/types/result';
 import { NotFoundError, ValidationError, type AppError } from '$lib/shared/domain/errors/app-error';
 import type {
 	Order,
+	OrderFulfillmentStatus,
 	OrderStats,
 	OrderSettlePaymentInput,
 	OrderPickupInput
@@ -163,7 +164,7 @@ export class MockOrderRepository implements OrderRepository {
 			orderId: 'ord-prod-004',
 			jobNumber: 'TKT/20261115/0010',
 			orderType: 'PRODUCTION',
-			status: 'OVERDUE',
+			status: 'UNPAID',
 			fulfillmentStatus: 'READY_FOR_PICKUP',
 			rackLocation: 'Rak B-01',
 			customerType: 'reseller',
@@ -257,7 +258,7 @@ export class MockOrderRepository implements OrderRepository {
 			orderId: 'ord-prod-006',
 			jobNumber: 'TKT/20261123/0001',
 			orderType: 'PRODUCTION',
-			status: 'PARTIAL_PAID',
+			status: 'LUNAS',
 			fulfillmentStatus: 'PROCESSING',
 			customerType: 'end_user',
 			customerName: 'Hendra Wijaya',
@@ -277,21 +278,21 @@ export class MockOrderRepository implements OrderRepository {
 				}
 			],
 			subtotal: 630000,
-			totalPaid: 300000,
-			remainingAmount: 330000,
-			dueDate: '2026-11-26T15:00:00.000Z',
+			totalPaid: 630000,
+			remainingAmount: 0,
+			dueDate: null,
 			paymentHistory: [
 				{
 					id: 'pay-006',
 					paymentDate: '2026-11-23T08:30:00.000Z',
 					method: 'TRANSFER',
-					amount: 300000,
+					amount: 630000,
 					referenceNumber: 'BCA-771822',
-					note: 'DP 50% via transfer BCA',
+					note: 'Lunas di awal via transfer BCA',
 					cashierName: 'Kasir 1'
 				}
 			],
-			notes: 'Sedang finishing mata ayam di workshop',
+			notes: 'Lunas di awal, sedang proses finishing mata ayam di workshop',
 			issuedAt: '2026-11-23T08:30:00.000Z',
 			updatedAt: '2026-11-23T08:30:00.000Z'
 		},
@@ -302,8 +303,9 @@ export class MockOrderRepository implements OrderRepository {
 			jobNumber: 'RTL/20261123/0002',
 			orderType: 'RETAIL',
 			status: 'LUNAS',
-			fulfillmentStatus: 'READY_FOR_PICKUP',
-			rackLocation: 'Meja Kasir',
+			fulfillmentStatus: 'PICKED_UP',
+			pickedUpAt: '2026-11-23T09:15:00.000Z',
+			pickedUpBy: 'Kasir Utama',
 			customerType: 'end_user',
 			customerName: 'Toko Buku Maju',
 			customerPhone: '085712345678',
@@ -336,7 +338,7 @@ export class MockOrderRepository implements OrderRepository {
 					cashierName: 'Kasir Utama'
 				}
 			],
-			notes: 'Paket diletakkan di rak kasir depan',
+			notes: 'Nota ritel murni selesai di kasir',
 			issuedAt: '2026-11-23T09:15:00.000Z',
 			updatedAt: '2026-11-23T09:15:00.000Z'
 		},
@@ -409,6 +411,50 @@ export class MockOrderRepository implements OrderRepository {
 			cancelledAt: '2026-11-18T16:00:00.000Z',
 			issuedAt: '2026-11-18T15:20:00.000Z',
 			updatedAt: '2026-11-18T16:00:00.000Z'
+		},
+		{
+			id: 'ord-202611-010',
+			invoiceNumber: 'INV/202611/0010',
+			orderId: 'ord-prod-010',
+			jobNumber: 'TKT/20261124/0001',
+			orderType: 'PRODUCTION',
+			status: 'PARTIAL_PAID',
+			fulfillmentStatus: 'CREATED',
+			customerType: 'end_user',
+			customerName: 'CV Cahaya Abadi',
+			customerPhone: '081399881122',
+			items: [
+				{
+					id: 'item-ord-010',
+					productId: 'prod-004',
+					productName: 'Stiker Vinyl Glossy Meteran',
+					isProduction: true,
+					uom: 'm2',
+					dimensionText: '2.0 x 1.0 m (2.00 m²)',
+					finishingText: 'Kiss Cut',
+					quantity: 3,
+					pricePerUnit: 85000,
+					subtotal: 510000
+				}
+			],
+			subtotal: 510000,
+			totalPaid: 255000,
+			remainingAmount: 255000,
+			dueDate: '2026-11-26T17:00:00.000Z',
+			paymentHistory: [
+				{
+					id: 'pay-010',
+					paymentDate: '2026-11-24T10:00:00.000Z',
+					method: 'TRANSFER',
+					amount: 255000,
+					referenceNumber: 'TRF-BCA-98112',
+					note: 'DP 50%',
+					cashierName: 'Kasir Utama'
+				}
+			],
+			notes: 'Nota baru dibuat, belum dikirim ke antrean produksi',
+			issuedAt: '2026-11-24T10:00:00.000Z',
+			updatedAt: '2026-11-24T10:00:00.000Z'
 		}
 	];
 
@@ -518,6 +564,29 @@ export class MockOrderRepository implements OrderRepository {
 			cashierName: 'Kasir Utama'
 		});
 
+		order.updatedAt = new Date().toISOString();
+
+		return Result.ok(JSON.parse(JSON.stringify(order)));
+	}
+
+	async updateFulfillmentStatus(
+		orderId: string,
+		status: OrderFulfillmentStatus
+	): Promise<Result<Order, AppError>> {
+		const order = this.orders.find((o) => o.id === orderId);
+		if (!order) {
+			return Result.error(new NotFoundError(`Pesanan "${orderId}" tidak ditemukan.`));
+		}
+
+		if (order.status === 'CANCELLED') {
+			return Result.error(new ValidationError('Pesanan yang dibatalkan tidak dapat diubah statusnya.'));
+		}
+
+		order.fulfillmentStatus = status;
+		if (status === 'PICKED_UP' && !order.pickedUpAt) {
+			order.pickedUpAt = new Date().toISOString();
+			order.pickedUpBy = 'Kasir Utama';
+		}
 		order.updatedAt = new Date().toISOString();
 
 		return Result.ok(JSON.parse(JSON.stringify(order)));

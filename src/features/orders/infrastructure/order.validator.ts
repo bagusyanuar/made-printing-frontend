@@ -38,7 +38,7 @@ export const orderDtoSchema = z.object({
 	job_number: z.string(),
 	order_type: z.enum(['PRODUCTION', 'RETAIL']),
 	status: z.enum(['LUNAS', 'PARTIAL_PAID', 'UNPAID', 'OVERDUE', 'CANCELLED']),
-	fulfillment_status: z.enum(['QUEUED', 'PROCESSING', 'READY_FOR_PICKUP', 'PICKED_UP']).optional(),
+	fulfillment_status: z.enum(['CREATED', 'QUEUED', 'PROCESSING', 'READY_FOR_PICKUP', 'PICKED_UP']).optional(),
 	rack_location: z.string().nullable().optional(),
 	picked_up_at: z.string().nullable().optional(),
 	picked_up_by: z.string().nullable().optional(),

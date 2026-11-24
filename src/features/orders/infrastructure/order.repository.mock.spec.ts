@@ -34,6 +34,14 @@ describe('MockOrderRepository', () => {
 		}
 	});
 
+	it('updates fulfillment status of active order', async () => {
+		const updateRes = await repo.updateFulfillmentStatus('ord-202611-001', 'READY_FOR_PICKUP');
+		expect(updateRes.success).toBe(true);
+		if (updateRes.success) {
+			expect(updateRes.data.fulfillmentStatus).toBe('READY_FOR_PICKUP');
+		}
+	});
+
 	it('settles remaining payment on partial order', async () => {
 		const settleRes = await repo.settlePayment('ord-202611-002', {
 			amount: 175000,

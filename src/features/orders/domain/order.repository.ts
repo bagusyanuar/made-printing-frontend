@@ -25,6 +25,7 @@ export interface OrderRepository {
 	getOrders(params?: OrderListParams): Promise<Result<Order[], AppError>>;
 	getOrderById(id: string): Promise<Result<Order, AppError>>;
 	getOrderStats(): Promise<Result<OrderStats, AppError>>;
+	updateFulfillmentStatus(orderId: string, status: OrderFulfillmentStatus): Promise<Result<Order, AppError>>;
 	settlePayment(orderId: string, input: OrderSettlePaymentInput): Promise<Result<Order, AppError>>;
 	markAsPickedUp(orderId: string, input?: OrderPickupInput): Promise<Result<Order, AppError>>;
 	cancelOrder(orderId: string, reason: string): Promise<Result<Order, AppError>>;

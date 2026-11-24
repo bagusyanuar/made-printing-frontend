@@ -7,22 +7,22 @@ _Dokumen Spesifikasi Fungsional, Konsep Alur Twin Status (Fulfillment & Finansia
 
 ## 1. Ringkasan Eksekutif & Latar Belakang
 
-Modul **Invoice & Monitoring Nota Pesanan** adalah pusat kendali operasional serah-terima produk cetak dan penagihan kas di meja kasir depan (*front desk*).
+Modul **Invoice & Monitoring Nota Pesanan** adalah pusat kendali operasional serah-terima produk cetak dan penagihan kas di meja kasir depan (_front desk_).
 
-Dalam operasional percetakan digital (*digital printing*), nota/faktur kasir bukan sekadar catatan akuntansi pasif, melainkan **tiket kendali fisik dan finansial**:
+Dalam operasional percetakan digital (_digital printing_), nota/faktur kasir bukan sekadar catatan akuntansi pasif, melainkan **tiket kendali fisik dan finansial**:
 
 1. **Kendali Serah-Terima Barang (Fulfillment Control)**:
    Pelanggan sering datang ke kasir membawa nomor nota (`INV-xxx`) atau bertanya via WhatsApp mengenai status pesanannya. Kasir membutuhkan visibilitas instan: apakah pesanan masih di mesin cetak, sedang di-finishing, sudah diletakkan di rak siap ambil, atau sudah diserahkan ke pelanggan.
-2. **Pencegahan Piutang Lolos (*The Golden Checkpoint*)**:
+2. **Pencegahan Piutang Lolos (_The Golden Checkpoint_)**:
    Banyak transaksi cetak dibuat dengan skema **Uang Muka / DP 50%**. Saat pelanggan mengambil barang jadi, kasir wajib memastikan sisa tagihan dilunasi terlebih dahulu sebelum barang fisik keluar dari outlet (kecuali reseller dengan fasilitas akun piutang/tempo resmi).
 3. **Manajemen Rak & Paket Mengendap**:
-   Memudahkan kasir mendeteksi pesanan yang sudah selesai dicetak namun belum diambil berhari-hari (*abandoned pickup*), lengkap dengan nomor rak penyimpanan dan fitur kirim pengingat WhatsApp 1-klik.
+   Memudahkan kasir mendeteksi pesanan yang sudah selesai dicetak namun belum diambil berhari-hari (_abandoned pickup_), lengkap dengan nomor rak penyimpanan dan fitur kirim pengingat WhatsApp 1-klik.
 
 ---
 
 ## 2. Alur Transaksi & Diagram Workflow
 
-Sistem menerapkan arsitektur **Twin Status (Status Ganda)** yang memisahkan status pengerjaan fisik (*fulfillment*) dan status pembayaran (*financial*):
+Sistem menerapkan arsitektur **Twin Status (Status Ganda)** yang memisahkan status pengerjaan fisik (_fulfillment_) dan status pembayaran (_financial_):
 
 ```mermaid
 flowchart TD
@@ -39,10 +39,10 @@ flowchart TD
     subgraph PICKUP_CHECKPOINT["3. Kasir: Pengambilan & The Golden Checkpoint"]
         READY --> PICKUP_CLICK["Kasir Klik: Serahkan Barang"]
         PICKUP_CLICK --> CHECK_PAY{"Apakah Status Bayar LUNAS?"}
-        
+
         CHECK_PAY -->|"Lunas Penuh"| CONFIRM_PICKUP["Konfirmasi Serah Terima Langsung"]
         CHECK_PAY -->|"Masih Ada Sisa DP"| DIALOG_SETTLE["Buka Dialog Pelunasan Kasir Otomatis"]
-        
+
         DIALOG_SETTLE -->|"Input Bayar Tunai/Transfer/QRIS"| PAY_SUCCESS["Sisa Tagihan Lunas (LUNAS)"]
         PAY_SUCCESS --> CONFIRM_PICKUP
     end
@@ -55,25 +55,24 @@ flowchart TD
 
 ---
 
-## 3. Spesifikasi Status Ganda (*The Twin Status Specs*)
+## 3. Spesifikasi Status Ganda (_The Twin Status Specs_)
 
 ### A. Dimensi Fisik / Pengerjaan (`fulfillmentStatus`):
 
-| Status Code | Label UI | Warna Token Semantik | Deskripsi Operasional |
-| :--- | :--- | :--- | :--- |
-| `QUEUED` | Baru / Antrean | `text-foreground-subtle bg-surface-subtle` | Nota baru diterbitkan, menunggu giliran pengerjaan operator. |
-| `PROCESSING` | Sedang Diproses | `text-sky-700 bg-sky-50 dark:text-sky-300 dark:bg-sky-950/40` | File masuk mesin cetak (Outdoor/Indoor/A3+/DTF) atau tahap finishing (seaming, mata ayam, potong). |
-| `READY_FOR_PICKUP` | Siap Diambil | `text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/40` | Produk selesai QC, diletakkan di rak toko/kasir. Trigger notifikasi WA siap ambil aktif. |
-| `PICKED_UP` | Sudah Diambil | `text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/40` | Produk resmi diserahkan ke pelanggan. Dicatat tanggal, jam, dan staf yang melayani. |
+| Status Code        | Label UI        | Warna Token Semantik                                                          | Deskripsi Operasional                                                                              |
+| :----------------- | :-------------- | :---------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------- |
+| `QUEUED`           | Baru / Antrean  | `text-foreground-subtle bg-surface-subtle`                                    | Nota baru diterbitkan, menunggu giliran pengerjaan operator.                                       |
+| `PROCESSING`       | Sedang Diproses | `text-sky-700 bg-sky-50 dark:text-sky-300 dark:bg-sky-950/40`                 | File masuk mesin cetak (Outdoor/Indoor/A3+/DTF) atau tahap finishing (seaming, mata ayam, potong). |
+| `READY_FOR_PICKUP` | Siap Diambil    | `text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/40`         | Produk selesai QC, diletakkan di rak toko/kasir. Trigger notifikasi WA siap ambil aktif.           |
+| `PICKED_UP`        | Sudah Diambil   | `text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/40` | Produk resmi diserahkan ke pelanggan. Dicatat tanggal, jam, dan staf yang melayani.                |
 
 ### B. Dimensi Finansial / Pembayaran (`paymentStatus`):
 
-| Status Code | Label UI | Warna Token Semantik | Deskripsi Finansial |
-| :--- | :--- | :--- | :--- |
-| `LUNAS` | Lunas | `text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-950/40` | Tagihan terbayar penuh 100%. |
-| `PARTIAL_PAID` | DP / Sebagian | `text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/40` | Pembayaran awal (DP) diterima, ada sisa piutang wajib lunas saat ambil. |
-| `UNPAID` | Tempo Reseller | `text-indigo-700 bg-indigo-50 dark:text-indigo-300 dark:bg-indigo-950/40` | Khusus mitra reseller yang memiliki termin waktu pembayaran (TOP). |
-| `OVERDUE` | Jatuh Tempo | `text-rose-700 bg-rose-50 dark:text-rose-300 dark:bg-rose-950/40` | Melewati tanggal batas tempo pembayaran reseller. |
+| Status Code    | Label UI       | Chip Styling & Icon                                                                           | Deskripsi Finansial                                                     |
+| :------------- | :------------- | :-------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------- |
+| `LUNAS`        | Lunas          | `border-emerald-500/20 bg-emerald-500/10 text-emerald-700` (`CheckCircle2`)                   | Tagihan terbayar penuh 100%.                                            |
+| `PARTIAL_PAID` | Bayar Sebagian | `border-orange-500/20 bg-orange-500/10 text-orange-700` (`CreditCard`)                       | Pembayaran awal (DP) diterima, ada sisa piutang wajib lunas saat ambil. |
+| `UNPAID`       | Belum DiBayar  | `border-rose-500/20 bg-rose-500/10 text-rose-700` (`AlertCircle`)                             | Belum ada pembayaran sama sekali (totalPaid = 0 / Piutang Tempo).       |
 
 ---
 
@@ -82,19 +81,22 @@ flowchart TD
 Sesuai bahasa visual **Soft Minimal SaaS** dan token dari `dystopia-linear-lib`:
 
 ### A. KPI Summary Metrics Header (4 Cards):
-1. **Total Nota Berjalan**: Jumlah akumulasi seluruh nota aktif di sistem.
-2. **Sedang Diproses**: Jumlah pesanan yang sedang berada di lantai workshop / pengerjaan.
-3. **Siap Diambil di Rak**: Jumlah paket yang sudah jadi di rak kasir dan siap diambil (highlight perhatian kasir).
-4. **Sisa Piutang Berjalan**: Akumulasi rupiah sisa tagihan DP & tempo yang belum masuk kas.
+
+1. **Pesanan Aktif**: Jumlah akumulasi seluruh nota produksi aktif yang sedang berjalan di workshop (tidak mencakup ritel karena secara konsep pesanan ritel langsung selesai di kasir).
+2. **Antrean Produksi**: Monitoring khusus nota antrean pra-cetak & plat mesin (`QUEUED`).
+3. **Di Proses**: Jumlah pesanan yang sedang berada di lantai workshop / mesin cetak & finishing (`PROCESSING`).
+4. **Siap Diambil**: Jumlah paket jadi di rak kasir depan yang siap diserahterimakan (`READY_FOR_PICKUP`).
 
 ### B. Segmented Pill Tabs (Linear-Style Sliding Indicator):
+
 - `Semua Nota`: Tampilan master seluruh transaksi faktur.
 - `Sedang Diproses`: Memfilter pesanan yang berstatus `QUEUED` & `PROCESSING`.
 - `Siap Diambil`: Memfilter pesanan `READY_FOR_PICKUP` (lengkap dengan counter badge oranye).
 - `Sudah Diambil`: Riwayat nota yang telah diserahkan ke pelanggan (`PICKED_UP`).
-- `Belum Lunas`: Filter silang (*cross-filter*) untuk melihat semua nota yang memiliki sisa pembayaran (`remainingAmount > 0`).
+- `Belum Lunas`: Filter silang (_cross-filter_) untuk melihat semua nota yang memiliki sisa pembayaran (`remainingAmount > 0`).
 
 ### C. Kolom Tabel Monitoring Nota:
+
 1. **No. Nota & Tipe Order**: Nomor faktur (`INV/202611/0001`), badge tipe (`Produksi` vs `Ritel`), dan jumlah item.
 2. **No. SPK & Waktu**: Nomor SPK kerja terkait dan tanggal terbit.
 3. **Pelanggan & Kontak**: Nama customer, badge tier (`Walk-in` vs `Reseller`), dan nomor telepon.
@@ -111,12 +113,12 @@ Sesuai bahasa visual **Soft Minimal SaaS** dan token dari `dystopia-linear-lib`:
 
 ## 5. Rincian Fitur Dialog / Modal
 
-| Nama Modal | Tujuan & Fungsionalitas |
-| :--- | :--- |
-| **`InvoiceDetailDialog`** | Menampilkan rincian teknis pesanan, itemized products, log riwayat pembayaran bertahap, status pengerjaan, dan lokasi rak kasir. |
-| **`InvoicePickupDialog`** | **The Golden Checkpoint Dialog**: Konfirmasi serah terima barang. Jika belum lunas, otomatis menyajikan input pembayaran pelunasan sisa sebelum status barang diubah ke `PICKED_UP`. |
-| **`InvoicePaymentDialog`** | Form pencatatan pelunasan mandiri sisa tagihan (metode: Tunai, Transfer, QRIS, input nomor referensi bukti transfer, dan catatan). |
-| **`InvoiceReceiptDialog`** | Pratinjau cetak struk kasir termal (58mm/80mm) dan faktur resmi A4, tombol cetak langsung browser, serta tombol _Click-to-Chat WhatsApp_. |
+| Nama Modal                 | Tujuan & Fungsionalitas                                                                                                                                                              |
+| :------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`InvoiceDetailDialog`**  | Menampilkan rincian teknis pesanan, itemized products, log riwayat pembayaran bertahap, status pengerjaan, dan lokasi rak kasir.                                                     |
+| **`InvoicePickupDialog`**  | **The Golden Checkpoint Dialog**: Konfirmasi serah terima barang. Jika belum lunas, otomatis menyajikan input pembayaran pelunasan sisa sebelum status barang diubah ke `PICKED_UP`. |
+| **`InvoicePaymentDialog`** | Form pencatatan pelunasan mandiri sisa tagihan (metode: Tunai, Transfer, QRIS, input nomor referensi bukti transfer, dan catatan).                                                   |
+| **`InvoiceReceiptDialog`** | Pratinjau cetak struk kasir termal (58mm/80mm) dan faktur resmi A4, tombol cetak langsung browser, serta tombol _Click-to-Chat WhatsApp_.                                            |
 
 ---
 
@@ -163,7 +165,7 @@ src/features/invoices/
   - [ ] Tambahkan method store `pickupOrder(invoiceId, settlePaymentInput?)`.
 
 - [ ] **Milestone 3: UI & Components Refactoring**
-  - [ ] Buat komponen modal `InvoicePickupDialog.svelte` (*The Golden Checkpoint*).
+  - [ ] Buat komponen modal `InvoicePickupDialog.svelte` (_The Golden Checkpoint_).
   - [ ] Sesuaikan segmented tabs pada `InvoiceListPage.svelte` agar berorientasi pada status fisik pengerjaan (`Semua`, `Sedang Diproses`, `Siap Diambil`, `Sudah Diambil`).
   - [ ] Tambahkan badge visual status pengerjaan dan lokasi rak pada baris tabel.
   - [ ] Tambahkan aksi 1-klik WhatsApp Notifikasi Siap Ambil.
@@ -173,3 +175,23 @@ src/features/invoices/
   - [ ] Tambahkan unit test vitest untuk skenario serah terima barang lunas vs belum lunas.
   - [ ] Jalankan `npx eslint src/features/invoices`.
   - [ ] Update knowledge graph AST via `graphify update .`.
+
+---
+
+## 8. Catatan Rencana Sesi Berikutnya (Next Session Notes)
+
+- [x] **Adjustment KPI Widgets Header (`OrderListPage.svelte`)**:
+  - Mengganti widget ke-4 (**"Selesai Diambil"**) menjadi **"Antrean Produksi"** (`QUEUED`).
+  - Menampilkan jumlah pesanan yang baru diterbitkan / masuk antrean pra-cetak & plat mesin.
+  - Sub-deskripsi: antrean mesin & approval pra-cetak.
+  - Alur 4 kartu KPI widget menjadi alur hidup produksi aktif penuh:
+    1. _Pesanan Aktif_
+    2. _Antrean Produksi_ (`QUEUED`)
+    3. _Di Proses_ (`PROCESSING`)
+    4. _Siap Diambil_ (`READY_FOR_PICKUP`)
+- [x] **Implementasi Popover Filter Toolbar Nota Aktif**:
+  - Popover filter di samping kanan tombol refresh dengan trigger button ber-badge count filter aktif.
+  - Filter multi-select Checkbox:
+    1. **Status**: Pesanan Dibuat, Antrean Produksi, Di Proses, Siap Diambil (inline flex wrap).
+    2. **Pembayaran**: Lunas, Bayar Sebagian, Belum DiBayar (inline flex wrap).
+  - Dilengkapi tombol Reset Filter cepat di header popover.

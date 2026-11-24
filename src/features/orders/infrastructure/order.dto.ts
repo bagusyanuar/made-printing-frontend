@@ -29,7 +29,7 @@ export interface OrderDto {
 	job_number: string;
 	order_type: 'PRODUCTION' | 'RETAIL';
 	status: 'LUNAS' | 'PARTIAL_PAID' | 'UNPAID' | 'OVERDUE' | 'CANCELLED';
-	fulfillment_status?: 'QUEUED' | 'PROCESSING' | 'READY_FOR_PICKUP' | 'PICKED_UP';
+	fulfillment_status?: 'CREATED' | 'QUEUED' | 'PROCESSING' | 'READY_FOR_PICKUP' | 'PICKED_UP';
 	rack_location?: string | null;
 	picked_up_at?: string | null;
 	picked_up_by?: string | null;

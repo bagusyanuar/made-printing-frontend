@@ -6,6 +6,7 @@ export type OrderPaymentStatus =
 	| 'CANCELLED';
 
 export type OrderFulfillmentStatus =
+	| 'CREATED'
 	| 'QUEUED'
 	| 'PROCESSING'
 	| 'READY_FOR_PICKUP'
