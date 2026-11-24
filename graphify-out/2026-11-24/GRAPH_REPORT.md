@@ -1,12 +1,12 @@
 # Graph Report - made-printing-frontend  (2026-11-24)
 
 ## Corpus Check
-- 313 files · ~157,015 words
+- 313 files · ~157,773 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
 ## Summary
-- 1765 nodes · 4274 edges · 112 communities (87 shown, 17 thin omitted)
+- 1771 nodes · 4300 edges · 116 communities (94 shown, 15 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 48 edges (avg confidence: 0.84)
 - Token cost: 0 input · 0 output
 
@@ -18,9 +18,9 @@
 ## Community Hubs (Navigation)
 - package.json
 - devDependencies
-- attribute-variant.repository.impl.ts
+- ProductAttribute
 - 6. Actionable Todo List (Tahapan Eksekusi)
-- ticket-order.repository.mock.ts
+- ticket-order.entity.ts
 - Result
 - What You Must Do When Invoked
 - @sveltejs/kit
@@ -29,8 +29,8 @@
 - dystopia-linear-lib
 - tsconfig.json
 - Build Order
-- AttributeFormDialog.svelte
-- Reseller
+- zod
+- ResellerInput
 - prettier.config.js
 - +layout.ts
 - app.d.ts
@@ -53,14 +53,14 @@
 - Superforms + Zod
 - Made Printing — Frontend (Digital Printing ERP)
 - 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste
-- orderStore
-- product.entity.ts
+- Order
+- product.validator.ts
 - Naming Conventions
 - Svelte 5 Best Practices
 - Tailwind CSS Rules
 - Interaction States
 - Layout Composition
-- app-error.ts
+- parseApiResponse
 - Commit Message Format
 - 05. Manajemen Mesin Produksi & Antrian Kerja (_Machine Scheduling_)
 - 07. Point of Sales (POS), Keuangan, & Manajemen Penagihan
@@ -77,16 +77,16 @@
 - cashier.entity.ts
 - graphify reference: query, path, explain
 - 01. Overview & Domain Model: Made Printing ERP
-- ProductCategory
+- result.ts
 - sv
-- Supplier
+- app-error.ts
 - knowledge/README.md
 - sidebar.types.ts
 - ExpenseCategory
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
-- dystopia-linear-lib/components/button
+- dystopia-linear-lib/components/typography
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
 - ux-audit.md
@@ -96,42 +96,47 @@
 - extraction-spec.md
 - workflows/graphify.md
 - Design System & Aesthetics (Anti-AI Slop)
-- ticket-order.entity.ts
-- ProductFormDialog.svelte
-- expense-category.mapper.ts
-- Product
+- ticket-order.mapper.ts
+- orderStore
+- attribute-variant.repository.impl.ts
+- Reseller
+- product.entity.ts
 - Mini PRD: Modul Invoice & Monitoring Nota Pesanan
 - ticketOrderStore
 - reseller.schema.ts
-- supplier.mapper.ts
+- TicketOrder
 - Frontend Architecture Rules (Clean Architecture + DDD)
-- supplier.schema.ts
-- CashierCheckoutPanel.svelte
+- order.mapper.ts
+- CreateTicketOrderPage.svelte
 - product.schema.ts
 - themeStore
 - CVA & Tailwind UI Components
 - safeApiCall
 - AppSidebar.svelte
-- vitest
-- expense-category.schema.ts
+- cashierStore
+- reseller.entity.ts
 - ticket-order.schema.ts
+- cashier.mapper.ts
+- ValidationError
 - cashier.schema.ts
 - cashier.validator.ts
+- order.entity.ts
 - (app)/+layout.svelte
+- reseller.container.ts
 - order.schema.ts
-- CreateTicketOrderPage.svelte
+- OrderListPage.svelte
 
 ## God Nodes (most connected - your core abstractions)
-1. `Result` - 277 edges
-2. `AppError` - 265 edges
+1. `Result` - 280 edges
+2. `AppError` - 268 edges
 3. `safeApiCall()` - 60 edges
-4. `NotFoundError` - 55 edges
+4. `NotFoundError` - 56 edges
 5. `CashierOrder` - 43 edges
 6. `parseApiResponse()` - 42 edges
 7. `TicketOrder` - 36 edges
 8. `Reseller` - 28 edges
-9. `zod` - 26 edges
-10. `orderStore` - 26 edges
+9. `orderStore` - 27 edges
+10. `zod` - 26 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `if()` --indirect_call--> `index()`  [INFERRED]
@@ -148,7 +153,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (112 total, 17 thin omitted)
+## Communities (116 total, 15 thin omitted)
 
 ### Community 0 - "package.json"
 Cohesion: 0.06
@@ -158,21 +163,21 @@ Nodes (31): name, private, type, version, class-variance-authority, clsx, dystop
 Cohesion: 0.07
 Nodes (30): devDependencies, eslint, eslint-config-prettier, @eslint/js, eslint-plugin-svelte, globals, @iconify-json/lucide, @iconify-json/mdi (+22 more)
 
-### Community 3 - "attribute-variant.repository.impl.ts"
+### Community 3 - "ProductAttribute"
 Cohesion: 0.08
-Nodes (25): attributeVariantRepositoryInstance, attributeVariantStore, attributeVariantUseCases, createAttributeVariantUseCases(), generateSlug(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant (+17 more)
+Nodes (13): attributeVariantRepositoryInstance, attributeVariantStore, attributeVariantUseCases, createAttributeVariantUseCases(), ProductAttribute, ProductAttributeInput, ProductAttributeVariant, ProductAttributeVariantBatchItem (+5 more)
 
 ### Community 4 - "6. Actionable Todo List (Tahapan Eksekusi)"
 Cohesion: 0.12
 Nodes (16): 1. Ringkasan Eksekutif & Latar Belakang, 2. Alur Transaksi & Diagram Workflow, 3. Spesifikasi Antarmuka Pengguna (UI / UX), 4. Rincian Fitur Dialog / Modal, 5. Rencana Arsitektur Teknis (Clean Architecture + DDD), 6. Actionable Todo List (Tahapan Eksekusi), A. Layout Utama (2 Kolom Desktop / Tabbed Mobile), Mini PRD: Modul Kasir & Pembayaran (Point of Sale / POS) (+8 more)
 
-### Community 5 - "ticket-order.repository.mock.ts"
-Cohesion: 0.12
-Nodes (19): ticketOrderRepositoryImpl, ticketOrderRepositoryInstance, ticketOrderRepositoryMock, TicketStatusFilterTab, CancelTicketOrderUseCase, GetTicketOrderByIdUseCase, GetTicketOrdersUseCase, SaveDraftTicketOrderUseCase (+11 more)
+### Community 5 - "ticket-order.entity.ts"
+Cohesion: 0.11
+Nodes (18): ticketOrderRepositoryImpl, ticketOrderRepositoryInstance, ticketOrderRepositoryMock, TicketStatusFilterTab, CancelTicketOrderUseCase, GetTicketOrderByIdUseCase, GetTicketOrdersUseCase, SaveDraftTicketOrderUseCase (+10 more)
 
 ### Community 6 - "Result"
-Cohesion: 0.09
-Nodes (9): calculateCashierSubtotal(), CashierOrder, CashierRepository, CashierRepositoryImpl, MockCashierRepository, TicketOrder, AppError, NotFoundError (+1 more)
+Cohesion: 0.12
+Nodes (8): calculateCashierSubtotal(), CashierOrder, CashierRepository, CashierRepositoryImpl, MockCashierRepository, AppError, NotFoundError, Result
 
 ### Community 7 - "What You Must Do When Invoked"
 Cohesion: 0.08
@@ -198,13 +203,13 @@ Nodes (9): $app/tsconfig, compilerOptions, paths, strict, types, extends, includ
 Cohesion: 0.12
 Nodes (17): 10. `application/<feature>.container.ts`, 11. `application/<feature>.use-cases.ts`, 12. `application/<feature>.store.svelte.ts` — only when needed, 13. `presentation/hooks/<feature>.query-keys.ts`, 14. Fetch in the page, not in a load function, 15. Wire the route, 1. `domain/<feature>.entity.ts`, 2. `domain/<feature>.repository.ts` (+9 more)
 
-### Community 14 - "AttributeFormDialog.svelte"
-Cohesion: 0.18
-Nodes (3): AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema
+### Community 14 - "zod"
+Cohesion: 0.15
+Nodes (11): zod, AttributeInputSchema, attributeVariantBatchItemSchema, VariantInputSchema, ExpenseCategoryFormSchema, expenseCategorySchema, ResellerDto, ResellerInputDto (+3 more)
 
-### Community 15 - "Reseller"
-Cohesion: 0.07
-Nodes (23): resellerRepositoryImpl, resellerRepositoryInstance, resellerRepositoryMock, resellerStore, createResellerUseCases(), resellerUseCases, generateResellerCode(), Reseller (+15 more)
+### Community 15 - "ResellerInput"
+Cohesion: 0.15
+Nodes (4): resellerStore, createResellerUseCases(), resellerUseCases, ResellerInput
 
 ### Community 19 - "Visual Style: Soft Minimal SaaS (Made Printing)"
 Cohesion: 0.17
@@ -282,13 +287,13 @@ Nodes (8): 1. What This Application Is, 2. Design System & Visual Aesthetic, 3. 
 Cohesion: 0.22
 Nodes (8): 06. Manajemen Inventori, Bahan Baku, & Pelacakan Waste, 1. Dua Tipe Inventori Bahan Baku Utama, 2. Inventori Tinta & Consumables, 3. Toleransi Limbah & Waste Ratio (_Scrap Tracking_), A. Bahan Continuous / Roll-Based Goods, B. Bahan Diskrit / Sheet-Based Goods, Rumus Persentase Waste:, Sumber-sumber Limbah Cetak:
 
-### Community 39 - "orderStore"
-Cohesion: 0.05
-Nodes (33): getOrderRepository(), orderStore, Order, OrderCustomerType, OrderFulfillmentStatus, OrderItem, OrderPaymentMethod, OrderPaymentRecord (+25 more)
+### Community 39 - "Order"
+Cohesion: 0.17
+Nodes (9): getOrderRepository(), Order, OrderCustomerType, OrderPickupInput, OrderStats, OrderListParams, OrderRepository, OrderRepositoryImpl (+1 more)
 
-### Community 40 - "product.entity.ts"
-Cohesion: 0.10
-Nodes (20): CALCULATION_TYPES, CalculationType, CalculationTypeOption, generateProductCode(), PriceTierItem, ProductAttributeSelection, ProductTierPricing, VariantTierPricing (+12 more)
+### Community 40 - "product.validator.ts"
+Cohesion: 0.23
+Nodes (10): PriceTierItemDto, ProductAttributeSelectionDto, ProductInputDto, ProductTierPricingDto, VariantTierPricingDto, priceTierItemDtoSchema, productAttributeSelectionDtoSchema, productDtoSchema (+2 more)
 
 ### Community 41 - "Naming Conventions"
 Cohesion: 0.25
@@ -310,9 +315,9 @@ Nodes (7): A Fully-Interactive Appearance Implies Real Behavior, Check, Disabled
 Cohesion: 0.25
 Nodes (7): Check, F-Pattern And Z-Pattern: Match The Flow To The Content Density, Law of Continuity: Alignment Consistency, Overridable By A Stronger Convention, Layout Composition, Rule Of Thirds: A Compositional Guide, Not A Requirement For Functional UI, Symmetry And Asymmetry: Balance Is Not The Same As Mirroring, White Space Must Be Deterministic, Not Incidental
 
-### Community 46 - "app-error.ts"
-Cohesion: 0.11
-Nodes (21): axios, zod, expenseCategoryDtoSchema, expenseCategoryListResponseSchema, productRepositoryImpl, productRepositoryInstance, productRepositoryMock, INITIAL_PRODUCTS (+13 more)
+### Community 46 - "parseApiResponse"
+Cohesion: 0.16
+Nodes (13): mapOrderDtoToEntity(), TicketOrderRepositoryImpl, orderItemResponseDtoSchema, orderListResponseDtoSchema, orderResponseDtoSchema, InvalidResponseError, PaginationMeta, PaginationParams (+5 more)
 
 ### Community 47 - "Commit Message Format"
 Cohesion: 0.25
@@ -367,8 +372,8 @@ Cohesion: 0.33
 Nodes (5): 1. Format, 2. One Domain Per Commit, 3. Always Confirm Before Committing, 4. Standard Git Safety, Conventional Commit Workflow
 
 ### Community 60 - "cashier.entity.ts"
-Cohesion: 0.07
-Nodes (23): getCashierRepository(), cashierStore, calculateCashierItemSubtotal(), CashierCreateRetailOrderInput, CashierCustomerType, CashierOrderItem, CashierOrderStatus, CashierOrderType (+15 more)
+Cohesion: 0.15
+Nodes (14): getCashierRepository(), calculateCashierItemSubtotal(), CashierCreateRetailOrderInput, CashierCustomerType, CashierOrderItem, CashierOrderStatus, CashierOrderType, CashierPaymentMethod (+6 more)
 
 ### Community 61 - "graphify reference: query, path, explain"
 Cohesion: 0.33
@@ -378,17 +383,17 @@ Nodes (5): For /graphify explain, For /graphify path, graphify reference: query,
 Cohesion: 0.33
 Nodes (5): 01. Overview & Domain Model: Made Printing ERP, 1. Latar Belakang & Profil Bisnis, 2. Aktor Pengguna & Peran Sistem (_User Personas_), Detail Tanggung Jawab Per Role:, Mengapa Digital Printing Berbeda dari Percetakan Konvensional (Offset)?
 
-### Community 63 - "ProductCategory"
+### Community 63 - "result.ts"
 Cohesion: 0.08
-Nodes (22): productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType, CalculationTypeOption, CategoryType (+14 more)
+Nodes (21): productCategoryRepositoryInstance, productCategoryStore, createProductCategoryUseCases(), productCategoryUseCases, CALCULATION_TYPES, CalculationType, CalculationTypeOption, CategoryType (+13 more)
 
 ### Community 64 - "sv"
 Cohesion: 0.33
 Nodes (5): Adding features, Building, Creating a project, Developing, sv
 
-### Community 65 - "Supplier"
-Cohesion: 0.11
-Nodes (14): supplierRepositoryImpl, supplierRepositoryInstance, supplierRepositoryMock, supplierStore, createSupplierUseCases(), supplierUseCases, generateSupplierCode(), getSupplierInitial() (+6 more)
+### Community 65 - "app-error.ts"
+Cohesion: 0.06
+Nodes (27): axios, supplierRepositoryImpl, supplierRepositoryInstance, supplierRepositoryMock, supplierStore, createSupplierUseCases(), supplierUseCases, generateSupplierCode() (+19 more)
 
 ### Community 66 - "knowledge/README.md"
 Cohesion: 0.40
@@ -399,8 +404,8 @@ Cohesion: 0.21
 Nodes (11): svelte, isActiveHref(), sectionContainsActive(), testSections, isNavGroup(), NavEntry, NavGroup, NavLink (+3 more)
 
 ### Community 68 - "ExpenseCategory"
-Cohesion: 0.09
-Nodes (15): expenseCategoryRepositoryImpl, expenseCategoryRepositoryInstance, expenseCategoryRepositoryMock, expenseCategoryStore, createExpenseCategoryUseCases(), expenseCategoryUseCases, EXPENSE_GROUPS, ExpenseCategory (+7 more)
+Cohesion: 0.07
+Nodes (26): vitest, vitest-browser-svelte, expenseCategoryRepositoryImpl, expenseCategoryRepositoryInstance, expenseCategoryRepositoryMock, expenseCategoryStore, createExpenseCategoryUseCases(), expenseCategoryUseCases (+18 more)
 
 ### Community 69 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -414,9 +419,9 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 72 - "dystopia-linear-lib/components/button"
+### Community 72 - "dystopia-linear-lib/components/typography"
 Cohesion: 0.09
-Nodes (4): onClose(), onClose(), onClose(), TablePaginationProps
+Nodes (4): onClose(), onClose(), idx(), onClose()
 
 ### Community 76 - "imports"
 Cohesion: 0.67
@@ -426,17 +431,25 @@ Nodes (3): imports, #features/*, #lib
 Cohesion: 0.25
 Nodes (8): 1. No "AI Slop" Permitted, 2. Depth & Elevation, 3. Typography & Hierarchy, 4. Micro-Interactions & Animation, 5. Spacing & Negative Space, 6. Dark Mode Support, 7. Icons & Imagery, Design System & Aesthetics (Anti-AI Slop)
 
-### Community 82 - "ticket-order.entity.ts"
-Cohesion: 0.19
-Nodes (12): calculateTotalArea(), formatDimensionText(), TicketOrderConfirmData, TicketOrderItem, TicketOrderStatus, DraftOrderItemRequestDto, DraftOrderRequestDto, OrderItemResponseDto (+4 more)
+### Community 82 - "ticket-order.mapper.ts"
+Cohesion: 0.36
+Nodes (8): formatDimensionText(), DraftOrderItemRequestDto, DraftOrderRequestDto, OrderItemResponseDto, OrderResponseDto, mapOrderItemDtoToEntity(), mapSaveDraftInputToDto(), VALID_STATUSES
 
-### Community 86 - "expense-category.mapper.ts"
-Cohesion: 0.25
-Nodes (6): ExpenseCategoryCreatePayload, ExpenseCategoryDto, ExpenseCategoryUpdatePayload, mapExpenseCategoryDtoToEntity(), mapExpenseCategoryInputToDto(), ExpenseCategoryRepositoryImpl
-
-### Community 87 - "Product"
+### Community 83 - "orderStore"
 Cohesion: 0.09
-Nodes (9): productStore, createProductUseCases(), productUseCases, Product, ProductInput, ProductRepository, mapProductDtoToEntity(), ProductRepositoryImpl (+1 more)
+Nodes (4): orderStore, OrderFulfillmentStatus, OrderPaymentStatus, OrderType
+
+### Community 84 - "attribute-variant.repository.impl.ts"
+Cohesion: 0.16
+Nodes (13): generateSlug(), ProductAttributeDto, ProductAttributeRequestDto, ProductAttributeVariantBatchDto, ProductAttributeVariantDto, ProductAttributeVariantRequestDto, mapAttributeDtoToEntity(), mapAttributeInputToDto() (+5 more)
+
+### Community 86 - "Reseller"
+Cohesion: 0.15
+Nodes (5): generateResellerCode(), Reseller, ResellerRepository, INITIAL_RESELLERS, ResellerRepositoryMock
+
+### Community 87 - "product.entity.ts"
+Cohesion: 0.08
+Nodes (23): productRepositoryImpl, productRepositoryInstance, productRepositoryMock, productStore, createProductUseCases(), productUseCases, CALCULATION_TYPES, CalculationType (+15 more)
 
 ### Community 88 - "Mini PRD: Modul Invoice & Monitoring Nota Pesanan"
 Cohesion: 0.13
@@ -446,17 +459,21 @@ Nodes (14): 1. Ringkasan Eksekutif & Latar Belakang, 2. Alur Transaksi & Diagram
 Cohesion: 0.29
 Nodes (6): ResellerDepositFormSchema, resellerDepositSchema, ResellerFormSchema, resellerSchema, resellerStatusSchema, resellerTierSchema
 
-### Community 91 - "supplier.mapper.ts"
-Cohesion: 0.52
-Nodes (4): SupplierCreatePayload, SupplierDto, SupplierUpdatePayload, mapSupplierInputToDto()
+### Community 91 - "TicketOrder"
+Cohesion: 0.19
+Nodes (4): calculateTotalArea(), SaveDraftTicketOrderInput, TicketOrder, TicketOrderRepositoryMock
 
 ### Community 92 - "Frontend Architecture Rules (Clean Architecture + DDD)"
 Cohesion: 0.22
 Nodes (9): 1. Core Philosophy, 2. Decoupling Domain and Infrastructure (Anti-Corruption Layer), 3. Directory Structure, 4. This Project Is an SPA, Not SSR, 5. State Management, Frontend Architecture Rules (Clean Architecture + DDD), `src/features/[feature-name]/`, `src/lib/` (+1 more)
 
-### Community 94 - "CashierCheckoutPanel.svelte"
-Cohesion: 0.10
-Nodes (3): index(), if(), if()
+### Community 93 - "order.mapper.ts"
+Cohesion: 0.21
+Nodes (15): OrderDto, OrderItemDto, OrderPaymentRecordDto, OrderSettlePaymentInputDto, OrderStatsDto, mapOrderDtoToEntity(), mapOrderItemDtoToEntity(), mapOrderPaymentRecordDtoToEntity() (+7 more)
+
+### Community 94 - "CreateTicketOrderPage.svelte"
+Cohesion: 0.06
+Nodes (4): index(), if(), if(), v()
 
 ### Community 95 - "product.schema.ts"
 Cohesion: 0.22
@@ -467,20 +484,24 @@ Cohesion: 0.40
 Nodes (4): 1. The Utility `cn()`, 2. File Structure (Barrel Export Pattern), CVA & Tailwind UI Components, Example: Button Component
 
 ### Community 98 - "safeApiCall"
-Cohesion: 0.12
-Nodes (11): AttributeVariantRepositoryImpl, mapProductCategoryDtoToEntity(), ProductCategoryRepositoryImpl, mapResellerDtoToEntity(), ResellerRepositoryImpl, mapSupplierDtoToEntity(), SupplierRepositoryImpl, mapOrderDtoToEntity() (+3 more)
+Cohesion: 0.16
+Nodes (6): mapProductCategoryDtoToEntity(), ProductCategoryRepositoryImpl, mapResellerDtoToEntity(), mapResellerInputToDto(), ResellerRepositoryImpl, safeApiCall()
 
 ### Community 99 - "AppSidebar.svelte"
-Cohesion: 0.18
+Cohesion: 0.16
 Nodes (3): groupTrigger(), linkContent(), pageTitleStore
 
-### Community 100 - "vitest"
-Cohesion: 0.32
-Nodes (3): vitest, vitest-browser-svelte, greet()
+### Community 101 - "reseller.entity.ts"
+Cohesion: 0.20
+Nodes (6): RESELLER_STATUSES, RESELLER_TIERS, ResellerStatus, ResellerStatusOption, ResellerTier, ResellerTierOption
 
 ### Community 102 - "ticket-order.schema.ts"
 Cohesion: 0.29
 Nodes (6): CancelTicketOrderFormSchema, cancelTicketOrderSchema, SaveDraftTicketOrderFormSchema, saveDraftTicketOrderSchema, TicketOrderItemFormSchema, ticketOrderItemSchema
+
+### Community 103 - "cashier.mapper.ts"
+Cohesion: 0.42
+Nodes (8): CashierOrderDto, CashierOrderItemDto, CashierRetailCatalogItemDto, CashierSplitPaymentDetailDto, mapCashierOrderDtoToEntity(), mapCashierOrderItemDtoToEntity(), mapCashierRetailCatalogItemDtoToEntity(), mapCashierSplitPaymentDetailDtoToEntity()
 
 ### Community 105 - "cashier.schema.ts"
 Cohesion: 0.20
@@ -490,33 +511,45 @@ Nodes (9): cashierAddRetailItemSchema, CashierAddRetailItemSchemaInput, cashierC
 Cohesion: 0.40
 Nodes (4): cashierOrderDtoSchema, cashierOrderItemDtoSchema, cashierRetailCatalogItemDtoSchema, cashierSplitPaymentDetailDtoSchema
 
+### Community 107 - "order.entity.ts"
+Cohesion: 0.29
+Nodes (5): formatCurrency(), OrderItem, OrderPaymentMethod, OrderPaymentRecord, if()
+
 ### Community 108 - "(app)/+layout.svelte"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (5): isTheme(), readStoredTheme(), Theme, THEME_STORAGE_KEY, ./$types
+
+### Community 110 - "reseller.container.ts"
+Cohesion: 0.40
+Nodes (4): resellerRepositoryImpl, resellerRepositoryInstance, resellerRepositoryMock, MOCK_FLAGS
 
 ### Community 113 - "order.schema.ts"
 Cohesion: 0.18
 Nodes (10): orderCustomerTypeSchema, orderFulfillmentStatusSchema, orderItemSchema, orderPaymentMethodSchema, orderPaymentRecordSchema, orderPaymentStatusSchema, orderSchema, orderSettlePaymentInputSchema (+2 more)
 
+### Community 116 - "OrderListPage.svelte"
+Cohesion: 0.16
+Nodes (3): formatItemsSummary(), formatItemSummary(), TablePaginationProps
+
 ## Knowledge Gaps
 - **579 isolated node(s):** `gitignorePath`, `name`, `private`, `version`, `type` (+574 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 778 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `zod` connect `app-error.ts` to `package.json`, `attribute-variant.repository.impl.ts`, `expense-category.schema.ts`, `ticket-order.schema.ts`, `orderStore`, `product.entity.ts`, `cashier.schema.ts`, `cashier.validator.ts`, `AttributeFormDialog.svelte`, `Reseller`, `order.schema.ts`, `reseller.schema.ts`, `supplier.schema.ts`, `product.schema.ts`, `ProductCategory`?**
-  _High betweenness centrality (0.102) - this node is a cross-community bridge._
-- **Why does `Result` connect `Result` to `Supplier`, `safeApiCall`, `attribute-variant.repository.impl.ts`, `ExpenseCategory`, `ticket-order.repository.mock.ts`, `orderStore`, `app-error.ts`, `Reseller`, `ticket-order.entity.ts`, `expense-category.mapper.ts`, `Product`, `cashier.entity.ts`, `ProductCategory`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
-- **Why does `AppError` connect `Result` to `Supplier`, `safeApiCall`, `attribute-variant.repository.impl.ts`, `ExpenseCategory`, `ticket-order.repository.mock.ts`, `orderStore`, `app-error.ts`, `Reseller`, `ticket-order.entity.ts`, `expense-category.mapper.ts`, `Product`, `cashier.entity.ts`, `ProductCategory`?**
-  _High betweenness centrality (0.081) - this node is a cross-community bridge._
+- **Why does `zod` connect `zod` to `package.json`, `app-error.ts`, `ExpenseCategory`, `ticket-order.schema.ts`, `product.validator.ts`, `cashier.schema.ts`, `cashier.validator.ts`, `parseApiResponse`, `order.schema.ts`, `attribute-variant.repository.impl.ts`, `product.entity.ts`, `reseller.schema.ts`, `order.mapper.ts`, `product.schema.ts`, `result.ts`?**
+  _High betweenness centrality (0.098) - this node is a cross-community bridge._
+- **Why does `Result` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `attribute-variant.repository.impl.ts`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
+  _High betweenness centrality (0.090) - this node is a cross-community bridge._
+- **Why does `AppError` connect `Result` to `app-error.ts`, `safeApiCall`, `ProductAttribute`, `ExpenseCategory`, `ticket-order.entity.ts`, `Order`, `ValidationError`, `zod`, `ResellerInput`, `parseApiResponse`, `orderStore`, `attribute-variant.repository.impl.ts`, `Reseller`, `product.entity.ts`, `TicketOrder`, `cashier.entity.ts`, `result.ts`?**
+  _High betweenness centrality (0.082) - this node is a cross-community bridge._
 - **What connects `gitignorePath`, `name`, `private` to the rest of the system?**
   _579 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `package.json` be split into smaller, more focused modules?**
   _Cohesion score 0.06439393939393939 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
-- **Should `dystopia-linear-lib/components/typography` be split into smaller, more focused modules?**
-  _Cohesion score 0.10338164251207729 - nodes in this community are weakly interconnected._
+- **Should `page-title.store.svelte.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.05451127819548872 - nodes in this community are weakly interconnected._
