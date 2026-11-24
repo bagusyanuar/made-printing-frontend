@@ -44,7 +44,11 @@
 	import IconChevronDown from '~icons/lucide/chevron-down';
 	import IconCheck from '~icons/lucide/check';
 
-	import type { Order, OrderPaymentStatus, OrderFulfillmentStatus } from '../../domain/order.entity';
+	import type {
+		Order,
+		OrderPaymentStatus,
+		OrderFulfillmentStatus
+	} from '../../domain/order.entity';
 	import { formatCurrency, formatOrderDateTime } from '../../domain/order.entity';
 	import { orderStore } from '../../application/order.store.svelte';
 
@@ -143,18 +147,17 @@
 	}
 
 	async function handlePickup(ord: Order) {
-		if (ord.remainingAmount > 0) {
-			toast.warning('Pesanan Belum Lunas', {
-				description: `Sisa tagihan Rp ${formatCurrency(ord.remainingAmount)} harus dilunasi terlebih dahulu sebelum diserahkan.`
-			});
-			openPayment(ord);
-			return;
-		}
 		const success = await orderStore.markAsPickedUp(ord.id);
 		if (success) {
-			toast.success('Pesanan Berhasil Diserahkan', {
-				description: `Nota ${ord.invoiceNumber} berhasil diserahkan ke pelanggan.`
-			});
+			if (ord.remainingAmount > 0) {
+				toast.info('Pesanan Diserahkan (Masuk Piutang)', {
+					description: `Nota ${ord.invoiceNumber} berhasil diserahkan. Sisa tagihan Rp ${formatCurrency(ord.remainingAmount)} tercatat sebagai piutang pelanggan.`
+				});
+			} else {
+				toast.success('Pesanan Berhasil Diserahkan', {
+					description: `Nota ${ord.invoiceNumber} berhasil diserahkan ke pelanggan.`
+				});
+			}
 		} else {
 			toast.danger('Gagal Menyerahkan Pesanan', {
 				description: orderStore.error || 'Terjadi kesalahan sistem.'
@@ -182,21 +185,19 @@
 	async function handleStatusChange(ord: Order, targetStatus: OrderFulfillmentStatus) {
 		if (ord.fulfillmentStatus === targetStatus) return;
 
-		// The Golden Checkpoint: Jika memilih PICKED_UP (Serah Terima)
+		// Serah Terima: Jika memilih PICKED_UP (Bisa diserahkan langsung, sisa otomatis jadi piutang)
 		if (targetStatus === 'PICKED_UP') {
-			if (ord.remainingAmount > 0) {
-				toast.warning('Pesanan Belum Lunas', {
-					description: `Sisa tagihan Rp ${formatCurrency(ord.remainingAmount)} harus dilunasi terlebih dahulu sebelum diserahkan ke pelanggan.`
-				});
-				openPayment(ord);
-				return;
-			}
-
 			const success = await orderStore.markAsPickedUp(ord.id);
 			if (success) {
-				toast.success('Pesanan Selesai Diserahkan', {
-					description: `Status nota ${ord.invoiceNumber} diubah menjadi Sudah Diambil dan dipindahkan ke Nota Selesai.`
-				});
+				if (ord.remainingAmount > 0) {
+					toast.info('Pesanan Diserahkan (Masuk Piutang)', {
+						description: `Status nota ${ord.invoiceNumber} diubah menjadi Sudah Diambil. Sisa tagihan Rp ${formatCurrency(ord.remainingAmount)} tercatat sebagai piutang pelanggan.`
+					});
+				} else {
+					toast.success('Pesanan Selesai Diserahkan', {
+						description: `Status nota ${ord.invoiceNumber} diubah menjadi Sudah Diambil dan dipindahkan ke Nota Selesai.`
+					});
+				}
 			} else {
 				toast.danger('Gagal Memperbarui Status', {
 					description: orderStore.error || 'Terjadi kesalahan sistem.'
@@ -284,35 +285,35 @@
 {#snippet paymentChip(status: OrderPaymentStatus)}
 	{#if status === 'LUNAS'}
 		<span
-			class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
+			class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
 		>
 			<IconCheckCircle2 class="size-3 text-emerald-600 dark:text-emerald-400" />
 			<span>Lunas</span>
 		</span>
 	{:else if status === 'PARTIAL_PAID'}
 		<span
-			class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 text-xs font-semibold text-orange-700 dark:text-orange-300"
+			class="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-0.5 text-xs font-semibold text-orange-700 dark:text-orange-300"
 		>
 			<IconCreditCard class="size-3 text-orange-600 dark:text-orange-400" />
 			<span>Bayar Sebagian</span>
 		</span>
 	{:else if status === 'UNPAID' || status === 'OVERDUE'}
 		<span
-			class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 text-xs font-semibold text-rose-700 dark:text-rose-300"
+			class="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-700 dark:text-rose-300"
 		>
 			<IconAlertCircle class="size-3 text-rose-600 dark:text-rose-400" />
 			<span>Belum DiBayar</span>
 		</span>
 	{:else if status === 'CANCELLED'}
 		<span
-			class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-zinc-500/20 bg-zinc-500/10 px-2.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400"
+			class="inline-flex items-center gap-1.5 rounded-full border border-zinc-500/20 bg-zinc-500/10 px-2.5 py-0.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400"
 		>
 			<IconBan class="size-3 text-zinc-500 dark:text-zinc-400" />
 			<span>Dibatalkan</span>
 		</span>
 	{:else}
 		<span
-			class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-2.5 text-xs font-semibold text-foreground-subtle"
+			class="bg-muted/40 inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold text-foreground-subtle"
 		>
 			<span>{status}</span>
 		</span>
@@ -448,9 +449,7 @@
 								Antrean Produksi
 							</span>
 							<div class="mt-1 flex items-baseline gap-1.5">
-								<span
-									class="text-2xl font-bold tracking-tight text-sky-600 dark:text-sky-400"
-								>
+								<span class="text-2xl font-bold tracking-tight text-sky-600 dark:text-sky-400">
 									{orderStore.queuedCount}
 								</span>
 								<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
@@ -720,9 +719,10 @@
 						bind:open={isFilterPopoverOpen}
 						placement="bottom-end"
 						offset={8}
-						class="h-8! gap-1.5 rounded-md px-2.5! text-xs! font-semibold transition-colors {activeFiltersCount > 0
+						class="h-8! gap-1.5 rounded-md px-2.5! text-xs! font-semibold transition-colors {activeFiltersCount >
+						0
 							? 'border-primary/40! bg-primary/10! text-primary!'
-							: 'text-foreground hover:bg-muted'}"
+							: 'hover:bg-muted text-foreground'}"
 						classes={{
 							content:
 								'z-50 w-[300px] rounded-xl border border-border bg-app-surface p-3.5 text-xs shadow-xl'
@@ -997,7 +997,7 @@
 													{#snippet trigger({ open })}
 														{#if ord.fulfillmentStatus === 'CREATED'}
 															<span
-																class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-slate-500/20 bg-slate-500/10 px-2.5 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-500/40 dark:text-slate-300"
+																class="inline-flex items-center gap-1.5 rounded-full border border-slate-500/20 bg-slate-500/10 px-2.5 py-0.5 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-500/40 dark:text-slate-300"
 															>
 																<IconFileText class="size-3 text-slate-500 dark:text-slate-400" />
 																<span>Pesanan Dibuat</span>
@@ -1009,7 +1009,7 @@
 															</span>
 														{:else if ord.fulfillmentStatus === 'QUEUED'}
 															<span
-																class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 text-xs font-semibold text-sky-700 transition-colors hover:border-sky-500/40 dark:text-sky-300"
+																class="inline-flex items-center gap-1.5 rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-0.5 text-xs font-semibold text-sky-700 transition-colors hover:border-sky-500/40 dark:text-sky-300"
 															>
 																<IconClock class="size-3 text-sky-600 dark:text-sky-400" />
 																<span>Antrean Produksi</span>
@@ -1021,7 +1021,7 @@
 															</span>
 														{:else if ord.fulfillmentStatus === 'PROCESSING'}
 															<span
-																class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 text-xs font-semibold text-indigo-700 transition-colors hover:border-indigo-500/40 dark:text-indigo-300"
+																class="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-700 transition-colors hover:border-indigo-500/40 dark:text-indigo-300"
 															>
 																<IconPrinter class="size-3 text-indigo-600 dark:text-indigo-400" />
 																<span>Di Proses</span>
@@ -1033,7 +1033,7 @@
 															</span>
 														{:else if ord.fulfillmentStatus === 'READY_FOR_PICKUP'}
 															<span
-																class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 text-xs font-semibold text-amber-700 transition-colors hover:border-amber-500/40 dark:text-amber-300"
+																class="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-700 transition-colors hover:border-amber-500/40 dark:text-amber-300"
 															>
 																<IconPackage class="size-3 text-amber-600 dark:text-amber-400" />
 																<span>Siap Diambil</span>
@@ -1045,9 +1045,11 @@
 															</span>
 														{:else if ord.fulfillmentStatus === 'PICKED_UP'}
 															<span
-																class="py-0.5 inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 text-xs font-semibold text-emerald-700 transition-colors hover:border-emerald-500/40 dark:text-emerald-300"
+																class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-colors hover:border-emerald-500/40 dark:text-emerald-300"
 															>
-																<IconCheckCircle2 class="size-3 text-emerald-600 dark:text-emerald-400" />
+																<IconCheckCircle2
+																	class="size-3 text-emerald-600 dark:text-emerald-400"
+																/>
 																<span>Sudah Diambil</span>
 																<IconChevronDown
 																	class="size-2.5 text-emerald-500/70 transition-transform {open
@@ -1060,7 +1062,7 @@
 
 													<!-- Header Popover -->
 													<div
-														class="border-b border-border/70 px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle"
+														class="border-b border-border/70 px-2.5 py-1.5 text-[10px] font-bold tracking-wider text-foreground-subtle uppercase"
 													>
 														Ubah Status Pengerjaan
 													</div>
@@ -1135,15 +1137,17 @@
 															: ''}"
 														onSelect={() => handleStatusChange(ord, 'PICKED_UP')}
 													>
-														<IconCheckCircle2 class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+														<IconCheckCircle2
+															class="size-3.5 text-emerald-600 dark:text-emerald-400"
+														/>
 														<span>Sudah Diambil</span>
 														{#if ord.fulfillmentStatus === 'PICKED_UP'}
 															<IconCheck class="ml-auto size-3.5 text-primary" />
 														{:else if ord.remainingAmount > 0}
 															<span
-																class="ml-auto rounded bg-amber-500/10 px-1 py-0.2 text-[9px] font-bold text-amber-700 dark:text-amber-300"
+																class="py-0.2 ml-auto rounded bg-amber-500/10 px-1.5 text-[9px] font-semibold text-amber-700 dark:text-amber-300"
 															>
-																Perlu Lunas
+																Piutang
 															</span>
 														{/if}
 													</DropdownItem>
@@ -1196,7 +1200,9 @@
 															class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-emerald-600 transition-colors hover:bg-emerald-500/10 dark:text-emerald-400"
 															onSelect={() => openPayment(ord)}
 														>
-															<IconCreditCard class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+															<IconCreditCard
+																class="size-3.5 text-emerald-600 dark:text-emerald-400"
+															/>
 															<span>Pelunasan Sisa</span>
 														</DropdownItem>
 													{/if}
@@ -1207,7 +1213,9 @@
 															class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-subtle"
 															onSelect={() => handlePickup(ord)}
 														>
-															<IconCheckCircle2 class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+															<IconCheckCircle2
+																class="size-3.5 text-emerald-600 dark:text-emerald-400"
+															/>
 															<span>Serah Terima Barang</span>
 														</DropdownItem>
 													{/if}
@@ -1715,7 +1723,9 @@
 															class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-emerald-600 transition-colors hover:bg-emerald-500/10 dark:text-emerald-400"
 															onSelect={() => openPayment(ord)}
 														>
-															<IconCreditCard class="size-3.5 text-emerald-600 dark:text-emerald-400" />
+															<IconCreditCard
+																class="size-3.5 text-emerald-600 dark:text-emerald-400"
+															/>
 															<span>Pelunasan Piutang</span>
 														</DropdownItem>
 													{/if}

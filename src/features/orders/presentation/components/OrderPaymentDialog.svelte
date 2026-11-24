@@ -32,7 +32,10 @@
 			paymentAmount = order.remainingAmount;
 			paymentMethod = 'CASH';
 			referenceNumber = '';
-			notes = 'Pelunasan sisa tagihan pesanan kasir';
+			notes =
+				order.fulfillmentStatus === 'PICKED_UP'
+					? 'Pelunasan piutang pesanan yang telah diambil'
+					: 'Pelunasan sisa tagihan pesanan kasir';
 		}
 	});
 
@@ -131,7 +134,9 @@
 			<!-- Form Body -->
 			<div class="flex-1 space-y-4 overflow-y-auto p-6 text-xs">
 				<!-- Outstanding Balance Card -->
-				<div class="flex items-center justify-between rounded-lg border border-border bg-muted/20 p-3.5">
+				<div
+					class="bg-muted/20 flex items-center justify-between rounded-lg border border-border p-3.5"
+				>
 					<div class="flex flex-col gap-0.5">
 						<span class="text-[10px] font-bold tracking-wider text-foreground-subtle uppercase">
 							Sisa Tagihan Tertunggak
@@ -185,7 +190,7 @@
 							class="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2 text-center transition-all {paymentMethod ===
 							'CASH'
 								? 'border-emerald-500/50 bg-emerald-500/10 font-bold text-emerald-700 dark:text-emerald-300'
-								: 'border-border/80 bg-app-surface text-foreground-subtle hover:bg-muted/40 hover:text-foreground'}"
+								: 'hover:bg-muted/40 border-border/80 bg-app-surface text-foreground-subtle hover:text-foreground'}"
 						>
 							<IconBanknote class="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
 							<span class="text-xs">Tunai</span>
@@ -197,7 +202,7 @@
 							class="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2 text-center transition-all {paymentMethod ===
 							'TRANSFER'
 								? 'border-sky-500/50 bg-sky-500/10 font-bold text-sky-700 dark:text-sky-300'
-								: 'border-border/80 bg-app-surface text-foreground-subtle hover:bg-muted/40 hover:text-foreground'}"
+								: 'hover:bg-muted/40 border-border/80 bg-app-surface text-foreground-subtle hover:text-foreground'}"
 						>
 							<IconCreditCard class="size-4 shrink-0 text-sky-600 dark:text-sky-400" />
 							<span class="text-xs">Transfer</span>
@@ -209,7 +214,7 @@
 							class="flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-md border px-2 text-center transition-all {paymentMethod ===
 							'QRIS'
 								? 'border-violet-500/50 bg-violet-500/10 font-bold text-violet-700 dark:text-violet-300'
-								: 'border-border/80 bg-app-surface text-foreground-subtle hover:bg-muted/40 hover:text-foreground'}"
+								: 'hover:bg-muted/40 border-border/80 bg-app-surface text-foreground-subtle hover:text-foreground'}"
 						>
 							<IconQrCode class="size-4 shrink-0 text-violet-600 dark:text-violet-400" />
 							<span class="text-xs">QRIS</span>
@@ -231,7 +236,7 @@
 							type="text"
 							bind:value={referenceNumber}
 							placeholder="Contoh: BCA-8829104"
-							class="h-8 w-full rounded-md border border-border bg-muted/30 px-2.5 text-xs font-semibold text-foreground placeholder:text-foreground-faint transition-colors focus:border-primary focus:outline-none"
+							class="bg-muted/30 h-8 w-full rounded-md border border-border px-2.5 text-xs font-semibold text-foreground transition-colors placeholder:text-foreground-faint focus:border-primary focus:outline-none"
 						/>
 					</div>
 				{/if}
@@ -249,14 +254,19 @@
 						type="text"
 						bind:value={notes}
 						placeholder="Contoh: Pelunasan saat ambil banner di kasir"
-						class="h-8 w-full rounded-md border border-border bg-muted/30 px-2.5 text-xs font-semibold text-foreground placeholder:text-foreground-faint transition-colors focus:border-primary focus:outline-none"
+						class="bg-muted/30 h-8 w-full rounded-md border border-border px-2.5 text-xs font-semibold text-foreground transition-colors placeholder:text-foreground-faint focus:border-primary focus:outline-none"
 					/>
 				</div>
 			</div>
 
 			<!-- Footer Actions -->
 			<div class="flex items-center justify-end gap-2 border-t border-border/40 px-6 py-3.5">
-				<Button variant="outline" size="sm" onclick={onClose} class="h-8.5 rounded-md text-xs font-semibold">
+				<Button
+					variant="outline"
+					size="sm"
+					onclick={onClose}
+					class="h-8.5 rounded-md text-xs font-semibold"
+				>
 					Batal
 				</Button>
 				<Button
