@@ -455,6 +455,99 @@ export class MockOrderRepository implements OrderRepository {
 			notes: 'Nota baru dibuat, belum dikirim ke antrean produksi',
 			issuedAt: '2026-11-24T10:00:00.000Z',
 			updatedAt: '2026-11-24T10:00:00.000Z'
+		},
+		{
+			id: 'ord-202611-011',
+			invoiceNumber: 'INV/202611/0011',
+			orderId: 'ord-prod-011',
+			jobNumber: 'TKT/20261117/0002',
+			orderType: 'PRODUCTION',
+			status: 'REFUND',
+			fulfillmentStatus: 'QUEUED',
+			customerType: 'end_user',
+			customerName: 'Hendro Wijaya',
+			customerPhone: '081288990011',
+			items: [
+				{
+					id: 'item-ord-011',
+					productId: 'prod-002',
+					productName: 'Brosur Art Paper 150gr A4 (Rim)',
+					isProduction: true,
+					uom: 'rim',
+					dimensionText: '1 Rim (500 Lembar)',
+					finishingText: 'Lipat 3 (Z-Fold)',
+					quantity: 1,
+					pricePerUnit: 175000,
+					subtotal: 175000
+				}
+			],
+			subtotal: 175000,
+			totalPaid: 0,
+			remainingAmount: 0,
+			dueDate: null,
+			paymentHistory: [
+				{
+					id: 'pay-011',
+					paymentDate: '2026-11-17T11:00:00.000Z',
+					method: 'TRANSFER',
+					amount: 175000,
+					referenceNumber: 'TRF-BCA-REFUND',
+					note: 'Dana dikembalikan penuh ke pelanggan (salah cetak)',
+					cashierName: 'Kasir Utama'
+				}
+			],
+			notes: 'Pesanan di-refund karena cacat cetak bahan art paper',
+			cancelReason: 'Cacat cetak bahan art paper, dana dikembalikan penuh',
+			cancelledAt: '2026-11-17T14:30:00.000Z',
+			issuedAt: '2026-11-17T10:00:00.000Z',
+			updatedAt: '2026-11-17T14:30:00.000Z'
+		},
+		{
+			id: 'ord-202611-012',
+			invoiceNumber: 'INV/202611/0012',
+			orderId: 'ord-prod-012',
+			jobNumber: 'TKT/20261119/0004',
+			orderType: 'PRODUCTION',
+			status: 'UNPAID',
+			fulfillmentStatus: 'PICKED_UP',
+			pickedUpAt: '2026-11-19T16:20:00.000Z',
+			pickedUpBy: 'Kasir 1',
+			customerType: 'reseller',
+			customerName: 'CV Kreasi Media Print',
+			customerPhone: '081277665544',
+			resellerId: 'reseller-003',
+			resellerName: 'CV Kreasi Media Print',
+			items: [
+				{
+					id: 'item-ord-012',
+					productId: 'prod-002',
+					productName: 'Kartu Nama Art Carton 260gr (2 Sisi)',
+					isProduction: true,
+					uom: 'box',
+					dimensionText: '9.0 x 5.5 cm (Isi 100 Lembar/Box)',
+					finishingText: 'Laminasi Doff 2 Sisi',
+					quantity: 10,
+					pricePerUnit: 45000,
+					subtotal: 450000
+				}
+			],
+			subtotal: 450000,
+			totalPaid: 0,
+			remainingAmount: 450000,
+			dueDate: '2026-12-03T23:59:59.000Z',
+			paymentHistory: [
+				{
+					id: 'pay-012',
+					paymentDate: '2026-11-19T16:20:00.000Z',
+					method: 'PIUTANG',
+					amount: 0,
+					note: 'Diambil lebih dulu, tempo piutang 14 hari',
+					cashierName: 'Kasir 1'
+				}
+			],
+			notes: 'Pesanan sudah diambil pelanggan dengan skema piutang (Belum DiBayar)',
+			issuedAt: '2026-11-19T08:00:00.000Z',
+			updatedAt: '2026-11-19T16:20:00.000Z'
 		}
 	];
 
@@ -579,7 +672,9 @@ export class MockOrderRepository implements OrderRepository {
 		}
 
 		if (order.status === 'CANCELLED') {
-			return Result.error(new ValidationError('Pesanan yang dibatalkan tidak dapat diubah statusnya.'));
+			return Result.error(
+				new ValidationError('Pesanan yang dibatalkan tidak dapat diubah statusnya.')
+			);
 		}
 
 		order.fulfillmentStatus = status;

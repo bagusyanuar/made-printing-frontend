@@ -1,3 +1,4 @@
+import { getLocalTimeZone, today } from '@internationalized/date';
 import type {
 	Order,
 	OrderPaymentStatus,
@@ -8,6 +9,10 @@ import type {
 	OrderPickupInput
 } from '../domain/order.entity';
 import { getOrderRepository } from './order.container';
+
+function getTodayDateString(): string {
+	return today(getLocalTimeZone()).toString();
+}
 
 export class OrderStore {
 	private repo = getOrderRepository();
@@ -29,10 +34,17 @@ export class OrderStore {
 	activeSearchQuery = $state<string>('');
 
 	// Completed Orders Filter State
-	completedStatusFilter = $state<'ALL' | 'PICKED_UP' | 'CANCELLED'>('ALL');
+	completedStatusFilter = $state<'ALL' | 'PICKED_UP' | 'CANCELLED' | 'REFUND'>('ALL');
+	completedStatusFilters = $state<('PICKED_UP' | 'CANCELLED')[]>([]);
 	completedPaymentFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
+	completedPaymentFilters = $state<OrderPaymentStatus[]>([]);
 	completedOrderTypeFilter = $state<OrderType | 'ALL'>('ALL');
+	completedOrderTypeFilters = $state<OrderType[]>([]);
 	completedSearchQuery = $state<string>('');
+	completedDateRange = $state<{ startDate: string | null; endDate: string | null }>({
+		startDate: getTodayDateString(),
+		endDate: getTodayDateString()
+	});
 
 	// Backward compatibility filter properties
 	statusFilter = $state<OrderPaymentStatus | 'ALL' | 'UNSETTLED'>('ALL');
@@ -52,13 +64,15 @@ export class OrderStore {
 			(o) =>
 				o.fulfillmentStatus !== 'PICKED_UP' &&
 				o.status !== 'CANCELLED' &&
+				o.status !== 'REFUND' &&
 				o.orderType !== 'RETAIL'
 		);
 	});
 
 	completedOrders = $derived.by(() => {
 		return this.orders.filter(
-			(o) => o.fulfillmentStatus === 'PICKED_UP' || o.status === 'CANCELLED'
+			(o) =>
+				o.fulfillmentStatus === 'PICKED_UP' || o.status === 'CANCELLED' || o.status === 'REFUND'
 		);
 	});
 
@@ -186,7 +200,16 @@ export class OrderStore {
 	filteredCompletedOrders = $derived.by(() => {
 		let list = [...this.completedOrders];
 
-		if (this.completedStatusFilter !== 'ALL') {
+		if (this.completedStatusFilters.length > 0) {
+			list = list.filter((o) => {
+				const isCancelled = o.status === 'CANCELLED' || o.status === 'REFUND';
+				return this.completedStatusFilters.some((status) => {
+					if (status === 'CANCELLED') return isCancelled;
+					if (status === 'PICKED_UP') return !isCancelled && o.fulfillmentStatus === 'PICKED_UP';
+					return false;
+				});
+			});
+		} else if (this.completedStatusFilter !== 'ALL') {
 			if (this.completedStatusFilter === 'PICKED_UP') {
 				list = list.filter((o) => o.fulfillmentStatus === 'PICKED_UP');
 			} else if (this.completedStatusFilter === 'CANCELLED') {
@@ -194,11 +217,22 @@ export class OrderStore {
 			}
 		}
 
-		if (this.completedOrderTypeFilter !== 'ALL') {
+		if (this.completedOrderTypeFilters.length > 0) {
+			list = list.filter((o) => this.completedOrderTypeFilters.includes(o.orderType));
+		} else if (this.completedOrderTypeFilter !== 'ALL') {
 			list = list.filter((o) => o.orderType === this.completedOrderTypeFilter);
 		}
 
-		if (this.completedPaymentFilter !== 'ALL') {
+		if (this.completedPaymentFilters.length > 0) {
+			list = list.filter((o) =>
+				this.completedPaymentFilters.some((status) => {
+					if (status === 'UNPAID') {
+						return o.status === 'UNPAID' || o.status === 'OVERDUE';
+					}
+					return o.status === status;
+				})
+			);
+		} else if (this.completedPaymentFilter !== 'ALL') {
 			if (this.completedPaymentFilter === 'UNSETTLED') {
 				list = list.filter(
 					(o) => o.status === 'PARTIAL_PAID' || o.status === 'UNPAID' || o.status === 'OVERDUE'
@@ -219,6 +253,24 @@ export class OrderStore {
 					(o.pickedUpBy && o.pickedUpBy.toLowerCase().includes(q)) ||
 					(o.cancelReason && o.cancelReason.toLowerCase().includes(q))
 			);
+		}
+
+		if (this.completedDateRange.startDate || this.completedDateRange.endDate) {
+			const startMs = this.completedDateRange.startDate
+				? Date.parse(`${this.completedDateRange.startDate}T00:00:00`)
+				: null;
+			const endMs = this.completedDateRange.endDate
+				? Date.parse(`${this.completedDateRange.endDate}T23:59:59.999`)
+				: null;
+
+			list = list.filter((o) => {
+				const rawDate = o.pickedUpAt || o.cancelledAt || o.issuedAt;
+				const timeMs = Date.parse(rawDate);
+				if (Number.isNaN(timeMs)) return false;
+				if (startMs !== null && timeMs < startMs) return false;
+				if (endMs !== null && timeMs > endMs) return false;
+				return true;
+			});
 		}
 
 		return list;
@@ -331,25 +383,95 @@ export class OrderStore {
 
 	setCompletedStatusFilter(status: 'ALL' | 'PICKED_UP' | 'CANCELLED') {
 		this.completedStatusFilter = status;
+		if (status === 'ALL') {
+			this.completedStatusFilters = [];
+		} else {
+			this.completedStatusFilters = [status];
+		}
+	}
+
+	toggleCompletedStatusFilter(status: 'PICKED_UP' | 'CANCELLED') {
+		if (this.completedStatusFilters.includes(status)) {
+			this.completedStatusFilters = this.completedStatusFilters.filter((s) => s !== status);
+		} else {
+			this.completedStatusFilters = [...this.completedStatusFilters, status];
+		}
+		if (this.completedStatusFilters.length === 1) {
+			this.completedStatusFilter = this.completedStatusFilters[0];
+		} else {
+			this.completedStatusFilter = 'ALL';
+		}
+	}
+
+	toggleCompletedPaymentFilter(status: OrderPaymentStatus) {
+		if (this.completedPaymentFilters.includes(status)) {
+			this.completedPaymentFilters = this.completedPaymentFilters.filter((s) => s !== status);
+		} else {
+			this.completedPaymentFilters = [...this.completedPaymentFilters, status];
+		}
+	}
+
+	clearCompletedStatusFilters() {
+		this.completedStatusFilters = [];
+		this.completedStatusFilter = 'ALL';
+	}
+
+	clearCompletedPaymentFilters() {
+		this.completedPaymentFilters = [];
+		this.completedPaymentFilter = 'ALL';
 	}
 
 	setCompletedPaymentFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {
 		this.completedPaymentFilter = status;
+		if (status === 'ALL') {
+			this.completedPaymentFilters = [];
+		}
 	}
 
 	setCompletedOrderTypeFilter(type: OrderType | 'ALL') {
 		this.completedOrderTypeFilter = type;
+		if (type === 'ALL') {
+			this.completedOrderTypeFilters = [];
+		} else {
+			this.completedOrderTypeFilters = [type];
+		}
+	}
+
+	toggleCompletedOrderTypeFilter(type: OrderType) {
+		if (this.completedOrderTypeFilters.includes(type)) {
+			this.completedOrderTypeFilters = this.completedOrderTypeFilters.filter((t) => t !== type);
+		} else {
+			this.completedOrderTypeFilters = [...this.completedOrderTypeFilters, type];
+		}
+		if (this.completedOrderTypeFilters.length === 1) {
+			this.completedOrderTypeFilter = this.completedOrderTypeFilters[0];
+		} else {
+			this.completedOrderTypeFilter = 'ALL';
+		}
+	}
+
+	clearCompletedOrderTypeFilters() {
+		this.completedOrderTypeFilters = [];
+		this.completedOrderTypeFilter = 'ALL';
 	}
 
 	setCompletedSearch(q: string) {
 		this.completedSearchQuery = q;
 	}
 
+	setCompletedDateRange(startDate: string | null, endDate: string | null) {
+		this.completedDateRange = { startDate, endDate };
+	}
+
 	resetCompletedFilters() {
 		this.completedStatusFilter = 'ALL';
+		this.completedStatusFilters = [];
 		this.completedPaymentFilter = 'ALL';
+		this.completedPaymentFilters = [];
 		this.completedOrderTypeFilter = 'ALL';
+		this.completedOrderTypeFilters = [];
 		this.completedSearchQuery = '';
+		this.completedDateRange = { startDate: null, endDate: null };
 	}
 
 	setStatusFilter(status: OrderPaymentStatus | 'ALL' | 'UNSETTLED') {
@@ -372,10 +494,7 @@ export class OrderStore {
 		this.selectedOrderId = id;
 	}
 
-	async updateFulfillmentStatus(
-		orderId: string,
-		status: OrderFulfillmentStatus
-	): Promise<boolean> {
+	async updateFulfillmentStatus(orderId: string, status: OrderFulfillmentStatus): Promise<boolean> {
 		const res = await this.repo.updateFulfillmentStatus(orderId, status);
 		if (res.success) {
 			const updated = res.data;

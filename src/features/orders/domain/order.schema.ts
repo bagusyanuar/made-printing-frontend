@@ -5,7 +5,8 @@ export const orderPaymentStatusSchema = z.enum([
 	'PARTIAL_PAID',
 	'UNPAID',
 	'OVERDUE',
-	'CANCELLED'
+	'CANCELLED',
+	'REFUND'
 ]);
 
 export const orderFulfillmentStatusSchema = z.enum([

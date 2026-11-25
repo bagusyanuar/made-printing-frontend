@@ -3,7 +3,7 @@
 	import type { Order } from '../../domain/order.entity';
 	import { formatCurrency, formatOrderDateTime } from '../../domain/order.entity';
 	import { Button } from 'dystopia-linear-lib/components/button';
-	import { Badge } from 'dystopia-linear-lib/components/badge';
+	import OrderPaymentChip from './OrderPaymentChip.svelte';
 	import IconReceipt from '~icons/lucide/receipt';
 	import IconX from '~icons/lucide/x';
 	import IconUser from '~icons/lucide/user';
@@ -32,26 +32,9 @@
 			}
 		};
 	}
-
-	function getStatusBadge(status: string) {
-		switch (status) {
-			case 'LUNAS':
-				return { label: 'LUNAS', variant: 'success' as const };
-			case 'PARTIAL_PAID':
-				return { label: 'BAYAR SEBAGIAN', variant: 'warning' as const };
-			case 'UNPAID':
-			case 'OVERDUE':
-				return { label: 'BELUM DIBAYAR', variant: 'danger' as const };
-			case 'CANCELLED':
-				return { label: 'DIBATALKAN', variant: 'secondary' as const };
-			default:
-				return { label: status, variant: 'secondary' as const };
-		}
-	}
 </script>
 
 {#if open && order}
-	{@const statusInfo = getStatusBadge(order.status)}
 	<div
 		class="fixed inset-0 z-50 flex items-center justify-center p-4"
 		role="dialog"
@@ -82,9 +65,7 @@
 					<div class="flex flex-col">
 						<div class="flex items-center gap-2">
 							<span class="text-sm font-bold text-foreground">{order.invoiceNumber}</span>
-							<Badge variant={statusInfo.variant} size="sm">
-								{statusInfo.label}
-							</Badge>
+							<OrderPaymentChip status={order.status} />
 						</div>
 						<span class="text-xs text-foreground-subtle">
 							Tiket: {order.jobNumber} • Diterbitkan: {formatOrderDateTime(order.issuedAt)}
@@ -103,21 +84,51 @@
 
 			<!-- Body -->
 			<div class="flex-1 space-y-4 overflow-y-auto p-6 text-xs">
+				{#if order.status === 'CANCELLED' || order.status === 'REFUND'}
+					<div
+						class="rounded-lg border {order.status === 'REFUND'
+							? 'border-purple-500/25 bg-purple-500/10'
+							: 'border-rose-500/25 bg-rose-500/10'} p-3"
+					>
+						<div class="flex items-center justify-between gap-2">
+							<span
+								class="text-xs font-bold {order.status === 'REFUND'
+									? 'text-purple-700 dark:text-purple-300'
+									: 'text-rose-700 dark:text-rose-300'}"
+							>
+								{order.status === 'REFUND'
+									? 'Pesanan Dibatalkan (Refund Dana)'
+									: 'Pesanan Dibatalkan (Batal Pesan)'}
+							</span>
+							{#if order.cancelledAt}
+								<span class="text-[11px] text-foreground-subtle">
+									{formatOrderDateTime(order.cancelledAt)}
+								</span>
+							{/if}
+						</div>
+						{#if order.cancelReason}
+							<p class="mt-1 text-xs text-foreground">
+								Alasan: {order.cancelReason}
+							</p>
+						{/if}
+					</div>
+				{/if}
+
 				<!-- Customer & Order Meta -->
-				<div class="grid grid-cols-2 gap-3 rounded-lg border border-border bg-muted/20 p-3">
+				<div class="bg-muted/20 grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
 					<div class="flex flex-col gap-1">
 						<div class="flex items-center gap-1.5 font-bold text-foreground">
 							<IconUser class="size-3.5 text-foreground-subtle" />
 							<span>{order.customerName}</span>
 							{#if order.customerType === 'reseller'}
 								<span
-									class="rounded bg-indigo-500/10 px-1.5 py-0.2 text-[9px] font-bold text-indigo-600 dark:text-indigo-400"
+									class="py-0.2 rounded bg-indigo-500/10 px-1.5 text-[9px] font-bold text-indigo-600 dark:text-indigo-400"
 								>
 									Reseller
 								</span>
 							{:else}
 								<span
-									class="rounded bg-muted px-1.5 py-0.2 text-[9px] font-medium text-foreground-subtle"
+									class="bg-muted py-0.2 rounded px-1.5 text-[9px] font-medium text-foreground-subtle"
 								>
 									Walk-in
 								</span>
@@ -137,7 +148,9 @@
 							</span>
 						</div>
 						<span class="text-[11px] text-foreground-subtle">
-							Tipe: {order.orderType === 'PRODUCTION' ? 'Tiket Produksi Cetak' : 'Pesanan Ritel Langsung'}
+							Tipe: {order.orderType === 'PRODUCTION'
+								? 'Tiket Produksi Cetak'
+								: 'Pesanan Ritel Langsung'}
 						</span>
 					</div>
 				</div>
@@ -149,7 +162,7 @@
 					</span>
 					<div class="overflow-hidden rounded-lg border border-border">
 						<table class="w-full text-left text-xs">
-							<thead class="border-b border-border bg-muted/40 text-foreground-subtle">
+							<thead class="bg-muted/40 border-b border-border text-foreground-subtle">
 								<tr>
 									<th class="px-3 py-2 font-medium">Produk & Spesifikasi</th>
 									<th class="px-3 py-2 text-center font-medium">Qty</th>
@@ -169,7 +182,8 @@
 											</div>
 										</td>
 										<td class="px-3 py-2.5 text-center font-semibold">
-											{item.quantity} {item.uom}
+											{item.quantity}
+											{item.uom}
 										</td>
 										<td class="px-3 py-2.5 text-right text-foreground-subtle">
 											{formatCurrency(item.pricePerUnit)}
@@ -190,7 +204,9 @@
 						Riwayat Pembayaran ({order.paymentHistory.length})
 					</span>
 					{#if order.paymentHistory.length === 0}
-						<div class="rounded-lg border border-border/60 bg-muted/10 p-3 text-center text-foreground-subtle">
+						<div
+							class="bg-muted/10 rounded-lg border border-border/60 p-3 text-center text-foreground-subtle"
+						>
 							Belum ada riwayat pembayaran yang tercatat.
 						</div>
 					{:else}
@@ -199,7 +215,7 @@
 								<div class="flex items-center justify-between p-3 text-xs">
 									<div class="flex items-center gap-2.5">
 										<div
-											class="flex size-7 items-center justify-center rounded-md border border-border bg-muted/30 text-foreground-subtle"
+											class="bg-muted/30 flex size-7 items-center justify-center rounded-md border border-border text-foreground-subtle"
 										>
 											<IconCreditCard class="size-3.5" />
 										</div>
@@ -227,7 +243,7 @@
 				</div>
 
 				<!-- Financial Summary Card -->
-				<div class="space-y-2 rounded-lg border border-border bg-muted/20 p-4">
+				<div class="bg-muted/20 space-y-2 rounded-lg border border-border p-4">
 					<div class="flex items-center justify-between text-xs text-foreground-subtle">
 						<span>Total Tagihan Faktur:</span>
 						<span class="font-bold text-foreground">{formatCurrency(order.subtotal)}</span>
@@ -238,12 +254,14 @@
 							{formatCurrency(order.totalPaid)}
 						</span>
 					</div>
-					<div class="flex items-center justify-between border-t border-border/60 pt-2 text-sm font-bold">
+					<div
+						class="flex items-center justify-between border-t border-border/60 pt-2 text-sm font-bold"
+					>
 						<span class="text-foreground">Sisa Piutang / Tagihan:</span>
 						<span
 							class={order.remainingAmount > 0
-								? 'text-rose-600 dark:text-rose-400 font-black'
-								: 'text-emerald-600 dark:text-emerald-400 font-bold'}
+								? 'font-black text-rose-600 dark:text-rose-400'
+								: 'font-bold text-emerald-600 dark:text-emerald-400'}
 						>
 							{formatCurrency(order.remainingAmount)}
 						</span>
@@ -253,7 +271,12 @@
 
 			<!-- Footer Actions -->
 			<div class="flex items-center justify-between border-t border-border/40 px-6 py-3.5">
-				<Button variant="outline" size="sm" onclick={onClose} class="h-8.5 rounded-md text-xs font-semibold">
+				<Button
+					variant="outline"
+					size="sm"
+					onclick={onClose}
+					class="h-8.5 rounded-md text-xs font-semibold"
+				>
 					Tutup
 				</Button>
 

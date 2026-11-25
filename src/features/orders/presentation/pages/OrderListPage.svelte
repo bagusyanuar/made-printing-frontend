@@ -20,34 +20,33 @@
 	import { Popover } from 'dystopia-linear-lib/components/popover';
 	import { Dropdown, DropdownItem } from 'dystopia-linear-lib/components/dropdown';
 	import { Checkbox } from 'dystopia-linear-lib/components/checkbox';
+	import { DatePicker } from 'dystopia-linear-lib/components/date-picker';
+	import type { CalendarRangeValue } from 'dystopia-linear-lib/components/calendar';
+	import { getLocalTimeZone, today } from '@internationalized/date';
 
 	import IconReceipt from '~icons/lucide/receipt';
 	import IconCheckCircle2 from '~icons/lucide/check-circle-2';
 	import IconAlertTriangle from '~icons/lucide/alert-triangle';
-	import IconAlertCircle from '~icons/lucide/alert-circle';
 	import IconSearch from '~icons/lucide/search';
 	import IconRefreshCw from '~icons/lucide/refresh-cw';
-	import IconDownload from '~icons/lucide/download';
 	import IconEye from '~icons/lucide/eye';
 	import IconCreditCard from '~icons/lucide/credit-card';
 	import IconPrinter from '~icons/lucide/printer';
 	import IconLayers from '~icons/lucide/layers';
-	import IconShoppingBag from '~icons/lucide/shopping-bag';
 	import IconPackage from '~icons/lucide/package';
 	import IconX from '~icons/lucide/x';
 	import IconClock from '~icons/lucide/clock';
 	import IconBan from '~icons/lucide/ban';
-	import IconRotateCcw from '~icons/lucide/rotate-ccw';
 	import IconFileText from '~icons/lucide/file-text';
 	import IconFilter from '~icons/lucide/filter';
 	import IconEllipsisVertical from '~icons/lucide/ellipsis-vertical';
-	import IconChevronDown from '~icons/lucide/chevron-down';
 	import IconCheck from '~icons/lucide/check';
 
 	import type {
 		Order,
 		OrderPaymentStatus,
-		OrderFulfillmentStatus
+		OrderFulfillmentStatus,
+		OrderType
 	} from '../../domain/order.entity';
 	import { formatCurrency, formatOrderDateTime } from '../../domain/order.entity';
 	import { orderStore } from '../../application/order.store.svelte';
@@ -56,6 +55,9 @@
 	import OrderPaymentDialog from '../components/OrderPaymentDialog.svelte';
 	import OrderReceiptDialog from '../components/OrderReceiptDialog.svelte';
 	import OrderCancelDialog from '../components/OrderCancelDialog.svelte';
+	import OrderCancellationInfoDialog from '../components/OrderCancellationInfoDialog.svelte';
+	import OrderStatusChip from '../components/OrderStatusChip.svelte';
+	import OrderPaymentChip from '../components/OrderPaymentChip.svelte';
 
 	// Dialog states
 	let isDetailOpen = $state(false);
@@ -70,12 +72,36 @@
 	let isCancelOpen = $state(false);
 	let selectedOrderForCancel = $state<Order | null>(null);
 
+	let isCancellationInfoOpen = $state(false);
+	let selectedOrderForCancellationInfo = $state<Order | null>(null);
+
 	// Pagination states
 	let activeCurrentPage = $state(1);
 	let activePageSize = $state(10);
 
+	function getTodayRangeValue(): CalendarRangeValue {
+		const currentToday = today(getLocalTimeZone());
+		return { start: currentToday, end: currentToday };
+	}
+
 	let completedCurrentPage = $state(1);
 	let completedPageSize = $state(10);
+	let completedDatePickerValue = $state<CalendarRangeValue | undefined>(getTodayRangeValue());
+
+	function handleCompletedDateRangeChange(range: CalendarRangeValue) {
+		completedDatePickerValue = range;
+		orderStore.setCompletedDateRange(
+			range.start ? range.start.toString() : null,
+			range.end ? range.end.toString() : null
+		);
+		completedCurrentPage = 1;
+	}
+
+	function resetAllCompletedFilters() {
+		orderStore.resetCompletedFilters();
+		completedDatePickerValue = undefined;
+		completedCurrentPage = 1;
+	}
 
 	const paginatedActiveOrders = $derived.by(() => {
 		const start = (activeCurrentPage - 1) * activePageSize;
@@ -88,10 +114,35 @@
 	});
 
 	let isFilterPopoverOpen = $state(false);
+	let isCompletedFilterPopoverOpen = $state(false);
 
 	const activeFiltersCount = $derived(
 		orderStore.activeFulfillmentFilters.length + orderStore.activePaymentFilters.length
 	);
+
+	const completedFiltersCount = $derived(
+		orderStore.completedStatusFilters.length +
+			orderStore.completedPaymentFilters.length +
+			orderStore.completedOrderTypeFilters.length
+	);
+
+	const completedStatusFilterOptions: { value: 'PICKED_UP' | 'CANCELLED'; label: string }[] = [
+		{ value: 'PICKED_UP', label: 'Sudah Diambil' },
+		{ value: 'CANCELLED', label: 'Dibatalkan' }
+	];
+
+	const completedOrderTypeFilterOptions: { value: OrderType; label: string }[] = [
+		{ value: 'PRODUCTION', label: 'Produksi' },
+		{ value: 'RETAIL', label: 'Ritel' }
+	];
+
+	const completedPaymentFilterOptions: { value: OrderPaymentStatus; label: string }[] = [
+		{ value: 'LUNAS', label: 'Lunas' },
+		{ value: 'PARTIAL_PAID', label: 'Bayar Sebagian' },
+		{ value: 'UNPAID', label: 'Belum DiBayar' },
+		{ value: 'CANCELLED', label: 'Dibatalkan' },
+		{ value: 'REFUND', label: 'Refund' }
+	];
 
 	const fulfillmentFilterOptions: { value: OrderFulfillmentStatus; label: string }[] = [
 		{ value: 'CREATED', label: 'Pesanan Dibuat' },
@@ -128,6 +179,11 @@
 	function openCancelModal(ord: Order) {
 		selectedOrderForCancel = ord;
 		isCancelOpen = true;
+	}
+
+	function openCancellationInfo(ord: Order) {
+		selectedOrderForCancellationInfo = ord;
+		isCancellationInfoOpen = true;
 	}
 
 	async function handleCancelConfirm(reason: string): Promise<boolean> {
@@ -219,106 +275,7 @@
 			});
 		}
 	}
-
-	function exportCsv() {
-		const list = orderStore.filteredOrders;
-		const tabName = orderStore.mainTab === 'ACTIVE' ? 'Nota Aktif' : 'Nota Selesai';
-
-		if (list.length === 0) {
-			toast.info(`Tidak ada data ${tabName} untuk diekspor`);
-			return;
-		}
-
-		const headers = [
-			'No. Invoice',
-			'No. SPK',
-			'Tipe Order',
-			'Pelanggan',
-			'Reseller',
-			'Telepon',
-			'Status Pengerjaan',
-			'Lokasi Rak',
-			'Tanggal Diterbitkan',
-			'Jatuh Tempo',
-			'Total Tagihan (Rp)',
-			'Terbayar (Rp)',
-			'Sisa Tagihan (Rp)',
-			'Status Pembayaran'
-		];
-
-		const rows = list.map((ord) => [
-			`"${ord.invoiceNumber}"`,
-			`"${ord.jobNumber}"`,
-			`"${ord.orderType === 'PRODUCTION' ? 'Produksi Cetak' : 'Ritel Walk-in'}"`,
-			`"${ord.customerName}"`,
-			`"${ord.resellerName || '-'}"`,
-			`"${ord.customerPhone}"`,
-			`"${ord.fulfillmentStatus}"`,
-			`"${ord.rackLocation || '-'}"`,
-			`"${formatOrderDateTime(ord.issuedAt)}"`,
-			`"${ord.dueDate ? formatOrderDateTime(ord.dueDate) : 'Lunas Saat Ambil'}"`,
-			ord.subtotal,
-			ord.totalPaid,
-			ord.remainingAmount,
-			`"${ord.status}"`
-		]);
-
-		const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
-		const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-		const url = URL.createObjectURL(blob);
-		const link = document.createElement('a');
-		link.setAttribute('href', url);
-		link.setAttribute(
-			'download',
-			`rekap-pesanan-${orderStore.mainTab.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.csv`
-		);
-		document.body.appendChild(link);
-		link.click();
-		document.body.removeChild(link);
-
-		toast.success(`Rekap ${tabName} berhasil diekspor`, {
-			description: `${list.length} baris data pesanan (${tabName}) telah diunduh sebagai file CSV.`
-		});
-	}
 </script>
-
-{#snippet paymentChip(status: OrderPaymentStatus)}
-	{#if status === 'LUNAS'}
-		<span
-			class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300"
-		>
-			<IconCheckCircle2 class="size-3 text-emerald-600 dark:text-emerald-400" />
-			<span>Lunas</span>
-		</span>
-	{:else if status === 'PARTIAL_PAID'}
-		<span
-			class="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-2.5 py-0.5 text-xs font-semibold text-orange-700 dark:text-orange-300"
-		>
-			<IconCreditCard class="size-3 text-orange-600 dark:text-orange-400" />
-			<span>Bayar Sebagian</span>
-		</span>
-	{:else if status === 'UNPAID' || status === 'OVERDUE'}
-		<span
-			class="inline-flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-0.5 text-xs font-semibold text-rose-700 dark:text-rose-300"
-		>
-			<IconAlertCircle class="size-3 text-rose-600 dark:text-rose-400" />
-			<span>Belum DiBayar</span>
-		</span>
-	{:else if status === 'CANCELLED'}
-		<span
-			class="inline-flex items-center gap-1.5 rounded-full border border-zinc-500/20 bg-zinc-500/10 px-2.5 py-0.5 text-xs font-semibold text-zinc-600 dark:text-zinc-400"
-		>
-			<IconBan class="size-3 text-zinc-500 dark:text-zinc-400" />
-			<span>Dibatalkan</span>
-		</span>
-	{:else}
-		<span
-			class="bg-muted/40 inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold text-foreground-subtle"
-		>
-			<span>{status}</span>
-		</span>
-	{/if}
-{/snippet}
 
 <div class="flex flex-col gap-6">
 	<!-- Page Header -->
@@ -339,260 +296,173 @@
 				</Typography>
 			</div>
 		</div>
-
-		<!-- Header Action Buttons -->
-		<div class="flex items-center gap-2 self-start sm:self-auto">
-			<Button
-				variant="outline"
-				size="sm"
-				onclick={() => orderStore.refresh()}
-				disabled={orderStore.isLoading}
-				aria-label="Segarkan data"
-				title="Segarkan data"
-				class="size-8 justify-center! p-0!"
-			>
-				<IconRefreshCw
-					class="size-4 text-foreground-subtle transition-transform {orderStore.isLoading
-						? 'animate-spin'
-						: ''}"
-				/>
-			</Button>
-
-			<Button
-				variant="outline"
-				size="sm"
-				onclick={exportCsv}
-				class="h-8 gap-1.5 rounded-md text-xs font-semibold"
-			>
-				<IconDownload class="size-3.5" />
-				<span>Export Rekap CSV</span>
-			</Button>
-		</div>
 	</div>
 
 	<!-- KPI Order Process Monitoring Widgets (4 Aesthetic SaaS Cards) -->
 	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 		<!-- Card 1: Pesanan Aktif -->
-		<button
-			type="button"
-			onclick={() => {
-				orderStore.setMainTab('ACTIVE');
-				orderStore.resetActiveFilters();
-			}}
-			class="text-left"
+		<Card
+			class="relative overflow-hidden rounded-xl border border-border/80 bg-app-surface shadow-none"
 		>
-			<Card
-				class="group relative overflow-hidden rounded-xl border bg-app-surface transition-all duration-200 hover:shadow-xs {orderStore.mainTab ===
-					'ACTIVE' && orderStore.activeFulfillmentFilter === 'ALL'
-					? 'border-primary ring-1 ring-primary/40'
-					: 'border-border/80 hover:border-border'}"
-			>
-				<CardContent class="p-4 sm:p-4.5">
-					<div class="flex items-start justify-between gap-3">
-						<div class="flex flex-col">
-							<span
-								class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase"
-							>
-								Pesanan Aktif
+			<CardContent class="p-4 sm:p-4.5">
+				<div class="flex items-start justify-between gap-3">
+					<div class="flex flex-col">
+						<span class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase">
+							Pesanan Aktif
+						</span>
+						<div class="mt-1 flex items-baseline gap-1.5">
+							<span class="text-2xl font-bold tracking-tight text-foreground">
+								{orderStore.activeCount}
 							</span>
-							<div class="mt-1 flex items-baseline gap-1.5">
-								<span class="text-2xl font-bold tracking-tight text-foreground">
-									{orderStore.activeCount}
-								</span>
-								<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
-							</div>
-						</div>
-						<div
-							class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 text-blue-600 transition-transform duration-200 group-hover:scale-105 dark:text-blue-400"
-						>
-							<IconLayers class="size-4.5" />
+							<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
 						</div>
 					</div>
 					<div
-						class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+						class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-blue-500/20 bg-blue-500/10 text-blue-600 dark:text-blue-400"
 					>
-						<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
-							<span class="size-1.5 rounded-full bg-blue-500"></span>
-							Total Pengerjaan Workshop
-						</span>
-						<span
-							class="py-0.2 rounded bg-blue-500/10 px-1.5 font-bold text-blue-600 dark:text-blue-400"
-						>
-							Produksi
-						</span>
+						<IconLayers class="size-4.5" />
 					</div>
-				</CardContent>
-			</Card>
-		</button>
+				</div>
+				<div
+					class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+				>
+					<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
+						<span class="size-1.5 rounded-full bg-blue-500"></span>
+						Total Pengerjaan Workshop
+					</span>
+					<span
+						class="py-0.2 rounded bg-blue-500/10 px-1.5 font-bold text-blue-600 dark:text-blue-400"
+					>
+						Produksi
+					</span>
+				</div>
+			</CardContent>
+		</Card>
 
 		<!-- Card 2: Antrean Produksi -->
-		<button
-			type="button"
-			onclick={() => {
-				orderStore.setMainTab('ACTIVE');
-				orderStore.setActiveFulfillmentFilter('QUEUED');
-			}}
-			class="text-left"
+		<Card
+			class="relative overflow-hidden rounded-xl border border-border/80 bg-app-surface shadow-none"
 		>
-			<Card
-				class="group relative overflow-hidden rounded-xl border bg-app-surface transition-all duration-200 hover:shadow-xs {orderStore.mainTab ===
-					'ACTIVE' && orderStore.activeFulfillmentFilter === 'QUEUED'
-					? 'border-sky-600 ring-1 ring-sky-600/40'
-					: 'border-border/80 hover:border-border'}"
-			>
-				<CardContent class="p-4 sm:p-4.5">
-					<div class="flex items-start justify-between gap-3">
-						<div class="flex flex-col">
-							<span
-								class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase"
-							>
-								Antrean Produksi
+			<CardContent class="p-4 sm:p-4.5">
+				<div class="flex items-start justify-between gap-3">
+					<div class="flex flex-col">
+						<span class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase">
+							Antrean Produksi
+						</span>
+						<div class="mt-1 flex items-baseline gap-1.5">
+							<span class="text-2xl font-bold tracking-tight text-sky-600 dark:text-sky-400">
+								{orderStore.queuedCount}
 							</span>
-							<div class="mt-1 flex items-baseline gap-1.5">
-								<span class="text-2xl font-bold tracking-tight text-sky-600 dark:text-sky-400">
-									{orderStore.queuedCount}
-								</span>
-								<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
-							</div>
-						</div>
-						<div
-							class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-sky-500/20 bg-sky-500/10 text-sky-600 transition-transform duration-200 group-hover:scale-105 dark:text-sky-400"
-						>
-							<IconClock class="size-4.5" />
+							<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
 						</div>
 					</div>
 					<div
-						class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+						class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-sky-500/20 bg-sky-500/10 text-sky-600 dark:text-sky-400"
 					>
-						<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
-							<span class="size-1.5 rounded-full bg-sky-500"></span>
-							Menunggu Pra-Cetak & Plat
-						</span>
-						<span
-							class="py-0.2 rounded bg-sky-500/10 px-1.5 font-bold text-sky-600 dark:text-sky-400"
-						>
-							Antrean
-						</span>
+						<IconClock class="size-4.5" />
 					</div>
-				</CardContent>
-			</Card>
-		</button>
+				</div>
+				<div
+					class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+				>
+					<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
+						<span class="size-1.5 rounded-full bg-sky-500"></span>
+						Menunggu Produksi
+					</span>
+					<span
+						class="py-0.2 rounded bg-sky-500/10 px-1.5 font-bold text-sky-600 dark:text-sky-400"
+					>
+						Antrean
+					</span>
+				</div>
+			</CardContent>
+		</Card>
 
 		<!-- Card 3: Di Proses -->
-		<button
-			type="button"
-			onclick={() => {
-				orderStore.setMainTab('ACTIVE');
-				orderStore.setActiveFulfillmentFilter('PROCESSING');
-			}}
-			class="text-left"
+		<Card
+			class="relative overflow-hidden rounded-xl border border-border/80 bg-app-surface shadow-none"
 		>
-			<Card
-				class="group relative overflow-hidden rounded-xl border bg-app-surface transition-all duration-200 hover:shadow-xs {orderStore.mainTab ===
-					'ACTIVE' && orderStore.activeFulfillmentFilter === 'PROCESSING'
-					? 'border-indigo-600 ring-1 ring-indigo-600/40'
-					: 'border-border/80 hover:border-border'}"
-			>
-				<CardContent class="p-4 sm:p-4.5">
-					<div class="flex items-start justify-between gap-3">
-						<div class="flex flex-col">
-							<span
-								class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase"
-							>
-								Di Proses
+			<CardContent class="p-4 sm:p-4.5">
+				<div class="flex items-start justify-between gap-3">
+					<div class="flex flex-col">
+						<span class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase">
+							Di Proses
+						</span>
+						<div class="mt-1 flex items-baseline gap-1.5">
+							<span class="text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400">
+								{orderStore.processingCount}
 							</span>
-							<div class="mt-1 flex items-baseline gap-1.5">
-								<span
-									class="text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400"
-								>
-									{orderStore.processingCount}
-								</span>
-								<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
-							</div>
-						</div>
-						<div
-							class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 transition-transform duration-200 group-hover:scale-105 dark:text-indigo-400"
-						>
-							<IconPrinter class="size-4.5" />
+							<span class="text-xs font-semibold text-foreground-subtle"> Pesanan </span>
 						</div>
 					</div>
 					<div
-						class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+						class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-indigo-500/20 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400"
 					>
-						<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
-							<span class="size-1.5 rounded-full bg-indigo-500"></span>
-							Mesin Cetak & Finishing
-						</span>
-						<span
-							class="py-0.2 rounded bg-indigo-500/10 px-1.5 font-bold text-indigo-600 dark:text-indigo-400"
-						>
-							Workshop
-						</span>
+						<IconPrinter class="size-4.5" />
 					</div>
-				</CardContent>
-			</Card>
-		</button>
+				</div>
+				<div
+					class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+				>
+					<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
+						<span class="size-1.5 rounded-full bg-indigo-500"></span>
+						Mesin Cetak & Finishing
+					</span>
+					<span
+						class="py-0.2 rounded bg-indigo-500/10 px-1.5 font-bold text-indigo-600 dark:text-indigo-400"
+					>
+						Workshop
+					</span>
+				</div>
+			</CardContent>
+		</Card>
 
 		<!-- Card 4: Siap Diambil -->
-		<button
-			type="button"
-			onclick={() => {
-				orderStore.setMainTab('ACTIVE');
-				orderStore.setActiveFulfillmentFilter('READY_FOR_PICKUP');
-			}}
-			class="text-left"
+		<Card
+			class="relative overflow-hidden rounded-xl border border-border/80 bg-app-surface shadow-none"
 		>
-			<Card
-				class="group relative overflow-hidden rounded-xl border bg-app-surface transition-all duration-200 hover:shadow-xs {orderStore.mainTab ===
-					'ACTIVE' && orderStore.activeFulfillmentFilter === 'READY_FOR_PICKUP'
-					? 'border-amber-600 ring-1 ring-amber-600/40'
-					: 'border-border/80 hover:border-border'}"
-			>
-				<CardContent class="p-4 sm:p-4.5">
-					<div class="flex items-start justify-between gap-3">
-						<div class="flex flex-col">
-							<span
-								class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase"
-							>
-								Siap Diambil
+			<CardContent class="p-4 sm:p-4.5">
+				<div class="flex items-start justify-between gap-3">
+					<div class="flex flex-col">
+						<span class="text-[11px] font-semibold tracking-wider text-foreground-subtle uppercase">
+							Siap Diambil
+						</span>
+						<div class="mt-1 flex items-baseline gap-1.5">
+							<span class="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
+								{orderStore.readyCount}
 							</span>
-							<div class="mt-1 flex items-baseline gap-1.5">
-								<span class="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
-									{orderStore.readyCount}
-								</span>
-								<span class="text-xs font-semibold text-foreground-subtle"> Paket </span>
-							</div>
-						</div>
-						<div
-							class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-600 transition-transform duration-200 group-hover:scale-105 dark:text-amber-400"
-						>
-							<IconPackage class="size-4.5" />
+							<span class="text-xs font-semibold text-foreground-subtle"> Paket </span>
 						</div>
 					</div>
 					<div
-						class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+						class="flex size-9 shrink-0 items-center justify-center rounded-lg border border-amber-500/20 bg-amber-500/10 text-amber-600 dark:text-amber-400"
 					>
-						<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
-							<span class="size-1.5 rounded-full bg-amber-500"></span>
-							Di Meja Kasir / Siap Ambil
-						</span>
-						{#if orderStore.readyUnpaidCount > 0}
-							<span
-								class="py-0.2 rounded bg-amber-500/15 px-1.5 font-bold text-amber-700 dark:text-amber-300"
-							>
-								{orderStore.readyUnpaidCount} Perlu Pelunasan
-							</span>
-						{:else}
-							<span
-								class="py-0.2 rounded bg-emerald-500/10 px-1.5 font-semibold text-emerald-600 dark:text-emerald-400"
-							>
-								Lunas Penuh
-							</span>
-						{/if}
+						<IconPackage class="size-4.5" />
 					</div>
-				</CardContent>
-			</Card>
-		</button>
+				</div>
+				<div
+					class="mt-3 flex items-center justify-between border-t border-border/60 pt-2.5 text-[11px]"
+				>
+					<span class="inline-flex items-center gap-1.5 text-foreground-subtle">
+						<span class="size-1.5 rounded-full bg-amber-500"></span>
+						Siap Ambil
+					</span>
+					{#if orderStore.readyUnpaidCount > 0}
+						<span
+							class="py-0.2 rounded bg-amber-500/15 px-1.5 font-bold text-amber-700 dark:text-amber-300"
+						>
+							{orderStore.readyUnpaidCount} Perlu Pelunasan
+						</span>
+					{:else}
+						<span
+							class="py-0.2 rounded bg-emerald-500/10 px-1.5 font-semibold text-emerald-600 dark:text-emerald-400"
+						>
+							Lunas Penuh
+						</span>
+					{/if}
+				</div>
+			</CardContent>
+		</Card>
 	</div>
 
 	<!-- Primary Pills Tabs: Nota Aktif vs Nota Selesai -->
@@ -986,78 +856,20 @@
 													placement="bottom"
 													offset={4}
 													aria-label="Ubah Status Pesanan"
-													class="inline-flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 transition-all hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
+													class="inline-flex h-auto! cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0! leading-none transition-all hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
 													classes={{
 														trigger:
-															'inline-flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 transition-all hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none',
+															'inline-flex h-auto! cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0! leading-none transition-all hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none',
 														content: 'min-w-52 border-border bg-app-surface p-1 shadow-lg'
 													}}
 													title="Klik untuk ubah status pengerjaan"
 												>
 													{#snippet trigger({ open })}
-														{#if ord.fulfillmentStatus === 'CREATED'}
-															<span
-																class="inline-flex items-center gap-1.5 rounded-full border border-slate-500/20 bg-slate-500/10 px-2.5 py-0.5 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-500/40 dark:text-slate-300"
-															>
-																<IconFileText class="size-3 text-slate-500 dark:text-slate-400" />
-																<span>Pesanan Dibuat</span>
-																<IconChevronDown
-																	class="size-2.5 text-slate-500/70 transition-transform {open
-																		? 'rotate-180'
-																		: ''}"
-																/>
-															</span>
-														{:else if ord.fulfillmentStatus === 'QUEUED'}
-															<span
-																class="inline-flex items-center gap-1.5 rounded-full border border-sky-500/20 bg-sky-500/10 px-2.5 py-0.5 text-xs font-semibold text-sky-700 transition-colors hover:border-sky-500/40 dark:text-sky-300"
-															>
-																<IconClock class="size-3 text-sky-600 dark:text-sky-400" />
-																<span>Antrean Produksi</span>
-																<IconChevronDown
-																	class="size-2.5 text-sky-500/70 transition-transform {open
-																		? 'rotate-180'
-																		: ''}"
-																/>
-															</span>
-														{:else if ord.fulfillmentStatus === 'PROCESSING'}
-															<span
-																class="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-2.5 py-0.5 text-xs font-semibold text-indigo-700 transition-colors hover:border-indigo-500/40 dark:text-indigo-300"
-															>
-																<IconPrinter class="size-3 text-indigo-600 dark:text-indigo-400" />
-																<span>Di Proses</span>
-																<IconChevronDown
-																	class="size-2.5 text-indigo-500/70 transition-transform {open
-																		? 'rotate-180'
-																		: ''}"
-																/>
-															</span>
-														{:else if ord.fulfillmentStatus === 'READY_FOR_PICKUP'}
-															<span
-																class="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-700 transition-colors hover:border-amber-500/40 dark:text-amber-300"
-															>
-																<IconPackage class="size-3 text-amber-600 dark:text-amber-400" />
-																<span>Siap Diambil</span>
-																<IconChevronDown
-																	class="size-2.5 text-amber-500/70 transition-transform {open
-																		? 'rotate-180'
-																		: ''}"
-																/>
-															</span>
-														{:else if ord.fulfillmentStatus === 'PICKED_UP'}
-															<span
-																class="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 transition-colors hover:border-emerald-500/40 dark:text-emerald-300"
-															>
-																<IconCheckCircle2
-																	class="size-3 text-emerald-600 dark:text-emerald-400"
-																/>
-																<span>Sudah Diambil</span>
-																<IconChevronDown
-																	class="size-2.5 text-emerald-500/70 transition-transform {open
-																		? 'rotate-180'
-																		: ''}"
-																/>
-															</span>
-														{/if}
+														<OrderStatusChip
+															fulfillmentStatus={ord.fulfillmentStatus}
+															showChevron={true}
+															{open}
+														/>
 													{/snippet}
 
 													<!-- Header Popover -->
@@ -1158,7 +970,7 @@
 										<!-- 7. Pembayaran (Status Pembayaran) -->
 										<TableCell class="px-4 py-3 text-center align-top">
 											<div class="flex items-center justify-center">
-												{@render paymentChip(ord.status)}
+												<OrderPaymentChip status={ord.status} />
 											</div>
 										</TableCell>
 
@@ -1258,196 +1070,202 @@
 		<!-- ============================================================== -->
 		<TabsContent value="COMPLETED" class="flex flex-col gap-3">
 			<!-- Toolbar: Nota Selesai -->
-			<div class="flex flex-col gap-3">
-				<!-- Row 1: Status Selesai Filter (Sudah Diambil vs Dibatalkan) -->
-				<div class="flex flex-wrap items-center justify-between gap-2">
-					<div class="flex flex-wrap items-center gap-1.5">
-						<!-- Semua Selesai -->
-						<button
-							type="button"
-							onclick={() => orderStore.setCompletedStatusFilter('ALL')}
-							class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all {orderStore.completedStatusFilter ===
-							'ALL'
-								? 'border-primary bg-primary text-primary-foreground shadow-xs'
-								: 'border-border bg-app-surface text-foreground-subtle hover:border-primary/40 hover:text-foreground'}"
-						>
-							<span>Semua Selesai</span>
-							<span
-								class="py-0.2 rounded-full px-1.5 text-[10px] {orderStore.completedStatusFilter ===
-								'ALL'
-									? 'bg-primary-foreground/20 text-primary-foreground'
-									: 'bg-muted text-foreground-subtle'}"
-							>
-								{orderStore.completedCount}
-							</span>
-						</button>
-
-						<!-- Sudah Diambil -->
-						<button
-							type="button"
-							onclick={() => orderStore.setCompletedStatusFilter('PICKED_UP')}
-							class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all {orderStore.completedStatusFilter ===
-							'PICKED_UP'
-								? 'border-emerald-600 bg-emerald-600 text-white shadow-xs'
-								: 'border-border bg-app-surface text-foreground-subtle hover:border-emerald-500/40 hover:text-foreground'}"
-						>
-							<IconCheckCircle2 class="size-3.5" />
-							<span>Sudah Diambil (Serah Terima)</span>
-							{#if orderStore.pickedUpCount > 0}
-								<span
-									class="py-0.2 rounded-full px-1.5 text-[10px] {orderStore.completedStatusFilter ===
-									'PICKED_UP'
-										? 'bg-white/20 text-white'
-										: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'}"
-								>
-									{orderStore.pickedUpCount}
-								</span>
-							{/if}
-						</button>
-
-						<!-- Dibatalkan -->
-						<button
-							type="button"
-							onclick={() => orderStore.setCompletedStatusFilter('CANCELLED')}
-							class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all {orderStore.completedStatusFilter ===
-							'CANCELLED'
-								? 'border-rose-600 bg-rose-600 text-white shadow-xs'
-								: 'border-border bg-app-surface text-foreground-subtle hover:border-rose-500/40 hover:text-foreground'}"
-						>
-							<IconBan class="size-3.5" />
-							<span>Dibatalkan</span>
-							{#if orderStore.cancelledCount > 0}
-								<span
-									class="py-0.2 rounded-full px-1.5 text-[10px] {orderStore.completedStatusFilter ===
-									'CANCELLED'
-										? 'bg-white/20 text-white'
-										: 'bg-rose-500/15 text-rose-700 dark:text-rose-300'}"
-								>
-									{orderStore.cancelledCount}
-								</span>
-							{/if}
-						</button>
+			<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<!-- Search Input on Left -->
+				<div class="relative w-full sm:w-72">
+					<TextField
+						size="sm"
+						placeholder="Cari invoice selesai, nama pelanggan..."
+						value={orderStore.completedSearchQuery}
+						onValueChange={(val) => {
+							orderStore.setCompletedSearch(val);
+							completedCurrentPage = 1;
+						}}
+						class="w-full pl-8"
+					/>
+					<div
+						class="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-foreground-subtle"
+					>
+						<IconSearch class="size-3.5" />
 					</div>
-				</div>
-
-				<!-- Row 2: Secondary Filters & Search -->
-				<div class="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-					<div class="flex flex-wrap items-center gap-2">
-						<!-- Tipe Order: Semua | Produksi | Ritel -->
-						<div class="flex items-center rounded-lg border border-border bg-app-surface p-0.5">
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedOrderTypeFilter('ALL')}
-								class="rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedOrderTypeFilter ===
-								'ALL'
-									? 'bg-primary text-primary-foreground'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								Semua Tipe
-							</button>
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedOrderTypeFilter('PRODUCTION')}
-								class="flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedOrderTypeFilter ===
-								'PRODUCTION'
-									? 'bg-primary text-primary-foreground'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								<IconLayers class="size-3" />
-								<span>Produksi</span>
-							</button>
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedOrderTypeFilter('RETAIL')}
-								class="flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedOrderTypeFilter ===
-								'RETAIL'
-									? 'bg-primary text-primary-foreground'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								<IconShoppingBag class="size-3" />
-								<span>Ritel</span>
-							</button>
-						</div>
-
-						<!-- Filter Status Tagihan: Semua | Lunas | Ada Piutang -->
-						<div class="flex items-center rounded-lg border border-border bg-app-surface p-0.5">
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedPaymentFilter('ALL')}
-								class="rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedPaymentFilter ===
-								'ALL'
-									? 'bg-primary text-primary-foreground'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								Semua Tagihan
-							</button>
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedPaymentFilter('LUNAS')}
-								class="flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedPaymentFilter ===
-								'LUNAS'
-									? 'bg-emerald-600 text-white'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								<span>Lunas Penuh</span>
-							</button>
-							<button
-								type="button"
-								onclick={() => orderStore.setCompletedPaymentFilter('UNSETTLED')}
-								class="flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-semibold transition-colors {orderStore.completedPaymentFilter ===
-								'UNSETTLED'
-									? 'bg-amber-600 text-white'
-									: 'text-foreground-subtle hover:text-foreground'}"
-							>
-								<span>Piutang / Tempo</span>
-							</button>
-						</div>
-
-						<!-- Reset Completed Filters if active -->
-						{#if orderStore.completedStatusFilter !== 'ALL' || orderStore.completedOrderTypeFilter !== 'ALL' || orderStore.completedPaymentFilter !== 'ALL' || orderStore.completedSearchQuery.trim()}
-							<Button
-								variant="ghost"
-								size="sm"
-								onclick={() => orderStore.resetCompletedFilters()}
-								class="h-7 gap-1 px-2 text-xs font-medium text-foreground-subtle hover:text-foreground"
-							>
-								<IconRotateCcw class="size-3" />
-								<span>Reset</span>
-							</Button>
-						{/if}
-					</div>
-
-					<!-- Search Input -->
-					<div class="relative w-full sm:w-64">
-						<TextField
-							size="sm"
-							placeholder="Cari invoice selesai, nama pengambil..."
-							value={orderStore.completedSearchQuery}
-							onValueChange={(val) => {
-								orderStore.setCompletedSearch(val);
+					{#if orderStore.completedSearchQuery.trim()}
+						<button
+							type="button"
+							onclick={() => {
+								orderStore.setCompletedSearch('');
 								completedCurrentPage = 1;
 							}}
-							class="w-full pl-8"
-						/>
-						<div
-							class="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-foreground-subtle"
+							class="hover:bg-muted absolute top-1/2 right-2.5 -translate-y-1/2 cursor-pointer rounded p-0.5 text-foreground-subtle"
+							aria-label="Bersihkan pencarian"
 						>
-							<IconSearch class="size-3.5" />
+							<IconX class="size-3" />
+						</button>
+					{/if}
+				</div>
+
+				<!-- Actions on Right: Date Range Filter & Refresh -->
+				<div class="flex items-center gap-2 self-end sm:self-auto">
+					<DatePicker
+						type="range"
+						bind:value={completedDatePickerValue}
+						onValueChange={handleCompletedDateRangeChange}
+						clearable={true}
+						locale="id-ID"
+						labels={{
+							placeholder: 'Filter rentang tanggal',
+							clear: 'Hapus filter tanggal',
+							previousMonth: 'Bulan sebelumnya',
+							nextMonth: 'Bulan berikutnya',
+							previousYear: 'Tahun sebelumnya',
+							nextYear: 'Tahun berikutnya',
+							previousYears: 'Beberapa tahun sebelumnya',
+							nextYears: 'Beberapa tahun berikutnya'
+						}}
+						class="w-fit max-w-full"
+						classes={{
+							trigger: `h-8 w-auto rounded-md bg-app-surface pl-2.5 text-xs ${completedDatePickerValue?.start ? 'pr-8' : 'pr-2.5'}`,
+							icon: 'size-3.5',
+							value: 'flex-initial text-xs',
+							clearButton: 'right-1.5 size-5',
+							content: 'bg-app-surface shadow-lg'
+						}}
+					/>
+					<Button
+						variant="outline"
+						size="sm"
+						onclick={() => orderStore.refresh()}
+						disabled={orderStore.isLoading}
+						aria-label="Segarkan data nota selesai"
+						title="Segarkan data nota selesai"
+						class="size-8 justify-center! p-0!"
+					>
+						<IconRefreshCw
+							class="size-4 text-foreground-subtle transition-transform {orderStore.isLoading
+								? 'animate-spin'
+								: ''}"
+						/>
+					</Button>
+
+					<!-- Filter Button with Popover (Nota Selesai) -->
+					<Popover
+						bind:open={isCompletedFilterPopoverOpen}
+						placement="bottom-end"
+						offset={8}
+						class="h-8! gap-1.5 rounded-md px-2.5! text-xs! font-semibold transition-colors {completedFiltersCount >
+						0
+							? 'border-primary/40! bg-primary/10! text-primary!'
+							: 'hover:bg-muted text-foreground'}"
+						classes={{
+							content:
+								'z-50 w-[300px] rounded-xl border border-border bg-app-surface p-3.5 text-xs shadow-xl'
+						}}
+						title="Filter status dan pembayaran"
+					>
+						{#snippet trigger()}
+							<IconFilter class="size-3.5" />
+							<span>Filter</span>
+							{#if completedFiltersCount > 0}
+								<span
+									class="inline-flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground"
+								>
+									{completedFiltersCount}
+								</span>
+							{/if}
+						{/snippet}
+
+						<div class="flex flex-col gap-3">
+							<!-- Header Popover -->
+							<div class="flex items-center justify-between border-b border-border/70 pb-2">
+								<div class="flex items-center gap-1.5 font-bold text-foreground">
+									<IconFilter class="size-3.5 text-primary" />
+									<span class="text-xs">Filter Nota Selesai</span>
+								</div>
+								{#if completedFiltersCount > 0}
+									<button
+										type="button"
+										onclick={() => {
+											orderStore.clearCompletedStatusFilters();
+											orderStore.clearCompletedPaymentFilters();
+											orderStore.clearCompletedOrderTypeFilters();
+											completedCurrentPage = 1;
+										}}
+										class="cursor-pointer text-[11px] font-semibold text-primary hover:underline"
+									>
+										Reset Filter
+									</button>
+								{/if}
+							</div>
+
+							<!-- 1. Tipe Nota (Produksi vs Ritel) -->
+							<div class="flex flex-col gap-2">
+								<span class="text-[11px] font-bold tracking-wider text-foreground-subtle uppercase">
+									Tipe Nota
+								</span>
+								<div class="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+									{#each completedOrderTypeFilterOptions as opt (opt.value)}
+										<Checkbox
+											size="sm"
+											label={opt.label}
+											checked={orderStore.completedOrderTypeFilters.includes(opt.value)}
+											onchange={() => {
+												orderStore.toggleCompletedOrderTypeFilter(opt.value);
+												completedCurrentPage = 1;
+											}}
+											classes={{
+												label: 'text-xs font-medium text-foreground cursor-pointer select-none'
+											}}
+										/>
+									{/each}
+								</div>
+							</div>
+
+							<!-- 2. Status (Sudah Diambil vs Dibatalkan) -->
+							<div class="flex flex-col gap-2 border-t border-border/70 pt-2.5">
+								<span class="text-[11px] font-bold tracking-wider text-foreground-subtle uppercase">
+									Status
+								</span>
+								<div class="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+									{#each completedStatusFilterOptions as opt (opt.value)}
+										<Checkbox
+											size="sm"
+											label={opt.label}
+											checked={orderStore.completedStatusFilters.includes(opt.value)}
+											onchange={() => {
+												orderStore.toggleCompletedStatusFilter(opt.value);
+												completedCurrentPage = 1;
+											}}
+											classes={{
+												label: 'text-xs font-medium text-foreground cursor-pointer select-none'
+											}}
+										/>
+									{/each}
+								</div>
+							</div>
+
+							<!-- 2. Pembayaran -->
+							<div class="flex flex-col gap-2 border-t border-border/70 pt-2.5">
+								<span class="text-[11px] font-bold tracking-wider text-foreground-subtle uppercase">
+									Pembayaran
+								</span>
+								<div class="flex flex-wrap items-center gap-x-4 gap-y-2.5">
+									{#each completedPaymentFilterOptions as opt (opt.value)}
+										<Checkbox
+											size="sm"
+											label={opt.label}
+											checked={orderStore.completedPaymentFilters.includes(opt.value)}
+											onchange={() => {
+												orderStore.toggleCompletedPaymentFilter(opt.value);
+												completedCurrentPage = 1;
+											}}
+											classes={{
+												label: 'text-xs font-medium text-foreground cursor-pointer select-none'
+											}}
+										/>
+									{/each}
+								</div>
+							</div>
 						</div>
-						{#if orderStore.completedSearchQuery.trim()}
-							<button
-								type="button"
-								onclick={() => {
-									orderStore.setCompletedSearch('');
-									completedCurrentPage = 1;
-								}}
-								class="hover:bg-muted absolute top-1/2 right-2.5 -translate-y-1/2 cursor-pointer rounded p-0.5 text-foreground-subtle"
-								aria-label="Bersihkan pencarian"
-							>
-								<IconX class="size-3" />
-							</button>
-						{/if}
-					</div>
+					</Popover>
 				</div>
 			</div>
 
@@ -1500,11 +1318,11 @@
 										: 'Belum ada riwayat pesanan yang selesai diambil atau dibatalkan pada filter ini.'}
 								</Typography>
 							{/snippet}
-							{#if orderStore.completedSearchQuery || orderStore.completedStatusFilter !== 'ALL' || orderStore.completedOrderTypeFilter !== 'ALL' || orderStore.completedPaymentFilter !== 'ALL'}
+							{#if orderStore.completedSearchQuery || orderStore.completedStatusFilter !== 'ALL' || orderStore.completedStatusFilters.length > 0 || orderStore.completedOrderTypeFilter !== 'ALL' || orderStore.completedOrderTypeFilters.length > 0 || orderStore.completedPaymentFilter !== 'ALL' || orderStore.completedPaymentFilters.length > 0 || orderStore.completedDateRange.startDate || orderStore.completedDateRange.endDate}
 								<Button
 									variant="outline"
 									size="sm"
-									onclick={() => orderStore.resetCompletedFilters()}
+									onclick={resetAllCompletedFilters}
 									class="mt-2 rounded-md text-xs font-semibold"
 								>
 									Reset Semua Filter
@@ -1518,10 +1336,7 @@
 							<TableHeader>
 								<TableRow class="bg-muted/40 border-b border-border hover:bg-transparent">
 									<TableHead class="h-9 px-4 text-xs font-bold text-foreground-subtle">
-										No. Invoice & Tipe
-									</TableHead>
-									<TableHead class="h-9 px-4 text-xs font-bold text-foreground-subtle">
-										No. SPK & Status Akhir
+										No. Invoice
 									</TableHead>
 									<TableHead class="h-9 px-4 text-xs font-bold text-foreground-subtle">
 										Pelanggan
@@ -1533,10 +1348,10 @@
 										Terbayar
 									</TableHead>
 									<TableHead class="h-9 px-4 text-right text-xs font-bold text-foreground-subtle">
-										Sisa Piutang
+										Sisa Tagihan
 									</TableHead>
-									<TableHead class="h-9 px-4 text-xs font-bold text-foreground-subtle">
-										Tanggal Selesai
+									<TableHead class="h-9 px-4 text-center text-xs font-bold text-foreground-subtle">
+										Status
 									</TableHead>
 									<TableHead class="h-9 px-4 text-center text-xs font-bold text-foreground-subtle">
 										Pembayaran
@@ -1551,9 +1366,9 @@
 									<TableRow
 										class="hover:bg-muted/30 border-b border-border/40 transition-colors duration-150"
 									>
-										<!-- No. Invoice & Tipe -->
+										<!-- 1. No. Invoice -->
 										<TableCell class="px-4 py-3 align-top">
-											<div class="flex flex-col gap-1">
+											<div class="flex flex-col gap-0.5">
 												<button
 													type="button"
 													onclick={() => openDetail(ord)}
@@ -1564,64 +1379,25 @@
 												<div class="flex items-center gap-1.5">
 													{#if ord.orderType === 'PRODUCTION'}
 														<span
-															class="py-0.2 inline-flex items-center gap-1 rounded bg-blue-500/10 px-1.5 text-[9px] font-bold text-blue-600 dark:text-blue-400"
+															class="rounded bg-sky-500/10 px-1.5 py-0.5 text-[9px] font-bold text-sky-700 dark:text-sky-300"
 														>
-															<IconLayers class="size-2.5" />
-															<span>Produksi</span>
+															Produksi
 														</span>
 													{:else}
 														<span
-															class="py-0.2 inline-flex items-center gap-1 rounded bg-orange-500/10 px-1.5 text-[9px] font-bold text-orange-600 dark:text-orange-400"
+															class="rounded bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 dark:text-amber-300"
 														>
-															<IconShoppingBag class="size-2.5" />
-															<span>Ritel</span>
+															Ritel
 														</span>
 													{/if}
-													<span class="text-[10px] text-foreground-subtle">
-														{ord.items.length} item
+													<span class="text-[11px] text-foreground-subtle">
+														{formatOrderDateTime(ord.pickedUpAt || ord.cancelledAt || ord.issuedAt)}
 													</span>
 												</div>
 											</div>
 										</TableCell>
 
-										<!-- No. SPK & Status Akhir -->
-										<TableCell class="px-4 py-3 align-top">
-											<div class="flex flex-col gap-1">
-												<span class="font-semibold text-foreground">{ord.jobNumber}</span>
-												<div class="flex flex-wrap items-center gap-1">
-													{#if ord.fulfillmentStatus === 'PICKED_UP'}
-														<span
-															class="py-0.2 inline-flex items-center gap-1 rounded bg-emerald-500/10 px-1.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400"
-														>
-															<IconCheckCircle2 class="size-2.5" />
-															<span>Sudah Diambil</span>
-														</span>
-														{#if ord.pickedUpBy}
-															<span class="text-[10px] text-foreground-subtle">
-																Oleh: {ord.pickedUpBy}
-															</span>
-														{/if}
-													{:else if ord.status === 'CANCELLED'}
-														<span
-															class="py-0.2 inline-flex items-center gap-1 rounded bg-rose-500/10 px-1.5 text-[10px] font-bold text-rose-600 dark:text-rose-400"
-														>
-															<IconBan class="size-2.5" />
-															<span>Dibatalkan</span>
-														</span>
-														{#if ord.cancelReason}
-															<span
-																class="line-clamp-1 max-w-45 text-[10px] text-foreground-subtle"
-																title={ord.cancelReason}
-															>
-																{ord.cancelReason}
-															</span>
-														{/if}
-													{/if}
-												</div>
-											</div>
-										</TableCell>
-
-										<!-- Pelanggan -->
+										<!-- 2. Pelanggan -->
 										<TableCell class="px-4 py-3 align-top">
 											<div class="flex flex-col gap-0.5">
 												<span class="font-bold text-foreground">{ord.customerName}</span>
@@ -1644,19 +1420,19 @@
 											</div>
 										</TableCell>
 
-										<!-- Total Tagihan -->
+										<!-- 3. Total Tagihan -->
 										<TableCell class="px-4 py-3 text-right align-top font-bold text-foreground">
 											{formatCurrency(ord.subtotal)}
 										</TableCell>
 
-										<!-- Terbayar -->
+										<!-- 4. Terbayar -->
 										<TableCell
 											class="px-4 py-3 text-right align-top font-bold text-emerald-600 dark:text-emerald-400"
 										>
 											{formatCurrency(ord.totalPaid)}
 										</TableCell>
 
-										<!-- Sisa Piutang -->
+										<!-- 5. Sisa Tagihan -->
 										<TableCell class="px-4 py-3 text-right align-top font-bold">
 											{#if ord.remainingAmount > 0}
 												<span
@@ -1671,21 +1447,26 @@
 											{/if}
 										</TableCell>
 
-										<!-- Tanggal Selesai -->
-										<TableCell class="px-4 py-3 align-top">
-											<span class="text-xs text-foreground">
-												{formatOrderDateTime(ord.pickedUpAt || ord.cancelledAt || ord.updatedAt)}
-											</span>
-										</TableCell>
-
-										<!-- Status Pembayaran -->
+										<!-- 6. Status (Sudah Diambil vs Dibatalkan) -->
 										<TableCell class="px-4 py-3 text-center align-top">
 											<div class="flex items-center justify-center">
-												{@render paymentChip(ord.status)}
+												<OrderStatusChip
+													fulfillmentStatus={ord.fulfillmentStatus}
+													paymentStatus={ord.status}
+													pickedUpBy={ord.pickedUpBy}
+													onCancelClick={() => openCancellationInfo(ord)}
+												/>
 											</div>
 										</TableCell>
 
-										<!-- Aksi (Vertical Ellipsis Dropdown Popover) -->
+										<!-- 7. Pembayaran -->
+										<TableCell class="px-4 py-3 text-center align-top">
+											<div class="flex items-center justify-center">
+												<OrderPaymentChip status={ord.status} />
+											</div>
+										</TableCell>
+
+										<!-- 8. Aksi (Vertical Ellipsis Dropdown Popover) -->
 										<TableCell class="px-4 py-3 text-center align-top">
 											<div class="flex items-center justify-center">
 												<Dropdown
@@ -1718,7 +1499,7 @@
 														<span>Cetak Salinan Struk</span>
 													</DropdownItem>
 
-													{#if ord.remainingAmount > 0 && ord.status !== 'CANCELLED'}
+													{#if ord.remainingAmount > 0 && ord.status !== 'CANCELLED' && ord.status !== 'REFUND'}
 														<DropdownItem
 															class="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-xs text-emerald-600 transition-colors hover:bg-emerald-500/10 dark:text-emerald-400"
 															onSelect={() => openPayment(ord)}
@@ -1794,4 +1575,15 @@
 	bind:isOpen={isCancelOpen}
 	order={selectedOrderForCancel}
 	onConfirm={handleCancelConfirm}
+/>
+
+<!-- Modal: Detail & Alasan Pembatalan -->
+<OrderCancellationInfoDialog
+	open={isCancellationInfoOpen}
+	order={selectedOrderForCancellationInfo}
+	onClose={() => {
+		isCancellationInfoOpen = false;
+		selectedOrderForCancellationInfo = null;
+	}}
+	onOpenDetail={(ord) => openDetail(ord)}
 />

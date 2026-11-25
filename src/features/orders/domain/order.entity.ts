@@ -1,16 +1,8 @@
 export type OrderPaymentStatus =
-	| 'LUNAS'
-	| 'PARTIAL_PAID'
-	| 'UNPAID'
-	| 'OVERDUE'
-	| 'CANCELLED';
+	'LUNAS' | 'PARTIAL_PAID' | 'UNPAID' | 'OVERDUE' | 'CANCELLED' | 'REFUND';
 
 export type OrderFulfillmentStatus =
-	| 'CREATED'
-	| 'QUEUED'
-	| 'PROCESSING'
-	| 'READY_FOR_PICKUP'
-	| 'PICKED_UP';
+	'CREATED' | 'QUEUED' | 'PROCESSING' | 'READY_FOR_PICKUP' | 'PICKED_UP';
 
 export type OrderType = 'PRODUCTION' | 'RETAIL';
 
