@@ -1794,15 +1794,15 @@
     "semantic_hash": ""
   },
   "src/features/orders/application/order.store.svelte.ts": {
-    "mtime": 1795512306.9563367,
-    "seen": 1795512461.564503,
-    "ast_hash": "483a040f4fc7255f327bfae931233912",
+    "mtime": 1795594638.2174685,
+    "seen": 1795594639.507423,
+    "ast_hash": "c6d6afb6d912c79270a6330909735506",
     "semantic_hash": ""
   },
   "src/features/orders/domain/order.entity.ts": {
-    "mtime": 1795506070.170997,
-    "seen": 1795506140.57073,
-    "ast_hash": "e7dacde6b06faceacbfa68a8cc4cceb4",
+    "mtime": 1795533047.9920871,
+    "seen": 1795533125.999883,
+    "ast_hash": "960256515fcd101ce19874e574ecf5e3",
     "semantic_hash": ""
   },
   "src/features/orders/domain/order.repository.ts": {
@@ -1812,9 +1812,9 @@
     "semantic_hash": ""
   },
   "src/features/orders/domain/order.schema.ts": {
-    "mtime": 1795506070.2263637,
-    "seen": 1795506140.570732,
-    "ast_hash": "8e759dee794bed69395d548306749794",
+    "mtime": 1795533048.0772648,
+    "seen": 1795533125.999885,
+    "ast_hash": "41e314ab419bf419d21f474d5e052cee",
     "semantic_hash": ""
   },
   "src/features/orders/infrastructure/order.dto.ts": {
@@ -1848,9 +1848,9 @@
     "semantic_hash": ""
   },
   "src/features/orders/infrastructure/order.repository.mock.ts": {
-    "mtime": 1795512441.6395118,
-    "seen": 1795512461.5645099,
-    "ast_hash": "2279139e363f738a2a5f2ad6fabad106",
+    "mtime": 1795590858.9801402,
+    "seen": 1795590871.305644,
+    "ast_hash": "5ce4d4588aa14af481a4614e7f0ac8af",
     "semantic_hash": ""
   },
   "src/features/orders/infrastructure/order.validator.ts": {
@@ -1860,9 +1860,9 @@
     "semantic_hash": ""
   },
   "src/features/orders/presentation/components/OrderDetailDialog.svelte": {
-    "mtime": 1795508566.2097275,
-    "seen": 1795508722.085679,
-    "ast_hash": "67fd012ea2a4a029401442f8877344a8",
+    "mtime": 1795591621.1931353,
+    "seen": 1795591852.460584,
+    "ast_hash": "96815938f78a1b6d8b6cc92d3e8aeeff",
     "semantic_hash": ""
   },
   "src/features/orders/presentation/components/OrderPaymentDialog.svelte": {
@@ -1878,9 +1878,9 @@
     "semantic_hash": ""
   },
   "src/features/orders/presentation/pages/OrderListPage.svelte": {
-    "mtime": 1795531847.3049788,
-    "seen": 1795531899.015946,
-    "ast_hash": "1f01a5069bb57fc102ce69e107ec242a",
+    "mtime": 1795595125.336312,
+    "seen": 1795595140.8469949,
+    "ast_hash": "0fb422e4d187740b16b28aa280cec1fa",
     "semantic_hash": ""
   },
   "src/routes/(app)/transactions/invoices/+page.ts": {
@@ -1893,6 +1893,24 @@
     "mtime": 1795510756.3105836,
     "seen": 1795510774.742024,
     "ast_hash": "0a2d9a5a47fb4e097220d0e554bb6cbe",
+    "semantic_hash": ""
+  },
+  "src/features/orders/presentation/components/OrderCancellationInfoDialog.svelte": {
+    "mtime": 1795591297.971825,
+    "seen": 1795591308.212435,
+    "ast_hash": "45ff2ff9819c16ff498ba62818eb1810",
+    "semantic_hash": ""
+  },
+  "src/features/orders/presentation/components/OrderPaymentChip.svelte": {
+    "mtime": 1795591600.1927197,
+    "seen": 1795591619.278542,
+    "ast_hash": "e51bfd13867a25db02b0ed00c4f5d20f",
+    "semantic_hash": ""
+  },
+  "src/features/orders/presentation/components/OrderStatusChip.svelte": {
+    "mtime": 1795591600.2323844,
+    "seen": 1795591619.278545,
+    "ast_hash": "7d0efdb909c18a5e6a80ee5f1c93a722",
     "semantic_hash": ""
   }
 }
