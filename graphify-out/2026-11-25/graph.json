@@ -4418,7 +4418,7 @@
       "file_type": "code",
       "norm_label": "account()",
       "source_file": "src/features/expenses/presentation/components/ExpenseFormDialog.svelte",
-      "source_location": "L1020"
+      "source_location": "L1019"
     },
     {
       "id": "src_features_expenses_presentation_components_expenseformdialog_if",
@@ -74967,7 +74967,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "src/features/expenses/presentation/components/ExpenseFormDialog.svelte",
-      "source_location": "L223",
+      "source_location": "L222",
       "weight": 1.0
     },
     {

@@ -1,7 +1,7 @@
 # Graph Report - made-printing-frontend  (2026-11-25)
 
 ## Corpus Check
-- 337 files · ~173,242 words
+- 337 files · ~173,231 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 4, .css 1)
 
