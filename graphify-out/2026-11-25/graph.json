@@ -1704,7 +1704,7 @@
       "file_type": "code",
       "norm_label": "naventry",
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L23"
+      "source_location": "L24"
     },
     {
       "id": "src_lib_components_ui_sidebar_sidebar_types_navgroup",
@@ -1717,7 +1717,7 @@
       "file_type": "code",
       "norm_label": "navgroup",
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L15"
+      "source_location": "L16"
     },
     {
       "id": "src_lib_components_ui_sidebar_sidebar_types_navlink",
@@ -1743,7 +1743,7 @@
       "file_type": "code",
       "norm_label": "navsection",
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L26"
+      "source_location": "L27"
     },
     {
       "id": "src_lib_components_ui_sidebar_sidebar_types_sidebarclasses",
@@ -1756,7 +1756,7 @@
       "file_type": "code",
       "norm_label": "sidebarclasses",
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L36"
+      "source_location": "L37"
     },
     {
       "id": "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore",
@@ -7072,7 +7072,7 @@
       "file_type": "code",
       "norm_label": "isnavgroup()",
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L32"
+      "source_location": "L33"
     },
     {
       "id": "src_lib_shared_presentation_page_title_store_svelte_pagetitlestore_set",
@@ -60679,7 +60679,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L15",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -60690,7 +60690,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -60701,7 +60701,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0
     },
     {
@@ -60712,7 +60712,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L32",
+      "source_location": "L33",
       "weight": 1.0
     },
     {
@@ -60723,7 +60723,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/lib/components/ui/sidebar/sidebar.types.ts",
-      "source_location": "L36",
+      "source_location": "L37",
       "weight": 1.0
     },
     {

@@ -42,8 +42,8 @@
     "semantic_hash": "7a9cb0835a5cf254386aa37ee9143522"
   },
   "src/lib/components/layout/navbar/AppNavbar.svelte": {
-    "mtime": 1795616548.014476,
-    "seen": 1795616608.230331,
+    "mtime": 1795616682.841655,
+    "seen": 1795616837.458108,
     "ast_hash": "0f713c4a0cb60a742672fc9653ffc1ba",
     "semantic_hash": ""
   },
@@ -96,10 +96,10 @@
     "semantic_hash": "e2811e44d8088bc81c24173b4b8e1182"
   },
   "src/lib/components/ui/sidebar/sidebar.types.ts": {
-    "mtime": 1793838155.9246793,
-    "seen": 1794315921.017278,
-    "ast_hash": "5b9e5b4ad55b182611f444e007f0d03f",
-    "semantic_hash": "5b9e5b4ad55b182611f444e007f0d03f"
+    "mtime": 1795616813.6135457,
+    "seen": 1795616837.458123,
+    "ast_hash": "1b72511b6b0fd520c9e057e7bcd689c5",
+    "semantic_hash": ""
   },
   "src/lib/index.ts": {
     "mtime": 1793779270.6825175,
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/app.nav.ts": {
-    "mtime": 1795595930.5581698,
-    "seen": 1795595943.0686238,
-    "ast_hash": "3db961f4e457f9ddc6fa48409535eb85",
+    "mtime": 1795616816.2747645,
+    "seen": 1795616837.4581351,
+    "ast_hash": "511fdf7418f62205e97ded432256db8f",
     "semantic_hash": ""
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -2058,15 +2058,15 @@
     "semantic_hash": ""
   },
   "src/lib/components/layout/command-palette/command-palette.utils.spec.ts": {
-    "mtime": 1795616523.4897068,
-    "seen": 1795616608.230329,
-    "ast_hash": "21febc69df88af4f5882a651b05f71d5",
+    "mtime": 1795616817.6794136,
+    "seen": 1795616837.458106,
+    "ast_hash": "e98e32d287695e40823e4a3e9261dd85",
     "semantic_hash": ""
   },
   "src/lib/components/layout/command-palette/command-palette.utils.ts": {
-    "mtime": 1795616522.8448591,
-    "seen": 1795616608.2303302,
-    "ast_hash": "6507f56289ae66e24e613ff654d19326",
+    "mtime": 1795616814.5164187,
+    "seen": 1795616837.458106,
+    "ast_hash": "35c0a21e91af9cab0d7c42a9c3050acd",
     "semantic_hash": ""
   },
   "src/lib/components/layout/command-palette/index.ts": {
