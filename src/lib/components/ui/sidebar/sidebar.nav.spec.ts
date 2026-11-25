@@ -48,6 +48,12 @@ describe('isActiveHref', () => {
 		expect(isActiveHref('/cashier', '/cashier')).toBe(true);
 		expect(isActiveHref('/cashier', '/tickets')).toBe(false);
 	});
+
+	it('activates /expenses and leaves /orders and /finance/expenses inactive when on /expenses', () => {
+		expect(isActiveHref('/expenses', '/expenses')).toBe(true);
+		expect(isActiveHref('/expenses', '/orders')).toBe(false);
+		expect(isActiveHref('/expenses', '/finance/expenses')).toBe(false);
+	});
 });
 
 describe('sectionContainsActive', () => {

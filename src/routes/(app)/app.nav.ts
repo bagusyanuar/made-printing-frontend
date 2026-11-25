@@ -2,6 +2,7 @@ import IconLayoutDashboard from '~icons/lucide/layout-dashboard';
 import IconTicket from '~icons/lucide/ticket';
 import IconShoppingBag from '~icons/lucide/shopping-bag';
 import IconReceipt from '~icons/lucide/receipt';
+import IconWallet from '~icons/lucide/wallet';
 import IconLandmark from '~icons/lucide/landmark';
 import IconHandCoins from '~icons/lucide/hand-coins';
 import IconArrowLeftRight from '~icons/lucide/arrow-left-right';
@@ -41,17 +42,17 @@ export const appNavSections: NavSection[] = [
 				title: 'Pesanan',
 				href: '/orders',
 				icon: IconReceipt
+			},
+			{
+				title: 'Pengeluaran',
+				href: '/expenses',
+				icon: IconWallet
 			}
 		]
 	},
 	{
 		label: 'KEUANGAN',
 		entries: [
-			{
-				title: 'Pengeluaran',
-				href: '/finance/expenses',
-				icon: IconReceipt
-			},
 			{
 				title: 'Setoran Modal',
 				href: '/finance/capital-deposit',
