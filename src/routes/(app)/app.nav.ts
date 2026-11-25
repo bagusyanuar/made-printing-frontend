@@ -29,9 +29,10 @@ export const appNavSections: NavSection[] = [
 		label: 'TRANSAKSI',
 		entries: [
 			{
-				title: 'Tiket Pesanan',
+				title: 'Tiket',
 				href: '/tickets',
-				icon: IconTicket
+				icon: IconTicket,
+				keywords: ['tiket pesanan', 'spk', 'order']
 			},
 			{
 				title: 'Kasir',

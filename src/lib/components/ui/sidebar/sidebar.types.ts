@@ -7,6 +7,7 @@ export interface NavLink {
 	icon: Component;
 	badge?: string | number;
 	permission?: string | string[];
+	keywords?: string[];
 }
 
 /**

@@ -8,10 +8,17 @@
 		collapsed?: boolean;
 		isDark?: boolean;
 		onToggleTheme?: () => void;
+		actions?: Snippet;
 		children?: Snippet;
 	}
 
-	let { collapsed = $bindable(false), isDark, onToggleTheme, children }: AppNavbarProps = $props();
+	let {
+		collapsed = $bindable(false),
+		isDark,
+		onToggleTheme,
+		actions,
+		children
+	}: AppNavbarProps = $props();
 
 	const iconButtonClass =
 		'text-foreground-subtle hover:text-foreground inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md transition-colors duration-150 hover:bg-surface-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none';
@@ -32,20 +39,25 @@
 		{@render children()}
 	{/if}
 
-	{#if onToggleTheme}
+	{#if actions || onToggleTheme}
 		<div class="ml-auto flex shrink-0 items-center gap-cozy">
-			<button
-				type="button"
-				aria-label={isDark ? 'Beralih ke tema terang' : 'Beralih ke tema gelap'}
-				onclick={onToggleTheme}
-				class={iconButtonClass}
-			>
-				{#if isDark}
-					<IconMoon class="size-4" />
-				{:else}
-					<IconSun class="size-4" />
-				{/if}
-			</button>
+			{#if actions}
+				{@render actions()}
+			{/if}
+			{#if onToggleTheme}
+				<button
+					type="button"
+					aria-label={isDark ? 'Beralih ke tema terang' : 'Beralih ke tema gelap'}
+					onclick={onToggleTheme}
+					class={iconButtonClass}
+				>
+					{#if isDark}
+						<IconMoon class="size-4" />
+					{:else}
+						<IconSun class="size-4" />
+					{/if}
+				</button>
+			{/if}
 		</div>
 	{/if}
 </header>
