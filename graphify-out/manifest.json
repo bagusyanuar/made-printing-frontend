@@ -84,9 +84,9 @@
     "semantic_hash": "d35dccce23b717c59db537211df7bd59"
   },
   "src/lib/components/ui/sidebar/sidebar.nav.spec.ts": {
-    "mtime": 1795185293.7924483,
-    "seen": 1795186765.705035,
-    "ast_hash": "97da57d0b58fa891e9db2b07577cb5e3",
+    "mtime": 1795595887.1901963,
+    "seen": 1795595943.068609,
+    "ast_hash": "b79a4d325f23ddfa10e0098e20bc714d",
     "semantic_hash": ""
   },
   "src/lib/components/ui/sidebar/sidebar.nav.ts": {
@@ -150,9 +150,9 @@
     "semantic_hash": "11fd3337bc7773fe35ffd378aa54e658"
   },
   "src/routes/(app)/app.nav.ts": {
-    "mtime": 1795443026.9268224,
-    "seen": 1795443195.511328,
-    "ast_hash": "23efb800134bd8174b844c0c313b29da",
+    "mtime": 1795595930.5581698,
+    "seen": 1795595943.0686238,
+    "ast_hash": "3db961f4e457f9ddc6fa48409535eb85",
     "semantic_hash": ""
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -178,12 +178,6 @@
     "seen": 1794315921.017285,
     "ast_hash": "a87ba75ec5c3a6bc66245221949f1978",
     "semantic_hash": "a87ba75ec5c3a6bc66245221949f1978"
-  },
-  "src/routes/(app)/finance/expenses/+page.svelte": {
-    "mtime": 1793837089.3338733,
-    "seen": 1794315921.0172858,
-    "ast_hash": "7cd6fbe86bbc912f64363c3292523e30",
-    "semantic_hash": "7cd6fbe86bbc912f64363c3292523e30"
   },
   "src/routes/(app)/finance/transfers/+page.svelte": {
     "mtime": 1793837089.4421136,
@@ -462,9 +456,9 @@
     "semantic_hash": ""
   },
   "src/lib/shared/infrastructure/di/mock-config.ts": {
-    "mtime": 1795443026.7400963,
-    "seen": 1795443195.511322,
-    "ast_hash": "464dfc62c77bbfe564bf7cd8d6a3456f",
+    "mtime": 1795611618.772074,
+    "seen": 1795611641.0221372,
+    "ast_hash": "0fb8320b04cd821d6de0c320c96a6022",
     "semantic_hash": ""
   },
   "src/routes/(app)/settings/product-categories/+page.svelte": {
@@ -1911,6 +1905,138 @@
     "mtime": 1795591600.2323844,
     "seen": 1795591619.278545,
     "ast_hash": "7d0efdb909c18a5e6a80ee5f1c93a722",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/expenses/+page.svelte": {
+    "mtime": 1795611618.8983114,
+    "seen": 1795611641.022143,
+    "ast_hash": "eab2aba6ebe14015d676d26a22b622bb",
+    "semantic_hash": ""
+  },
+  "src/routes/(app)/finance/expenses/+page.ts": {
+    "mtime": 1795595883.6793675,
+    "seen": 1795595943.068629,
+    "ast_hash": "b0807d87bd20a8dc61522e5ab0f6c886",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/application/expense.container.ts": {
+    "mtime": 1795611473.199386,
+    "seen": 1795611641.022033,
+    "ast_hash": "13ba12fd7b184e65649e47d5da3ead38",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/application/expense.store.svelte.ts": {
+    "mtime": 1795614871.7101204,
+    "seen": 1795615071.665971,
+    "ast_hash": "2673baf2ace8e3cf598baa3f4eb09a36",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/application/expense.use-cases.ts": {
+    "mtime": 1795614871.8349075,
+    "seen": 1795615071.665972,
+    "ast_hash": "9750be717502e5fdabfdf98db44ba20a",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/domain/expense.entity.ts": {
+    "mtime": 1795614871.982837,
+    "seen": 1795615071.665973,
+    "ast_hash": "41f0521572eabcc654637fb1454fa807",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/domain/expense.repository.ts": {
+    "mtime": 1795614872.1535397,
+    "seen": 1795615071.665974,
+    "ast_hash": "841c0085592aed7573800cf467aa5473",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/domain/expense.schema.ts": {
+    "mtime": 1795614872.3021624,
+    "seen": 1795615071.665974,
+    "ast_hash": "da728e1f1b8bc0a9678677485c598766",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.dto.ts": {
+    "mtime": 1795614648.0908492,
+    "seen": 1795614833.13099,
+    "ast_hash": "b822b20c65e971ec750bbf816f00cae0",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.mapper.ts": {
+    "mtime": 1795614872.6407778,
+    "seen": 1795615071.665977,
+    "ast_hash": "ae0bc9dd67a444c65c11380e29aa7b7e",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.repository.impl.ts": {
+    "mtime": 1795614872.779799,
+    "seen": 1795615071.6659782,
+    "ast_hash": "f945db909135e99911210a36268f4d66",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.repository.mock.ts": {
+    "mtime": 1795614873.0924375,
+    "seen": 1795615071.665979,
+    "ast_hash": "af12f8f5b37905e05eed6507741ad1d2",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.validator.ts": {
+    "mtime": 1795614873.2577057,
+    "seen": 1795615071.665983,
+    "ast_hash": "b32755034b1d9e8ec7b958b90c24acce",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpenseCancelDialog.svelte": {
+    "mtime": 1795612816.8715265,
+    "seen": 1795613267.950018,
+    "ast_hash": "441d7eb1ed21a5910ce3d0edbcc83145",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpenseDetailDialog.svelte": {
+    "mtime": 1795614873.4222178,
+    "seen": 1795615071.665984,
+    "ast_hash": "2a052dc774359e942337fd1a12554dbe",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpenseFormDialog.svelte": {
+    "mtime": 1795615795.8566425,
+    "seen": 1795615829.157469,
+    "ast_hash": "665d2246bc8c55cce4aebe12e339d586",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpenseStatusChip.svelte": {
+    "mtime": 1795611548.158589,
+    "seen": 1795611641.022042,
+    "ast_hash": "f0aca133649729b511eca61dc237b600",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/pages/ExpenseListPage.svelte": {
+    "mtime": 1795614874.4726095,
+    "seen": 1795615071.6659882,
+    "ast_hash": "2c8cdc0f8aa63204ddb1c7871d0dcb92",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.mapper.spec.ts": {
+    "mtime": 1795614872.5138373,
+    "seen": 1795615071.665976,
+    "ast_hash": "fa2d1966dfd6a5a549e7bd7667bc1186",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/infrastructure/expense.repository.mock.spec.ts": {
+    "mtime": 1795614872.9039257,
+    "seen": 1795615071.6659782,
+    "ast_hash": "ceca68008737300943a51675e5bbc553",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpensePaymentChip.svelte": {
+    "mtime": 1795614783.3625183,
+    "seen": 1795614833.130997,
+    "ast_hash": "0a53612f1d7962b9df267ad9c83955d2",
+    "semantic_hash": ""
+  },
+  "src/features/expenses/presentation/components/ExpensePaymentDialog.svelte": {
+    "mtime": 1795614804.9197643,
+    "seen": 1795614833.1309981,
+    "ast_hash": "e14aea5f3fb0fe9df8f56b094af283ac",
     "semantic_hash": ""
   }
 }
