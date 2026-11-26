@@ -66,10 +66,10 @@
     "semantic_hash": "f77e8783b679ce663ae7822c3d6352f1"
   },
   "src/lib/components/layout/sidebar/AppSidebar.svelte": {
-    "mtime": 1793804420.6999269,
-    "seen": 1794315921.0172749,
-    "ast_hash": "2f719b033ee0241880f0ece1a2bf5592",
-    "semantic_hash": "2f719b033ee0241880f0ece1a2bf5592"
+    "mtime": 1795677055.5464242,
+    "seen": 1795677071.482072,
+    "ast_hash": "f6775ff99b2897406e1c9e87bb1d867e",
+    "semantic_hash": ""
   },
   "src/lib/components/layout/sidebar/index.ts": {
     "mtime": 1793838155.8993623,
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/app.nav.ts": {
-    "mtime": 1795676334.7474802,
-    "seen": 1795676336.712679,
-    "ast_hash": "88f42934ef34180583af1150bddc4f96",
+    "mtime": 1795676773.4158447,
+    "seen": 1795676850.520258,
+    "ast_hash": "9bb062f1715b9aa8063ace6eb9c9ea93",
     "semantic_hash": ""
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -2064,9 +2064,9 @@
     "semantic_hash": ""
   },
   "src/routes/(app)/reports/+page.svelte": {
-    "mtime": 1795676473.6340609,
-    "seen": 1795676495.171239,
-    "ast_hash": "2fe53776cbb40aca47aa299a3ba28886",
+    "mtime": 1795676773.5435815,
+    "seen": 1795676850.5202749,
+    "ast_hash": "9f6a3d38bf8aed758c9b9684aa416db0",
     "semantic_hash": ""
   }
 }

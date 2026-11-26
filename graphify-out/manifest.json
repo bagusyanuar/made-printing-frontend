@@ -66,10 +66,10 @@
     "semantic_hash": "f77e8783b679ce663ae7822c3d6352f1"
   },
   "src/lib/components/layout/sidebar/AppSidebar.svelte": {
-    "mtime": 1793804420.6999269,
-    "seen": 1794315921.0172749,
-    "ast_hash": "2f719b033ee0241880f0ece1a2bf5592",
-    "semantic_hash": "2f719b033ee0241880f0ece1a2bf5592"
+    "mtime": 1795677491.8935943,
+    "seen": 1795677551.4168441,
+    "ast_hash": "d02602b1f8a9d881f918c47fc700bae5",
+    "semantic_hash": ""
   },
   "src/lib/components/layout/sidebar/index.ts": {
     "mtime": 1793838155.8993623,
