@@ -10,6 +10,7 @@
 		SidebarItem,
 		SidebarCollapsibleItem
 	} from 'dystopia-linear-lib/components/sidebar';
+	import { Badge } from 'dystopia-linear-lib/components/badge';
 	import { Popover } from 'dystopia-linear-lib/components/popover';
 	import { Tooltip } from 'dystopia-linear-lib/components/tooltip';
 	import { HoverCard } from 'dystopia-linear-lib/components/hover-card';
@@ -117,7 +118,12 @@
 			</div>
 		{/if}
 		<div class="flex min-w-0 flex-col leading-tight" class:hidden={collapsed}>
-			<span class="truncate text-sm font-bold text-primary">{brand.name}</span>
+			<div class="flex items-center gap-tight">
+				<span class="truncate text-sm font-bold text-primary">{brand.name}</span>
+				{#if version}
+					<Badge variant="secondary" size="sm" class="shrink-0 leading-none">v{version}</Badge>
+				{/if}
+			</div>
 			<span class="truncate text-xs text-foreground-subtle">{brand.subtitle}</span>
 		</div>
 	</SidebarHeader>
@@ -256,14 +262,14 @@
 		{/each}
 	</SidebarContent>
 
-	<SidebarFooter class="border-t-0">
+	<SidebarFooter class="border-t-0 p-tight!">
 		<Popover
 			placement="right-end"
 			offset={8}
 			classes={{
 				trigger: collapsed
-					? 'flex h-auto w-full items-center justify-center rounded-md border-0 p-tight'
-					: 'gap-tight px-compact py-control-y flex h-auto w-full items-center justify-start rounded-md border-0',
+					? 'flex h-auto w-full items-center justify-center rounded-md border-0 p-tight! hover:bg-surface-hover'
+					: 'gap-cozy! p-tight! flex h-auto w-full items-center justify-start rounded-md border-0 hover:bg-surface-hover',
 				content: 'w-56 p-0 border border-border bg-app-surface shadow-md'
 			}}
 		>
@@ -303,17 +309,5 @@
 				</button>
 			</div>
 		</Popover>
-
-		{#if version}
-			<div class="-mx-compact border-t border-border pt-tight">
-				<div
-					class="flex flex-col items-center text-center text-[11px] leading-tight text-foreground-faint"
-					class:hidden={collapsed}
-				>
-					<span>Made Printing &copy; {new Date().getFullYear()}</span>
-					<span>Digital Printing ERP v{version}</span>
-				</div>
-			</div>
-		{/if}
 	</SidebarFooter>
 </Sidebar>
