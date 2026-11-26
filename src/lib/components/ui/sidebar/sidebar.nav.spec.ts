@@ -54,6 +54,11 @@ describe('isActiveHref', () => {
 		expect(isActiveHref('/expenses', '/orders')).toBe(false);
 		expect(isActiveHref('/expenses', '/finance/expenses')).toBe(false);
 	});
+
+	it('activates parent /finance and /reports hub links on nested subpages', () => {
+		expect(isActiveHref('/finance/transfers', '/finance')).toBe(true);
+		expect(isActiveHref('/reports/profit-loss', '/reports')).toBe(true);
+	});
 });
 
 describe('sectionContainsActive', () => {

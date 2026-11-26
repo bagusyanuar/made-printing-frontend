@@ -4,12 +4,7 @@ import IconShoppingBag from '~icons/lucide/shopping-bag';
 import IconReceipt from '~icons/lucide/receipt';
 import IconWallet from '~icons/lucide/wallet';
 import IconLandmark from '~icons/lucide/landmark';
-import IconHandCoins from '~icons/lucide/hand-coins';
-import IconArrowLeftRight from '~icons/lucide/arrow-left-right';
 import IconChartPie from '~icons/lucide/chart-pie';
-import IconChartLine from '~icons/lucide/chart-line';
-import IconBanknote from '~icons/lucide/banknote';
-import IconScale from '~icons/lucide/scale';
 import IconSettings from '~icons/lucide/settings';
 
 import type { NavSection } from '$lib/components/ui/sidebar/sidebar.types';
@@ -52,57 +47,33 @@ export const appNavSections: NavSection[] = [
 		]
 	},
 	{
-		label: 'KEUANGAN',
+		label: 'MANAJEMEN',
 		entries: [
 			{
-				title: 'Setoran Modal',
-				href: '/finance/capital-deposit',
-				icon: IconLandmark
+				title: 'Keuangan',
+				href: '/finance',
+				icon: IconLandmark,
+				keywords: ['setoran modal', 'prive', 'penarikan modal', 'pemindahan dana', 'kas', 'kasbon']
 			},
 			{
-				title: 'Penarikan Modal (Prive)',
-				href: '/finance/withdrawals',
-				icon: IconHandCoins
+				title: 'Laporan',
+				href: '/reports',
+				icon: IconChartPie,
+				keywords: [
+					'penjualan',
+					'pengeluaran',
+					'arus kas',
+					'laba rugi',
+					'rekap',
+					'hutang',
+					'piutang'
+				]
 			},
-			{
-				title: 'Pemindahan Dana',
-				href: '/finance/transfers',
-				icon: IconArrowLeftRight
-			}
-		]
-	},
-	{
-		label: 'LAPORAN',
-		entries: [
-			{
-				title: 'Laporan Penjualan',
-				href: '/reports/sales',
-				icon: IconChartPie
-			},
-			{
-				title: 'Laporan Pengeluaran',
-				href: '/reports/expenses',
-				icon: IconChartLine
-			},
-			{
-				title: 'Laporan Arus Kas',
-				href: '/reports/cash-flow',
-				icon: IconBanknote
-			},
-			{
-				title: 'Laporan Laba Rugi',
-				href: '/reports/profit-loss',
-				icon: IconScale
-			}
-		]
-	},
-	{
-		label: 'PENGATURAN',
-		entries: [
 			{
 				title: 'Pengaturan',
 				href: '/settings',
-				icon: IconSettings
+				icon: IconSettings,
+				keywords: ['master data', 'produk', 'reseller', 'supplier', 'hak akses']
 			}
 		]
 	}
